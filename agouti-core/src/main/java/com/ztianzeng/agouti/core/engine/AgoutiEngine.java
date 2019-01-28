@@ -18,8 +18,12 @@
 package com.ztianzeng.agouti.core.engine;
 
 import com.alibaba.fastjson.JSONObject;
+import com.ztianzeng.agouti.core.Task;
 import com.ztianzeng.agouti.core.WorkFlow;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.Iterator;
+import java.util.Objects;
 
 /**
  * 核心引擎
@@ -38,5 +42,20 @@ public class AgoutiEngine {
      */
     public void invoke(WorkFlow workFlow, JSONObject params) {
         log.info("invoke workFlow name {} , desc {} ", workFlow.getName(), workFlow.getDescription());
+        invoke(workFlow.getTasks().iterator());
+    }
+
+    /**
+     * 具体的执行
+     *
+     * @param tasks 任务列表
+     */
+    private void invoke(Iterator<Task> tasks) {
+        Objects invoke = null;
+        while (tasks.hasNext()) {
+            Task next = tasks.next();
+            BaseActuator baseActuator = ActuatorFactory.build(next.getTaskType());
+            invoke = baseActuator.invoke(invoke, next);
+        }
     }
 }

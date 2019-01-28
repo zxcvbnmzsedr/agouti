@@ -9,9 +9,10 @@
   },
   "tasks": [
     {
-      "target": "url:http://helloWorld.test.hello",
+      "target": "http://helloWorld.test.hello",
       "alias": "d1",
       "method": "getA",
+      "taskType": "URL",
       "timeout": 3000,
       "inputs": {
         "helloWorld": {
@@ -26,9 +27,10 @@
       }
     },
     {
-      "target": "url:http://helloWorld.test.hello",
+      "target": "http://helloWorld.test.hello",
       "alias": "d2",
       "method": "getB",
+      "taskType": "URL",
       "inputsExtra": {
         "helloWorld": "com.ztianzeng.agouti.core.HelloWorld",
         "name": "java.lang.String"
