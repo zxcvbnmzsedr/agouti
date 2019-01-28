@@ -24,10 +24,22 @@ public class Task {
 
     private String method;
 
+    private TaskType taskType;
+
     /**
      * 入参情况，多个入参通过key:value的结构书写
      */
     private Map<String, Object> inputs;
 
 
+    public enum TaskType {
+        /**
+         * FEIGN 调用
+         */
+        FEIGN,
+        /**
+         * URL调用
+         */
+        URL;
+    }
 }
