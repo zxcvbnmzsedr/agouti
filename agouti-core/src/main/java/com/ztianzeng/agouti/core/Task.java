@@ -25,14 +25,9 @@ public class Task {
     private String method;
 
     /**
-     * 入参情况，多个入参通过key:value的结构书写，key的类别通过下面的inputsExtra定义。
+     * 入参情况，多个入参通过key:value的结构书写
      */
     private Map<String, Object> inputs;
-
-    /**
-     * 入参key的类别定义
-     */
-    private Map<String, String> inputsExtra;
 
 
 }

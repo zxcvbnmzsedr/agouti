@@ -1,3 +1,46 @@
 {
-  "name": "123"
+  "name": "agouti",
+  "description": "agoutiTest",
+  "outputs": {
+    "d1name": "$d1.name",
+    "languages": "$d2.languages",
+    "language1": "$d2.languages[0]",
+    "name": "csophys"
+  },
+  "tasks": [
+    {
+      "target": "url:http://helloWorld.test.hello",
+      "alias": "d1",
+      "method": "getA",
+      "timeout": 3000,
+      "inputs": {
+        "helloWorld": {
+          "name": "csophys",
+          "sex": "boy"
+        },
+        "name": "winnie"
+      },
+      "inputsExtra": {
+        "helloWorld": "com.ztianzeng.agouti.core.HelloWorld",
+        "name": "java.lang.String"
+      }
+    },
+    {
+      "target": "url:http://helloWorld.test.hello",
+      "alias": "d2",
+      "method": "getB",
+      "inputsExtra": {
+        "helloWorld": "com.ztianzeng.agouti.core.HelloWorld",
+        "name": "java.lang.String"
+      },
+      "timeout": 3000,
+      "inputs": {
+        "helloWorld": {
+          "name": "csophys",
+          "sex": "boy"
+        },
+        "name": "winnie"
+      }
+    }
+  ]
 }

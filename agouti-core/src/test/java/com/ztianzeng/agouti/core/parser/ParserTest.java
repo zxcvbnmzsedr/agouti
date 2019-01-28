@@ -17,6 +17,8 @@
 
 package com.ztianzeng.agouti.core.parser;
 
+import com.ztianzeng.agouti.core.HelloWorld;
+import com.ztianzeng.agouti.core.Task;
 import com.ztianzeng.agouti.core.WorkFlow;
 import com.ztianzeng.agouti.core.resource.AbstractResource;
 import com.ztianzeng.agouti.core.resource.ClassPathResource;
@@ -40,7 +42,17 @@ public class ParserTest {
         Parser parser = new Parser();
         WorkFlow parse = parser.parse(resource);
 
-        Assert.assertEquals(parse.getName(), "123");
+        Assert.assertEquals(parse.getName(), "agouti");
+        Assert.assertEquals(parse.getDescription(), "agoutiTest");
+
+
+        for (Task task : parse.getTasks()) {
+            Object name = task.getInputs().get("name");
+            Assert.assertTrue(name instanceof String);
+
+            Object helloWorld = task.getInputs().get("helloWorld");
+            Assert.assertTrue(helloWorld instanceof HelloWorld);
+        }
 
     }
 }

@@ -17,37 +17,17 @@
 
 package com.ztianzeng.agouti.core;
 
-
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-
-import java.util.List;
+import lombok.Data;
 
 /**
- * 任务编排流程
- *
  * @author zhaotianzeng
  * @version V1.0
- * @date 2019-01-28 17:52
+ * @date 2019-01-28 20:12
  */
-@Getter
-@AllArgsConstructor
-public class WorkFlow {
+@Data
+public class HelloWorld {
 
     private String name;
 
-    private String description;
-
-    /**
-     * 定义好最后输出的数据模型
-     */
-    private Object outputs;
-
-    private List<Task> tasks;
-
-    public WorkFlow(String name, String description, Object outputs) {
-        this.name = name;
-        this.description = description;
-        this.outputs = outputs;
-    }
+    private String sex;
 }
