@@ -37,8 +37,15 @@ import java.util.regex.Pattern;
  */
 @Slf4j
 public class UrlActuator extends BaseActuator {
-
+    /**
+     * http method
+     */
     private static final Pattern REQUEST_LINE_PATTERN = Pattern.compile("^([A-Z]+)[ ]*(.*)$");
+
+    /**
+     * path value replace
+     */
+    private static final Pattern VARIABLE_PATTERN = Pattern.compile("\\$\\{[^/]+?}");
 
     @Override
     protected Object invoke(Map<String, String> all,
@@ -50,6 +57,18 @@ public class UrlActuator extends BaseActuator {
         String url = target + method;
         HttpMethod httpMethod;
 
+
+        Matcher pathValueMatcher = VARIABLE_PATTERN.matcher(url);
+        while (pathValueMatcher.find()) {
+            String group = pathValueMatcher.group();
+            String tempString = group.substring(2, group.length() - 1);
+            String s = all.get("$" + tempString);
+            if (s != null) {
+                url = pathValueMatcher.replaceFirst(s);
+            }
+
+        }
+
         Matcher requestLineMatcher = REQUEST_LINE_PATTERN.matcher(url);
         Request.Builder builder = new Request.Builder();
         if (!requestLineMatcher.find()) {
@@ -58,14 +77,18 @@ public class UrlActuator extends BaseActuator {
                     target));
         } else {
             httpMethod = HttpMethod.valueOf(requestLineMatcher.group(1));
-
-
         }
         if (httpMethod == HttpMethod.GET) {
             StringBuilder param = new StringBuilder();
-            param.append("?");
+
             inputs.forEach((k, v) -> param.append(k).append("=").append(v).append("&"));
+            if (!param.toString().isEmpty()){
+                param.insert(0, "?");
+            }
+
+
             builder.url(requestLineMatcher.group(2) + param.toString());
+
 
         } else {
             builder.url(requestLineMatcher.group(2));
@@ -84,7 +107,7 @@ public class UrlActuator extends BaseActuator {
             e.printStackTrace();
         }
         try {
-            return JSONObject.parseObject(response.body().string());
+            return JSONObject.parse(response.body().string());
         } catch (IOException e) {
             e.printStackTrace();
         }

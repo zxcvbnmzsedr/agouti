@@ -21,7 +21,6 @@ import com.ztianzeng.agouti.core.Task;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -45,21 +44,21 @@ public abstract class BaseActuator {
     public void invoke(Map<String, String> all, Task task) {
         Object invokeResult = invoke(all, task.getAlias(), task.getMethod(), task.getTarget(), task.getInputs());
         log.info("task {} invoke result {} ", invokeResult);
-        handleResult("$" + task.getAlias() + ".", invokeResult, all);
+        handleResult("$" + task.getAlias(), invokeResult, all);
     }
 
     private void handleResult(String prefix, Object invokeResult, Map<String, String> all) {
-        if (invokeResult instanceof Collections) {
+        if (invokeResult instanceof Collection) {
             Collection collection = (Collection) invokeResult;
             Iterator iterator = collection.iterator();
             int i = 0;
             while (iterator.hasNext()) {
-                handleResult(prefix + i, iterator.next(), all);
+                handleResult(prefix + "[" + (i++) + "]", iterator.next(), all);
             }
         }
         if (invokeResult instanceof Map) {
             Map<String, Object> mapResult = (Map) invokeResult;
-            handleMapResult(prefix, mapResult, all);
+            handleMapResult(prefix + ".", mapResult, all);
         }
     }
 

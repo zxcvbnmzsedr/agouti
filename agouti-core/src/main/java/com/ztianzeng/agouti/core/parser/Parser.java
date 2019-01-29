@@ -80,20 +80,22 @@ public class Parser {
      */
     private Map<String, Object> handleInput(JSONObject inputs, JSONObject inputsExtra) {
         Map<String, Object> stringObjectMap = new HashMap<>(1);
-        inputsExtra.forEach((k, v) -> {
-            try {
-                Class<?> aClass = Class.forName(String.valueOf(v));
-                Object o = inputs.get(k);
-                if (aClass.equals(o.getClass())) {
-                    stringObjectMap.put(k, o);
-                } else {
-                    stringObjectMap.put(k, JSONObject.parseObject(o.toString(), aClass));
-                }
+        if (inputsExtra != null) {
+            inputsExtra.forEach((k, v) -> {
+                try {
+                    Class<?> aClass = Class.forName(String.valueOf(v));
+                    Object o = inputs.get(k);
+                    if (aClass.equals(o.getClass())) {
+                        stringObjectMap.put(k, o);
+                    } else {
+                        stringObjectMap.put(k, JSONObject.parseObject(o.toString(), aClass));
+                    }
 
-            } catch (ClassNotFoundException e) {
-                throw new AgoutiException("class not found " + v);
-            }
-        });
+                } catch (ClassNotFoundException e) {
+                    throw new AgoutiException("class not found " + v);
+                }
+            });
+        }
         return stringObjectMap;
     }
 
