@@ -45,7 +45,7 @@ public abstract class BaseActuator {
     public void invoke(Map<String, String> all, Task task) {
         Object invokeResult = invoke(all, task.getAlias(), task.getMethod(), task.getTarget(), task.getInputs());
         log.info("task {} invoke result {} ", invokeResult);
-        handleResult("$", invokeResult, all);
+        handleResult("$" + task.getAlias() + ".", invokeResult, all);
     }
 
     private void handleResult(String prefix, Object invokeResult, Map<String, String> all) {

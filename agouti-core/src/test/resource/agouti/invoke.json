@@ -2,9 +2,9 @@
   "name": "agouti",
   "description": "agoutiTest",
   "outputs": {
-    "yesterdayData": "$data.yesterday.date",
-    "sunrise": "$data.yesterday.sunrise",
-    "cityInfo":"$cityInfo.city"
+    "yesterdayData": "$weather.data.yesterday.date",
+    "sunrise": "$weather.data.yesterday.sunrise",
+    "cityInfo": "$weather.cityInfo.city"
   },
   "tasks": [
     {
@@ -13,10 +13,8 @@
       "method": "api/weather/city/101030100",
       "taskType": "URL",
       "inputs": {
-
       },
       "inputsExtra": {
-
       }
     }
   ]
