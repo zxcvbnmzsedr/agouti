@@ -21,6 +21,7 @@ import com.ztianzeng.agouti.core.WorkFlow;
 import com.ztianzeng.agouti.core.parser.Parser;
 import com.ztianzeng.agouti.core.resource.AbstractResource;
 import com.ztianzeng.agouti.core.resource.ClassPathResource;
+import org.junit.Assert;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -41,9 +42,8 @@ public class AgoutiEngineTest {
 
         Parser parser = new Parser();
         WorkFlow parse = parser.parse(resource);
-
-
         AgoutiEngine agoutiEngine = new AgoutiEngine();
-        agoutiEngine.invoke(parse,null);
+        Object invoke = agoutiEngine.invoke(parse, null);
+        Assert.assertNotNull(invoke);
     }
 }

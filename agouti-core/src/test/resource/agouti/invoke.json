@@ -2,7 +2,9 @@
   "name": "agouti",
   "description": "agoutiTest",
   "outputs": {
-    "d1name": "$weather.data.wendu"
+    "yesterdayData": "$data.yesterday.date",
+    "sunrise": "$data.yesterday.sunrise",
+    "cityInfo":"$cityInfo.city"
   },
   "tasks": [
     {
