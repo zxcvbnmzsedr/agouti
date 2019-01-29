@@ -17,6 +17,7 @@
 
 package com.ztianzeng.agouti.core.parser;
 
+import com.alibaba.fastjson.JSONArray;
 import com.ztianzeng.agouti.core.HelloWorld;
 import com.ztianzeng.agouti.core.Task;
 import com.ztianzeng.agouti.core.WorkFlow;
@@ -53,6 +54,11 @@ public class ParserTest {
             Object helloWorld = task.getInputs().get("helloWorld");
             Assert.assertTrue(helloWorld instanceof HelloWorld);
         }
+
+    }
+    @Test
+    public void a(){
+        JSONArray objects = new JSONArray();
 
     }
 }

@@ -20,6 +20,8 @@ package com.ztianzeng.agouti.core.engine;
 import com.ztianzeng.agouti.core.Task;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -43,32 +45,50 @@ public abstract class BaseActuator {
     public void invoke(Map<String, String> all, Task task) {
         Object invokeResult = invoke(all, task.getAlias(), task.getMethod(), task.getTarget(), task.getInputs());
         log.info("task {} invoke result {} ", invokeResult);
-        if (invokeResult instanceof Iterator) {
-            log.debug("iterable result");
-            Iterator iterableResult = (Iterator) invokeResult;
 
+        handleResult("$", invokeResult, all);
+
+
+    }
+
+    private void handleResult(String prefix, Object invokeResult, Map<String, String> all) {
+        if (invokeResult instanceof Collections) {
+            Collection collection = (Collection) invokeResult;
+            Iterator iterator = collection.iterator();
+            int i = 0;
+            while (iterator.hasNext()) {
+                handleResult(prefix + i, iterator.next(), all);
+            }
         }
-
         if (invokeResult instanceof Map) {
-            log.debug("map result");
             Map<String, Object> mapResult = (Map) invokeResult;
-            mapResult.forEach((k, v) -> {
-                if (v instanceof String
-                        || v instanceof Number) {
-                    all.put(k, String.valueOf(v));
-                } else if (v instanceof Iterator) {
-                    Iterator iterator = (Iterator) v;
-                    int p = 0;
-                    while (iterator.hasNext()) {
-                        all.put(k + iterator.toString() + (p++), iterator.toString());
-                    }
-                } else if (v instanceof Map) {
-
-                }
-            });
-
+            handleMapResult(prefix, mapResult, all);
         }
+    }
 
+    /**
+     * 处理MAP结果集
+     *
+     * @param mapResult
+     * @param all
+     */
+    private void handleMapResult(String prefix, Map<String, Object> mapResult, Map<String, String> all) {
+
+        mapResult.forEach((k, v) -> {
+            if (v instanceof String
+                    || v instanceof Number) {
+                all.put(prefix + k, String.valueOf(v));
+            } else if (v instanceof Collection) {
+                Collection collection = (Collection) v;
+                Iterator iterator = collection.iterator();
+                int i = 0;
+                while (iterator.hasNext()) {
+                    handleResult(prefix + k + "[" + (i++) + "].", iterator.next(), all);
+                }
+            } else if (v instanceof Map) {
+                handleMapResult(prefix + k + ".", (Map<String, Object>) v, all);
+            }
+        });
     }
 
     /**

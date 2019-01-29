@@ -49,18 +49,22 @@ public class AgoutiEngine {
         log.info("invoke work flow name {} , desc {} ", workFlow.getName(), workFlow.getDescription());
         Map<String, String> invokeResult = invoke(workFlow.getTasks().iterator());
 
+        log.debug("all task invoke result {}", invokeResult);
+
         Map<String, Object> result = new HashMap<>(10);
 
-        log.debug("all task invoke result {}", result);
+
         JSONObject outputs = workFlow.getOutputs();
         outputs.forEach((k, v) -> result.put(k, handleValue(invokeResult, v)));
 
+        log.debug("output {} ", result);
         return result;
     }
 
     private Object handleValue(Map<String, String> invokeResult, Object v) {
         if (v instanceof String) {
             String v1 = (String) v;
+            return invokeResult.get(v1);
         }
         return invokeResult;
     }

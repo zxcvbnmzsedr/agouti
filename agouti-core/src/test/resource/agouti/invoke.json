@@ -6,15 +6,15 @@
   },
   "tasks": [
     {
-      "target": "GET https://www.sojson.com/",
+      "target": "GET http://t.weather.sojson.com/",
       "alias": "weather",
-      "method": "open/api/weather/json.shtml",
+      "method": "api/weather/city/101030100",
       "taskType": "URL",
       "inputs": {
-        "city": "北京"
+
       },
       "inputsExtra": {
-        "city": "java.lang.String"
+
       }
     }
   ]
