@@ -26,17 +26,17 @@
   },
   "tasks": [
     { // API地址
-      "target": "GET http://cdn.sojson.com/",
+      "target": "GET http://cdn.sojson.com/_city.json",
       // 任务别名
       "alias": "city",
-      "method": "_city.json",
+      "method": "",
       // 任务类型
       "taskType": "URL"
     },
     {
-      "target": "GET http://t.weather.sojson.com/",
+      "target": "GET http://t.weather.sojson.com/api/weather/city/${city[25].city_code}",
       "alias": "weather",
-      "method": "api/weather/city/${city[25].city_code}",
+      "method": "",
       "taskType": "URL"
     }
   ]

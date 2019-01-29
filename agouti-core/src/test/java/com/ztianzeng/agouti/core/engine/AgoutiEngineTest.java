@@ -24,8 +24,6 @@ import com.ztianzeng.agouti.core.resource.ClassPathResource;
 import org.junit.Assert;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
 /**
  * @author zhaotianzeng
  * @version V1.0
@@ -35,7 +33,7 @@ public class AgoutiEngineTest {
 
     @Test
     public void invoke() {
-        String path = "agouti/invoke.json";
+        String path = "agouti/http.json";
 
         AbstractResource resource = new ClassPathResource(
                 path, ClassLoader.getSystemClassLoader());

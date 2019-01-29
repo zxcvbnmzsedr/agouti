@@ -8,15 +8,13 @@
   },
   "tasks": [
     {
-      "target": "GET http://cdn.sojson.com/",
+      "target": "GET http://cdn.sojson.com/_city.json",
       "alias": "city",
-      "method": "_city.json",
       "taskType": "URL"
     },
     {
-      "target": "GET http://t.weather.sojson.com/",
+      "target": "GET http://t.weather.sojson.com/api/weather/city/${city[25].city_code}",
       "alias": "weather",
-      "method": "api/weather/city/${city[25].city_code}",
       "taskType": "URL"
     }
   ]

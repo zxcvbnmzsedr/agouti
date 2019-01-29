@@ -22,6 +22,8 @@ import com.ztianzeng.agouti.core.executor.BaseExecutor;
 import java.util.Map;
 
 /**
+ * feign executor
+ *
  * @author zhaotianzeng
  * @version V1.0
  * @date 2019-01-29 17:43
@@ -33,6 +35,7 @@ public class FeignExecutor extends BaseExecutor {
                             String method,
                             String target,
                             Map<String, Object> inputs) {
+
         return null;
     }
 }

@@ -56,7 +56,7 @@ public class HttpExecutor extends BaseExecutor {
                             String target,
                             Map<String, Object> inputs) {
 
-        String url = target + method;
+        String url = target;
         HttpMethod httpMethod;
 
 
