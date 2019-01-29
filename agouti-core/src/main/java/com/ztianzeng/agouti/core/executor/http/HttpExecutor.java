@@ -15,10 +15,11 @@
  *
  */
 
-package com.ztianzeng.agouti.core.executor;
+package com.ztianzeng.agouti.core.executor.http;
 
 import com.alibaba.fastjson.JSONObject;
 import com.ztianzeng.agouti.core.AgoutiException;
+import com.ztianzeng.agouti.core.executor.BaseExecutor;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -37,7 +38,7 @@ import java.util.regex.Pattern;
  * @date 2019-01-28 20:53
  */
 @Slf4j
-public class UrlExecutor extends BaseExecutor {
+public class HttpExecutor extends BaseExecutor {
     /**
      * http method
      */

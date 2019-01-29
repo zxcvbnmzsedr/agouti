@@ -15,7 +15,7 @@
  *
  */
 
-package com.ztianzeng.agouti.core.executor;
+package com.ztianzeng.agouti.core.executor.http;
 
 /**
  * @author zhaotianzeng

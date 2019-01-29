@@ -20,6 +20,7 @@ package com.ztianzeng.agouti.core.executor;
 
 import com.ztianzeng.agouti.core.AgoutiException;
 import com.ztianzeng.agouti.core.Task;
+import com.ztianzeng.agouti.core.executor.http.HttpExecutor;
 
 /**
  * 执行器工厂
@@ -42,7 +43,7 @@ public final class ExecutorFactory {
      */
     public static BaseExecutor build(Task.TaskType taskType) {
         if (taskType.equals(Task.TaskType.URL)) {
-            return new UrlExecutor();
+            return new HttpExecutor();
         }
         throw new AgoutiException("json error ,not support taskType");
     }
