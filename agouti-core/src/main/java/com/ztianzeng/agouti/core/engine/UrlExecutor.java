@@ -37,7 +37,7 @@ import java.util.regex.Pattern;
  * @date 2019-01-28 20:53
  */
 @Slf4j
-public class UrlActuator extends BaseActuator {
+public class UrlExecutor extends BaseExecutor {
     /**
      * http method
      */

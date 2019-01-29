@@ -40,9 +40,9 @@ public final class ActuatorFactory {
      * @param taskType
      * @return
      */
-    public static BaseActuator build(Task.TaskType taskType) {
+    public static BaseExecutor build(Task.TaskType taskType) {
         if (taskType.equals(Task.TaskType.URL)) {
-            return new UrlActuator();
+            return new UrlExecutor();
         }
         throw new AgoutiException("json error ,not support taskType");
     }

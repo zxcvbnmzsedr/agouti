@@ -78,8 +78,8 @@ public class AgoutiEngine {
         Map<String, String> invokeResult = new HashMap<>(10);
         while (tasks.hasNext()) {
             Task next = tasks.next();
-            BaseActuator baseActuator = ActuatorFactory.build(next.getTaskType());
-            baseActuator.invoke(invokeResult, next);
+            BaseExecutor baseExecutor = ActuatorFactory.build(next.getTaskType());
+            baseExecutor.invoke(invokeResult, next);
         }
         return invokeResult;
     }

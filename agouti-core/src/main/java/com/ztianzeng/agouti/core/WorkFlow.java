@@ -46,9 +46,4 @@ public class WorkFlow {
 
     private List<Task> tasks;
 
-    public WorkFlow(String name, String description, JSONObject outputs) {
-        this.name = name;
-        this.description = description;
-        this.outputs = outputs;
-    }
 }
