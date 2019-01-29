@@ -17,8 +17,16 @@
 
 package com.ztianzeng.agouti.core.engine;
 
+import com.alibaba.fastjson.JSONObject;
+import lombok.extern.slf4j.Slf4j;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
+import java.io.IOException;
 import java.util.Map;
-import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * URL执行器
@@ -27,11 +35,60 @@ import java.util.Objects;
  * @version V1.0
  * @date 2019-01-28 20:53
  */
+@Slf4j
 public class UrlActuator extends BaseActuator {
 
+    private static final Pattern REQUEST_LINE_PATTERN = Pattern.compile("^([A-Z]+)[ ]*(.*)$");
 
     @Override
-    protected Objects invoke(Object before, String alias, String method, String target, Map<String, Object> inputs) {
+    protected Object invoke(Map<String, String> all,
+                            String alias,
+                            String method,
+                            String target,
+                            Map<String, Object> inputs) {
+
+        String url = target + method;
+        HttpMethod httpMethod;
+
+        Matcher requestLineMatcher = REQUEST_LINE_PATTERN.matcher(url);
+        Request.Builder builder = new Request.Builder();
+        if (!requestLineMatcher.find()) {
+            throw new IllegalStateException(String.format(
+                    "RequestLine annotation didn't start with an HTTP verb on method %s",
+                    target));
+        } else {
+            httpMethod = HttpMethod.valueOf(requestLineMatcher.group(1));
+
+
+        }
+        if (httpMethod == HttpMethod.GET) {
+            StringBuilder param = new StringBuilder();
+            param.append("?");
+            inputs.forEach((k, v) -> param.append(k).append("=").append(v).append("&"));
+            builder.url(requestLineMatcher.group(2) + param.toString());
+
+        } else {
+            builder.url(requestLineMatcher.group(2));
+        }
+
+        builder.method(httpMethod.name(), null);
+        OkHttpClient client = new OkHttpClient();
+
+        builder.addHeader("user-agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.80 Safari/537.36");
+        Request request = builder.build();
+
+        Response response = null;
+        try {
+            response = client.newCall(request).execute();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            return JSONObject.parseObject(response.body().string());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return null;
     }
+
 }

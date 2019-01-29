@@ -17,21 +17,11 @@
 
 package com.ztianzeng.agouti.core.engine;
 
-import java.util.Map;
-import java.util.Objects;
-
 /**
- * feign执行器
- *
  * @author zhaotianzeng
  * @version V1.0
- * @date 2019-01-28 20:53
+ * @date 2019-01-29 11:11
  */
-public class FeignActuator extends BaseActuator {
-
-
-    @Override
-    protected Objects invoke(Object before, String alias, String method, String target, Map<String, Object> inputs) {
-        return null;
-    }
+public enum HttpMethod {
+    GET, HEAD, POST, PUT, DELETE, CONNECT, OPTIONS, TRACE, PATCH
 }

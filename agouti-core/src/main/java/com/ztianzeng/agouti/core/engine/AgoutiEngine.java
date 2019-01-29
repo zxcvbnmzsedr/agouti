@@ -18,12 +18,14 @@
 package com.ztianzeng.agouti.core.engine;
 
 import com.alibaba.fastjson.JSONObject;
+import com.ztianzeng.agouti.core.AgoutiException;
 import com.ztianzeng.agouti.core.Task;
 import com.ztianzeng.agouti.core.WorkFlow;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Objects;
+import java.util.Map;
 
 /**
  * 核心引擎
@@ -40,9 +42,27 @@ public class AgoutiEngine {
      * @param workFlow 服务流程
      * @param params   接口参数
      */
-    public void invoke(WorkFlow workFlow, JSONObject params) {
-        log.info("invoke workFlow name {} , desc {} ", workFlow.getName(), workFlow.getDescription());
-        invoke(workFlow.getTasks().iterator());
+    public Object invoke(WorkFlow workFlow, JSONObject params) {
+        if (workFlow == null) {
+            throw new AgoutiException("workFlow is null");
+        }
+        log.info("invoke work flow name {} , desc {} ", workFlow.getName(), workFlow.getDescription());
+        Map<String, String> invokeResult = invoke(workFlow.getTasks().iterator());
+
+        Map<String, Object> result = new HashMap<>(10);
+
+        log.debug("all task invoke result {}", result);
+        JSONObject outputs = workFlow.getOutputs();
+        outputs.forEach((k, v) -> result.put(k, handleValue(invokeResult, v)));
+
+        return result;
+    }
+
+    private Object handleValue(Map<String, String> invokeResult, Object v) {
+        if (v instanceof String) {
+            String v1 = (String) v;
+        }
+        return invokeResult;
     }
 
     /**
@@ -50,12 +70,13 @@ public class AgoutiEngine {
      *
      * @param tasks 任务列表
      */
-    private void invoke(Iterator<Task> tasks) {
-        Objects invoke = null;
+    private Map<String, String> invoke(Iterator<Task> tasks) {
+        Map<String, String> invokeResult = new HashMap<>(10);
         while (tasks.hasNext()) {
             Task next = tasks.next();
             BaseActuator baseActuator = ActuatorFactory.build(next.getTaskType());
-            invoke = baseActuator.invoke(invoke, next);
+            baseActuator.invoke(invokeResult, next);
         }
+        return invokeResult;
     }
 }

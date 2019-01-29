@@ -18,6 +18,7 @@
 package com.ztianzeng.agouti.core;
 
 
+import com.alibaba.fastjson.JSONObject;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -41,11 +42,11 @@ public class WorkFlow {
     /**
      * 定义好最后输出的数据模型
      */
-    private Object outputs;
+    private JSONObject outputs;
 
     private List<Task> tasks;
 
-    public WorkFlow(String name, String description, Object outputs) {
+    public WorkFlow(String name, String description, JSONObject outputs) {
         this.name = name;
         this.description = description;
         this.outputs = outputs;

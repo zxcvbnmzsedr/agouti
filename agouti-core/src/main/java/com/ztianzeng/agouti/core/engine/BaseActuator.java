@@ -18,9 +18,10 @@
 package com.ztianzeng.agouti.core.engine;
 
 import com.ztianzeng.agouti.core.Task;
+import lombok.extern.slf4j.Slf4j;
 
+import java.util.Iterator;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * 基础执行器
@@ -29,30 +30,58 @@ import java.util.Objects;
  * @version V1.0
  * @date 2019-01-28 20:57
  */
+@Slf4j
 public abstract class BaseActuator {
 
     /**
      * 执行任务
      *
-     * @param before
+     * @param all  已执行过的task的结果
      * @param task
      * @return
      */
-    public Objects invoke(Object before, Task task) {
-        return invoke(before, task.getAlias(), task.getMethod(), task.getTarget(), task.getInputs());
+    public void invoke(Map<String, String> all, Task task) {
+        Object invokeResult = invoke(all, task.getAlias(), task.getMethod(), task.getTarget(), task.getInputs());
+        log.info("task {} invoke result {} ", invokeResult);
+        if (invokeResult instanceof Iterator) {
+            log.debug("iterable result");
+            Iterator iterableResult = (Iterator) invokeResult;
+
+        }
+
+        if (invokeResult instanceof Map) {
+            log.debug("map result");
+            Map<String, Object> mapResult = (Map) invokeResult;
+            mapResult.forEach((k, v) -> {
+                if (v instanceof String
+                        || v instanceof Number) {
+                    all.put(k, String.valueOf(v));
+                } else if (v instanceof Iterator) {
+                    Iterator iterator = (Iterator) v;
+                    int p = 0;
+                    while (iterator.hasNext()) {
+                        all.put(k + iterator.toString() + (p++), iterator.toString());
+                    }
+                } else if (v instanceof Map) {
+
+                }
+            });
+
+        }
+
     }
 
     /**
      * 执行器
      *
-     * @param before 上一个task执行的结果
+     * @param all    已执行过的task的结果
      * @param alias  别名
      * @param method 方法
      * @param target 目标
      * @param inputs 入参
      * @return 执行结果
      */
-    protected abstract Objects invoke(Object before, String alias, String method, String target, Map<String, Object> inputs);
+    protected abstract Object invoke(Map<String, String> all, String alias, String method, String target, Map<String, Object> inputs);
 
 
 }

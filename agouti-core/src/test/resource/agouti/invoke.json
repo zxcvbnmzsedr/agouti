@@ -1,0 +1,21 @@
+{
+  "name": "agouti",
+  "description": "agoutiTest",
+  "outputs": {
+    "d1name": "$weather.data.wendu"
+  },
+  "tasks": [
+    {
+      "target": "GET https://www.sojson.com/",
+      "alias": "weather",
+      "method": "open/api/weather/json.shtml",
+      "taskType": "URL",
+      "inputs": {
+        "city": "北京"
+      },
+      "inputsExtra": {
+        "city": "java.lang.String"
+      }
+    }
+  ]
+}

@@ -61,13 +61,14 @@ public class Parser {
             task.setTarget(t1.getString("target"));
             task.setAlias(t1.getString("alias"));
             task.setMethod(t1.getString("method"));
+            task.setTaskType(Task.TaskType.valueOf(t1.getString("taskType")));
             task.setInputs(handleInput(t1.getJSONObject("inputs"), t1.getJSONObject("inputsExtra")));
             tasks.add(task);
         }
 
         return new WorkFlow(workFlowJSON.getString("name"),
                 workFlowJSON.getString("description"),
-                workFlowJSON.get("outputs"),
+                workFlowJSON.getJSONObject("outputs"),
                 tasks);
     }
 

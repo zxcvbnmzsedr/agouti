@@ -17,33 +17,33 @@
 
 package com.ztianzeng.agouti.core.engine;
 
+import com.ztianzeng.agouti.core.WorkFlow;
+import com.ztianzeng.agouti.core.parser.Parser;
+import com.ztianzeng.agouti.core.resource.AbstractResource;
+import com.ztianzeng.agouti.core.resource.ClassPathResource;
+import org.junit.Test;
 
-import com.ztianzeng.agouti.core.AgoutiException;
-import com.ztianzeng.agouti.core.Task;
+import static org.junit.Assert.*;
 
 /**
- * 执行器工厂
- *
  * @author zhaotianzeng
  * @version V1.0
- * @date 2019-01-28 21:10
+ * @date 2019-01-29 09:33
  */
-public final class ActuatorFactory {
+public class AgoutiEngineTest {
 
-    private ActuatorFactory() {
+    @Test
+    public void invoke() {
+        String path = "agouti/invoke.json";
 
-    }
+        AbstractResource resource = new ClassPathResource(
+                path, ClassLoader.getSystemClassLoader());
 
-    /**
-     * 构造执行器
-     *
-     * @param taskType
-     * @return
-     */
-    public static BaseActuator build(Task.TaskType taskType) {
-        if (taskType.equals(Task.TaskType.URL)) {
-            return new UrlActuator();
-        }
-        throw new AgoutiException("json error ,not support taskType");
+        Parser parser = new Parser();
+        WorkFlow parse = parser.parse(resource);
+
+
+        AgoutiEngine agoutiEngine = new AgoutiEngine();
+        agoutiEngine.invoke(parse,null);
     }
 }
