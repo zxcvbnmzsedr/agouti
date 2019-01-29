@@ -18,6 +18,7 @@
 package com.ztianzeng.agouti.core.engine;
 
 import com.alibaba.fastjson.JSONObject;
+import com.ztianzeng.agouti.core.AgoutiException;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -82,7 +83,7 @@ public class UrlActuator extends BaseActuator {
             StringBuilder param = new StringBuilder();
 
             inputs.forEach((k, v) -> param.append(k).append("=").append(v).append("&"));
-            if (!param.toString().isEmpty()){
+            if (!param.toString().isEmpty()) {
                 param.insert(0, "?");
             }
 
@@ -100,18 +101,13 @@ public class UrlActuator extends BaseActuator {
         builder.addHeader("user-agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.80 Safari/537.36");
         Request request = builder.build();
 
-        Response response = null;
+        Response response;
         try {
             response = client.newCall(request).execute();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
             return JSONObject.parse(response.body().string());
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new AgoutiException(e);
         }
-        return null;
     }
 
 }
