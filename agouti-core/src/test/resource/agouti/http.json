@@ -5,12 +5,18 @@
     {
       "alias": "city",
       "target": "GET http://cdn.sojson.com/_city.json",
-      "taskType": "URL"
+      "taskType": "URL",
+      "headers": {
+        "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.80 Safari/537.36"
+      }
     },
     {
       "alias": "weather",
       "target": "GET http://t.weather.sojson.com/api/weather/city/${city[25].city_code}",
-      "taskType": "URL"
+      "taskType": "URL",
+      "headers": {
+        "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.80 Safari/537.36"
+      }
     }
   ],
   "outputs": {

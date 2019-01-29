@@ -17,6 +17,7 @@
 
 package com.ztianzeng.agouti.core.executor.feign;
 
+import com.ztianzeng.agouti.core.Task;
 import com.ztianzeng.agouti.core.executor.BaseExecutor;
 
 import java.util.Map;
@@ -29,13 +30,9 @@ import java.util.Map;
  * @date 2019-01-29 17:43
  */
 public class FeignExecutor extends BaseExecutor {
-    @Override
-    protected Object invoke(Map<String, String> all,
-                            String alias,
-                            String method,
-                            String target,
-                            Map<String, Object> inputs) {
 
+    @Override
+    protected Object invoke(Task task, Map<String, String> all, String alias, String method, String target, Map<String, Object> inputs) {
         return null;
     }
 }
