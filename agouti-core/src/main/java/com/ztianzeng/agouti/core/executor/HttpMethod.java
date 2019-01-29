@@ -15,35 +15,13 @@
  *
  */
 
-package com.ztianzeng.agouti.core.engine;
-
-
-import com.ztianzeng.agouti.core.AgoutiException;
-import com.ztianzeng.agouti.core.Task;
+package com.ztianzeng.agouti.core.executor;
 
 /**
- * 执行器工厂
- *
  * @author zhaotianzeng
  * @version V1.0
- * @date 2019-01-28 21:10
+ * @date 2019-01-29 11:11
  */
-public final class ActuatorFactory {
-
-    private ActuatorFactory() {
-
-    }
-
-    /**
-     * 构造执行器
-     *
-     * @param taskType
-     * @return
-     */
-    public static BaseExecutor build(Task.TaskType taskType) {
-        if (taskType.equals(Task.TaskType.URL)) {
-            return new UrlExecutor();
-        }
-        throw new AgoutiException("json error ,not support taskType");
-    }
+public enum HttpMethod {
+    GET, HEAD, POST, PUT, DELETE, CONNECT, OPTIONS, TRACE, PATCH
 }

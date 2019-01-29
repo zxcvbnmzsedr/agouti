@@ -21,9 +21,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.ztianzeng.agouti.core.AgoutiException;
 import com.ztianzeng.agouti.core.Task;
 import com.ztianzeng.agouti.core.WorkFlow;
+import com.ztianzeng.agouti.core.executor.ExecutorFactory;
+import com.ztianzeng.agouti.core.executor.BaseExecutor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -49,25 +50,13 @@ public class AgoutiEngine {
         log.info("invoke work flow name {} , desc {} ", workFlow.getName(), workFlow.getDescription());
         Map<String, String> invokeResult = invoke(workFlow.getTasks().iterator());
 
+
         log.debug("all task invoke result {}", invokeResult);
 
-        Map<String, Object> result = new HashMap<>(10);
 
-
-        JSONObject outputs = workFlow.getOutputs();
-        outputs.forEach((k, v) -> result.put(k, handleValue(invokeResult, v)));
-
-        log.debug("output {} ", result);
-        return result;
+        return DataProcessor.getCurrentContext().getResult(workFlow);
     }
 
-    private Object handleValue(Map<String, String> invokeResult, Object v) {
-        if (v instanceof String) {
-            String v1 = (String) v;
-            return invokeResult.get(v1);
-        }
-        return invokeResult;
-    }
 
     /**
      * 具体的执行
@@ -75,10 +64,10 @@ public class AgoutiEngine {
      * @param tasks 任务列表
      */
     private Map<String, String> invoke(Iterator<Task> tasks) {
-        Map<String, String> invokeResult = new HashMap<>(10);
+        Map<String, String> invokeResult = DataProcessor.getCurrentContext().INVOKE_RESULT;
         while (tasks.hasNext()) {
             Task next = tasks.next();
-            BaseExecutor baseExecutor = ActuatorFactory.build(next.getTaskType());
+            BaseExecutor baseExecutor = ExecutorFactory.build(next.getTaskType());
             baseExecutor.invoke(invokeResult, next);
         }
         return invokeResult;
