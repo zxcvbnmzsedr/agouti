@@ -1,21 +1,21 @@
 {
   "name": "agouti",
   "description": "agoutiTest",
+  "tasks": [
+    {
+      "alias": "city",
+      "target": "GET http://cdn.sojson.com/_city.json",
+      "taskType": "URL"
+    },
+    {
+      "alias": "weather",
+      "target": "GET http://t.weather.sojson.com/api/weather/city/${city[25].city_code}",
+      "taskType": "URL"
+    }
+  ],
   "outputs": {
     "yesterdayData": "$weather.data.yesterday.date",
     "sunrise": "$weather.data.yesterday.sunrise",
     "cityInfo": "$weather.cityInfo.city"
-  },
-  "tasks": [
-    {
-      "target": "GET http://cdn.sojson.com/_city.json",
-      "alias": "city",
-      "taskType": "URL"
-    },
-    {
-      "target": "GET http://t.weather.sojson.com/api/weather/city/${city[25].city_code}",
-      "alias": "weather",
-      "taskType": "URL"
-    }
-  ]
+  }
 }
