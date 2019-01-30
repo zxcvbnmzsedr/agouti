@@ -44,20 +44,24 @@ public class FeignExecutor extends BaseExecutor {
         try {
             Class<?> aClass = Class.forName(target);
 
+            if (aClass.isInterface()) {
+                InvocationHandler handler = new DefaultInvocationHandler(aClass);
+                Object o = Proxy.newProxyInstance(aClass.getClassLoader(),
+                        new Class<?>[]{aClass},
+                        handler);
+                Method me = o.getClass().getDeclaredMethod(method);
+                return me.invoke(o);
+            } else {
+                Method declaredMethod = aClass.getDeclaredMethod(method);
+                return declaredMethod.invoke(aClass.newInstance());
 
-            InvocationHandler handler = new DefaultInvocationHandler(aClass);
+            }
 
-            Object o = Proxy.newProxyInstance(aClass.getClassLoader(), new Class<?>[]{aClass}, handler);
-
-            Method me = o.getClass().getDeclaredMethod(method);
-            me.invoke(o);
-        } catch (ClassNotFoundException | NoSuchMethodException e) {
+        } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             throw new AgoutiException(e);
-        } catch (IllegalAccessException | InvocationTargetException e) {
-            throw new AgoutiException("invoke method error " + target + " " + method);
+        } catch (InstantiationException e) {
+            e.printStackTrace();
         }
-
-
         return null;
     }
 
@@ -71,7 +75,7 @@ public class FeignExecutor extends BaseExecutor {
 
         @Override
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-            //default方法不重写
+            // if method is default，don't rewrite
             if (method.isDefault()) {
                 Constructor<MethodHandles.Lookup> constructor = MethodHandles.Lookup.class
                         .getDeclaredConstructor(Class.class, int.class);

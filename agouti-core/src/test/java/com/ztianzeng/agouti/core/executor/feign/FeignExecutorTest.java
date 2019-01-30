@@ -21,6 +21,9 @@ import com.ztianzeng.agouti.core.Task;
 import com.ztianzeng.agouti.core.executor.BaseExecutor;
 import org.junit.Test;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @author zhaotianzeng
  * @version V1.0
@@ -31,12 +34,22 @@ public class FeignExecutorTest {
     @Test
     public void invoke() {
         BaseExecutor baseExecutor = new FeignExecutor();
+        Map<String, String> all = new HashMap<>();
+
         Task task = new Task();
         task.setTaskType(Task.TaskType.FEIGN);
         task.setTarget("com.ztianzeng.agouti.core.executor.feign.TestFeignInterfaceClass");
         task.setMethod("print");
 
-        baseExecutor.invoke(null, task);
+
+        Task task2 = new Task();
+        task2.setTaskType(Task.TaskType.FEIGN);
+        task2.setTarget("com.ztianzeng.agouti.core.executor.feign.TestFeignClass");
+        task2.setMethod("print");
+
+        baseExecutor.invoke(all, task);
+
+        baseExecutor.invoke(all, task2);
     }
 
 }
