@@ -21,10 +21,8 @@ import com.ztianzeng.agouti.core.AgoutiException;
 import com.ztianzeng.agouti.core.Task;
 import com.ztianzeng.agouti.core.executor.BaseExecutor;
 
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
+import java.lang.invoke.MethodHandles;
+import java.lang.reflect.*;
 import java.util.Map;
 
 /**
@@ -73,21 +71,22 @@ public class FeignExecutor extends BaseExecutor {
 
         @Override
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-            if ("equals".equals(method.getName())) {
-                try {
-                    Object otherHandler =
-                            args.length > 0 && args[0] != null ? Proxy.getInvocationHandler(args[0]) : null;
-                    return equals(otherHandler);
-                } catch (IllegalArgumentException e) {
-                    return false;
-                }
-            } else if ("hashCode".equals(method.getName())) {
-                return hashCode();
-            } else if ("toString".equals(method.getName())) {
-                return toString();
+            //default方法不重写
+            if (method.isDefault()) {
+                Constructor<MethodHandles.Lookup> constructor = MethodHandles.Lookup.class
+                        .getDeclaredConstructor(Class.class, int.class);
+                constructor.setAccessible(true);
+
+                Class<?> declaringClass = method.getDeclaringClass();
+                int allModes = MethodHandles.Lookup.PUBLIC | MethodHandles.Lookup.PRIVATE | MethodHandles.Lookup.PROTECTED | MethodHandles.Lookup.PACKAGE;
+
+                return constructor.newInstance(declaringClass, allModes)
+                        .unreflectSpecial(method, declaringClass)
+                        .bindTo(proxy)
+                        .invokeWithArguments(args);
             }
 
-            return method.invoke(proxy, args);
+            return null;
         }
 
         @Override

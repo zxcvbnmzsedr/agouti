@@ -33,8 +33,8 @@ public class FeignExecutorTest {
         BaseExecutor baseExecutor = new FeignExecutor();
         Task task = new Task();
         task.setTaskType(Task.TaskType.FEIGN);
-        task.setTarget("com.ztianzeng.agouti.core.executor.feign.TestFeignClass");
-        task.setMethod("toString");
+        task.setTarget("com.ztianzeng.agouti.core.executor.feign.TestFeignInterfaceClass");
+        task.setMethod("print");
 
         baseExecutor.invoke(null, task);
     }
