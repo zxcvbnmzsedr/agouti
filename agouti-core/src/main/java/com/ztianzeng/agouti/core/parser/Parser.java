@@ -63,6 +63,7 @@ public class Parser {
             task.setMethod(t1.getString("method"));
             task.setTaskType(Task.TaskType.valueOf(t1.getString("taskType")));
             task.setInputs(handleInput(t1.getJSONObject("inputs"), t1.getJSONObject("inputsExtra")));
+            task.setHeaders(t1.getJSONObject("headers"));
             tasks.add(task);
         }
 

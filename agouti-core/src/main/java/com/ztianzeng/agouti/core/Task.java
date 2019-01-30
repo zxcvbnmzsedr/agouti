@@ -1,5 +1,6 @@
 package com.ztianzeng.agouti.core;
 
+import com.alibaba.fastjson.JSONObject;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -27,6 +28,8 @@ public class Task {
     private String alias;
 
     private String method;
+
+    private JSONObject headers;
 
     /**
      * 入参情况，多个入参通过key:value的结构书写

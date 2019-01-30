@@ -42,7 +42,7 @@ public abstract class BaseExecutor {
      * @return
      */
     public void invoke(Map<String, String> all, Task task) {
-        Object invokeResult = invoke(all, task.getAlias(), task.getMethod(), task.getTarget(), task.getInputs());
+        Object invokeResult = invoke(task, all, task.getAlias(), task.getMethod(), task.getTarget(), task.getInputs());
         log.debug("task {} invoke result {} ", invokeResult);
         handleResult("$" + task.getAlias(), invokeResult, all);
     }
@@ -90,6 +90,7 @@ public abstract class BaseExecutor {
     /**
      * 执行器
      *
+     * @param task   当前执行的任务
      * @param all    已执行过的task的结果
      * @param alias  别名
      * @param method 方法
@@ -97,7 +98,12 @@ public abstract class BaseExecutor {
      * @param inputs 入参
      * @return 执行结果
      */
-    protected abstract Object invoke(Map<String, String> all, String alias, String method, String target, Map<String, Object> inputs);
+    protected abstract Object invoke(Task task,
+                                     Map<String, String> all,
+                                     String alias,
+                                     String method,
+                                     String target,
+                                     Map<String, Object> inputs);
 
 
 }

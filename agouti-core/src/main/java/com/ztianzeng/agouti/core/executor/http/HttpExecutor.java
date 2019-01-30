@@ -19,6 +19,7 @@ package com.ztianzeng.agouti.core.executor.http;
 
 import com.alibaba.fastjson.JSONObject;
 import com.ztianzeng.agouti.core.AgoutiException;
+import com.ztianzeng.agouti.core.Task;
 import com.ztianzeng.agouti.core.executor.BaseExecutor;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
@@ -50,7 +51,8 @@ public class HttpExecutor extends BaseExecutor {
     private static final Pattern VARIABLE_PATTERN = Pattern.compile("\\$\\{[^/]+?}");
 
     @Override
-    protected Object invoke(Map<String, String> all,
+    protected Object invoke(Task task,
+                            Map<String, String> all,
                             String alias,
                             String method,
                             String target,
@@ -96,10 +98,12 @@ public class HttpExecutor extends BaseExecutor {
             builder.url(requestLineMatcher.group(2));
         }
 
+        task.getHeaders().forEach((k, v) -> builder.addHeader(k, String.valueOf(v)));
+
+
         builder.method(httpMethod.name(), null);
         OkHttpClient client = new OkHttpClient();
 
-        builder.addHeader("user-agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.80 Safari/537.36");
         Request request = builder.build();
 
         Response response;
