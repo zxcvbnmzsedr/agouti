@@ -17,9 +17,11 @@
 
 package com.ztianzeng.agouti.core.executor;
 
+import com.alibaba.fastjson.JSONObject;
 import com.ztianzeng.agouti.core.Task;
 import lombok.extern.slf4j.Slf4j;
 
+import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
@@ -48,6 +50,9 @@ public abstract class BaseExecutor {
     }
 
     private void handleResult(String prefix, Object invokeResult, Map<String, String> all) {
+        if (invokeResult == null) {
+            return;
+        }
         if (invokeResult instanceof Collection) {
             Collection collection = (Collection) invokeResult;
             Iterator iterator = collection.iterator();
@@ -55,15 +60,24 @@ public abstract class BaseExecutor {
             while (iterator.hasNext()) {
                 handleResult(prefix + "[" + (i++) + "]", iterator.next(), all);
             }
-        }
-        if (invokeResult instanceof Map) {
+        } else if (invokeResult instanceof Map) {
             Map<String, Object> mapResult = (Map) invokeResult;
             handleMapResult(prefix + ".", mapResult, all);
-        }
-
-        if (invokeResult instanceof String) {
+        } else if (invokeResult instanceof String) {
             String k = (String) invokeResult;
             all.put(prefix, k);
+        } else {
+            all.put(prefix, JSONObject.toJSONString(invokeResult));
+            Field[] fields = invokeResult.getClass().getDeclaredFields();
+            for (Field field : fields) {
+                field.setAccessible(true);
+                try {
+                    all.put(prefix + "." + field.getName(), field.get(invokeResult).toString());
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+
+            }
         }
     }
 

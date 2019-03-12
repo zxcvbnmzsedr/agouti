@@ -17,11 +17,11 @@
         "hehe": "$hehe"
       },
       "inputsExtra": {
-        "hehe": "java.lang.String"
+        "hehe": "com.ztianzeng.agouti.core.engine.User"
       }
     }
   ],
   "outputs": {
-    "yesterdayData": "$hehe"
+    "yesterdayData": "$hehe.name"
   }
 }

@@ -58,7 +58,7 @@ public class MethodExecutor extends BaseExecutor {
                 List<Object> params = new ArrayList<>(20);
                 inputs.forEach((s, o) -> {
                     parameterTypes.add(o.getClass());
-                    params.add(all.get(o));
+                    params.add(o);
                 });
                 Class[] classes = new Class[parameterTypes.toArray().length];
                 for (int i = 0; i < parameterTypes.size(); i++) {

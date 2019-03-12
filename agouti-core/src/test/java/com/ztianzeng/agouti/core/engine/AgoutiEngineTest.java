@@ -38,8 +38,7 @@ public class AgoutiEngineTest {
         AbstractResource resource = new ClassPathResource(
                 path, ClassLoader.getSystemClassLoader());
 
-        Parser parser = new Parser();
-        WorkFlow parse = parser.parse(resource);
+        WorkFlow parse = Parser.parse(resource);
         Object invoke = AgoutiEngine.invoke(parse, null);
         Assert.assertNotNull(invoke);
     }
@@ -51,9 +50,9 @@ public class AgoutiEngineTest {
         AbstractResource resource = new ClassPathResource(
                 path, ClassLoader.getSystemClassLoader());
 
-        Parser parser = new Parser();
-        WorkFlow parse = parser.parse(resource);
+        WorkFlow parse = Parser.parse(resource);
         Object invoke = AgoutiEngine.invoke(parse, null);
         Assert.assertNotNull(invoke);
+        System.out.println(invoke);
     }
 }

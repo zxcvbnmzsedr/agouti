@@ -23,8 +23,11 @@ import com.ztianzeng.agouti.core.Task;
 import com.ztianzeng.agouti.core.WorkFlow;
 import com.ztianzeng.agouti.core.executor.BaseExecutor;
 import com.ztianzeng.agouti.core.executor.ExecutorFactory;
+import com.ztianzeng.agouti.core.parser.KVObj;
 import lombok.extern.slf4j.Slf4j;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -49,11 +52,7 @@ public class AgoutiEngine {
         }
         log.info("invoke work flow name {} , desc {} ", workFlow.getName(), workFlow.getDescription());
         Map<String, String> invokeResult = invoke(workFlow.getTasks().iterator());
-
-
         log.debug("all task invoke result {}", invokeResult);
-
-
         return DataProcessor.getCurrentContext().getResult(workFlow);
     }
 
@@ -67,6 +66,33 @@ public class AgoutiEngine {
         Map<String, String> invokeResult = DataProcessor.getCurrentContext().INVOKE_RESULT;
         while (tasks.hasNext()) {
             Task next = tasks.next();
+            Map<String, Object> inputs = new HashMap<>(20);
+            next.getOriginInputs().forEach((k, v) -> {
+                try {
+                    if (v instanceof KVObj) {
+                        KVObj v1 = (KVObj) v;
+                        Class<?> aClass = Class.forName(v1.getValue());
+                        if (invokeResult.get(v1.getKey()) == null) {
+                            inputs.put(k,
+                                    aClass.getDeclaredConstructor().newInstance()
+                            );
+
+                        } else {
+                            inputs.put(k,
+                                    JSONObject.parseObject(invokeResult.get(v1.getKey()), aClass)
+                            );
+                        }
+
+
+                    }
+                } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
+                    throw new AgoutiException("class not found " + e);
+                } catch (NoSuchMethodException | InvocationTargetException e) {
+                    e.printStackTrace();
+                }
+            });
+            next.setInputs(inputs);
+
             BaseExecutor baseExecutor = ExecutorFactory.build(next.getTaskType());
             baseExecutor.invoke(invokeResult, next);
         }

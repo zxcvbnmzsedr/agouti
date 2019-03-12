@@ -26,10 +26,7 @@ import com.ztianzeng.agouti.core.resource.AbstractResource;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author zhaotianzeng
@@ -44,7 +41,7 @@ public class Parser {
      * @param resource
      * @return
      */
-    public WorkFlow parse(AbstractResource resource) {
+    public static WorkFlow parse(AbstractResource resource) {
         JSONObject workFlowJSON;
         try {
             workFlowJSON = JSONObject.parseObject(resource.read(), JSONObject.class);
@@ -62,7 +59,9 @@ public class Parser {
             task.setAlias(t1.getString("alias"));
             task.setMethod(t1.getString("method"));
             task.setTaskType(Task.TaskType.valueOf(t1.getString("taskType")));
-            task.setInputs(handleInput(t1.getJSONObject("inputs"), t1.getJSONObject("inputsExtra")));
+            task.setOriginInputs(
+                    handleInput(t1.getJSONObject("inputs"), t1.getJSONObject("inputsExtra"))
+            );
             task.setHeaders(t1.getJSONObject("headers"));
             tasks.add(task);
         }
@@ -79,22 +78,13 @@ public class Parser {
      * @param inputs      输入参数
      * @param inputsExtra 输入参数类型
      */
-    private Map<String, Object> handleInput(JSONObject inputs, JSONObject inputsExtra) {
+    private static Map<String, Object> handleInput(JSONObject inputs,
+                                                   JSONObject inputsExtra) {
         Map<String, Object> stringObjectMap = new HashMap<>(1);
         if (inputsExtra != null) {
             inputsExtra.forEach((k, v) -> {
-                try {
-                    Class<?> aClass = Class.forName(String.valueOf(v));
-                    Object o = inputs.get(k);
-                    if (aClass.equals(o.getClass())) {
-                        stringObjectMap.put(k, o);
-                    } else {
-                        stringObjectMap.put(k, JSONObject.parseObject(o.toString(), aClass));
-                    }
-
-                } catch (ClassNotFoundException e) {
-                    throw new AgoutiException("class not found " + v);
-                }
+                Object o = inputs.get(k);
+                stringObjectMap.put(k, new KVObj(o.toString(), v.toString()));
             });
         }
         return stringObjectMap;

@@ -6,11 +6,12 @@ package com.ztianzeng.agouti.core.engine;
  * @date 2019-03-12 11:37
  */
 public class MethodTest {
-    public String hehe(){
-        return "hehe";
+    public User hehe(){
+        return new User("username");
     }
 
-    public void haha(String hehe){
-        System.out.println(hehe);
+    public void haha(User user){
+        System.out.println(user);
     }
+
 }
