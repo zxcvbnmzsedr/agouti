@@ -23,6 +23,8 @@ import com.ztianzeng.agouti.core.executor.BaseExecutor;
 
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -52,8 +54,18 @@ public class MethodExecutor extends BaseExecutor {
                 Method me = o.getClass().getDeclaredMethod(method);
                 return me.invoke(o);
             } else {
-                Method declaredMethod = aClass.getDeclaredMethod(method);
-                return declaredMethod.invoke(aClass.newInstance());
+                List<Class> parameterTypes = new ArrayList<>(20);
+                List<Object> params = new ArrayList<>(20);
+                inputs.forEach((s, o) -> {
+                    parameterTypes.add(o.getClass());
+                    params.add(all.get(o));
+                });
+                Class[] classes = new Class[parameterTypes.toArray().length];
+                for (int i = 0; i < parameterTypes.size(); i++) {
+                    classes[i] = parameterTypes.get(i);
+                }
+                Method declaredMethod = aClass.getDeclaredMethod(method, classes);
+                return declaredMethod.invoke(aClass.newInstance(), params.toArray());
 
             }
 

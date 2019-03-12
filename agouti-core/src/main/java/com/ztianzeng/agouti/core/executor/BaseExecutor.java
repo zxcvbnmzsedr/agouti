@@ -60,6 +60,11 @@ public abstract class BaseExecutor {
             Map<String, Object> mapResult = (Map) invokeResult;
             handleMapResult(prefix + ".", mapResult, all);
         }
+
+        if (invokeResult instanceof String) {
+            String k = (String) invokeResult;
+            all.put(prefix, k);
+        }
     }
 
     /**
