@@ -21,8 +21,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.ztianzeng.agouti.core.AgoutiException;
 import com.ztianzeng.agouti.core.Task;
 import com.ztianzeng.agouti.core.WorkFlow;
-import com.ztianzeng.agouti.core.executor.ExecutorFactory;
 import com.ztianzeng.agouti.core.executor.BaseExecutor;
+import com.ztianzeng.agouti.core.executor.ExecutorFactory;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Iterator;
@@ -43,7 +43,7 @@ public class AgoutiEngine {
      * @param workFlow 服务流程
      * @param params   接口参数
      */
-    public Object invoke(WorkFlow workFlow, JSONObject params) {
+    public static Object invoke(WorkFlow workFlow, JSONObject params) {
         if (workFlow == null) {
             throw new AgoutiException("workFlow is null");
         }
@@ -63,7 +63,7 @@ public class AgoutiEngine {
      *
      * @param tasks 任务列表
      */
-    private Map<String, String> invoke(Iterator<Task> tasks) {
+    private static Map<String, String> invoke(Iterator<Task> tasks) {
         Map<String, String> invokeResult = DataProcessor.getCurrentContext().INVOKE_RESULT;
         while (tasks.hasNext()) {
             Task next = tasks.next();

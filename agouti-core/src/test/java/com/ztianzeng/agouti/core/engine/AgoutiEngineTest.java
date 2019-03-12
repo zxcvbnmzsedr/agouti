@@ -40,8 +40,7 @@ public class AgoutiEngineTest {
 
         Parser parser = new Parser();
         WorkFlow parse = parser.parse(resource);
-        AgoutiEngine agoutiEngine = new AgoutiEngine();
-        Object invoke = agoutiEngine.invoke(parse, null);
+        Object invoke = AgoutiEngine.invoke(parse, null);
         Assert.assertNotNull(invoke);
     }
 }
