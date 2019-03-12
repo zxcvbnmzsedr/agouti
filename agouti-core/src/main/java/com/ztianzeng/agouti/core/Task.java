@@ -41,7 +41,7 @@ public class Task {
         /**
          * FEIGN 调用
          */
-        FEIGN,
+        METHOD,
         /**
          * URL调用
          */

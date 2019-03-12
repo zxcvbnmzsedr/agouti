@@ -15,7 +15,7 @@
  *
  */
 
-package com.ztianzeng.agouti.core.executor.feign;
+package com.ztianzeng.agouti.core.executor.method;
 
 import com.ztianzeng.agouti.core.AgoutiException;
 import com.ztianzeng.agouti.core.Task;
@@ -32,7 +32,7 @@ import java.util.Map;
  * @version V1.0
  * @date 2019-01-29 17:43
  */
-public class FeignExecutor extends BaseExecutor {
+public class MethodExecutor extends BaseExecutor {
 
     @Override
     protected Object invoke(Task task,

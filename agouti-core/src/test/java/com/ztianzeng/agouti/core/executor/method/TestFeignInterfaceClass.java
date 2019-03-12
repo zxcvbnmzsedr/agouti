@@ -15,16 +15,16 @@
  *
  */
 
-package com.ztianzeng.agouti.core.executor.feign;
+package com.ztianzeng.agouti.core.executor.method;
 
 /**
  * @author zhaotianzeng
  * @version V1.0
  * @date 2019-01-29 20:05
  */
-public class TestFeignClass {
+public interface TestFeignInterfaceClass {
 
-    public void print() {
+    default void print() {
         System.out.println("hello world");
     }
 }
