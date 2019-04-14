@@ -45,13 +45,12 @@ public class Parser {
         JSONObject workFlowJSON;
         try {
             workFlowJSON = JSONObject.parseObject(resource.read(), JSONObject.class);
-
         } catch (IOException e) {
             throw new AgoutiException(e);
         }
         JSONArray taskJSONs = workFlowJSON.getJSONArray("tasks");
-        List<Task> tasks = new ArrayList<>();
 
+        List<Task> tasks = new ArrayList<>();
         for (Object t : taskJSONs) {
             JSONObject t1 = (JSONObject) t;
             Task task = new Task();
