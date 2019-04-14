@@ -53,22 +53,32 @@ public class Parser {
         List<Task> tasks = new ArrayList<>();
         for (Object t : taskJSONs) {
             JSONObject t1 = (JSONObject) t;
-            Task task = new Task();
-            task.setTarget(t1.getString("target"));
-            task.setAlias(t1.getString("alias"));
-            task.setMethod(t1.getString("method"));
-            task.setTaskType(Task.TaskType.valueOf(t1.getString("taskType")));
-            task.setOriginInputs(
-                    handleInput(t1.getJSONObject("inputs"), t1.getJSONObject("inputsExtra"))
-            );
-            task.setHeaders(t1.getJSONObject("headers"));
-            tasks.add(task);
+            tasks.add(readTask(t1));
         }
 
         return new WorkFlow(workFlowJSON.getString("name"),
                 workFlowJSON.getString("description"),
                 workFlowJSON.getJSONObject("outputs"),
                 tasks);
+    }
+
+    /**
+     * 读取节点
+     *
+     * @param t1
+     * @return
+     */
+    private static Task readTask(JSONObject t1) {
+        Task task = new Task();
+        task.setTarget(t1.getString("target"));
+        task.setAlias(t1.getString("alias"));
+        task.setMethod(t1.getString("method"));
+        task.setTaskType(Task.TaskType.valueOf(t1.getString("taskType")));
+        task.setOriginInputs(
+                handleInput(t1.getJSONObject("inputs"), t1.getJSONObject("inputsExtra"))
+        );
+        task.setHeaders(t1.getJSONObject("headers"));
+        return task;
     }
 
     /**
