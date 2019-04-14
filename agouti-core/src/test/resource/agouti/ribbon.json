@@ -1,0 +1,21 @@
+{
+  "name": "agouti",
+  "description": "agoutiTest",
+  "tasks": [
+    {
+      "alias": "serviceA",
+      "target": "lb://service-a",
+      "taskType": "URL"
+    },
+    {
+      "alias": "serviceB",
+      "target": "lb://service-b",
+      "taskType": "URL"
+    }
+  ],
+  "outputs": {
+    "yesterdayData": "$weather.data.yesterday.date",
+    "sunrise": "$weather.data.yesterday.sunrise",
+    "cityInfo": "$weather.cityInfo.city"
+  }
+}
