@@ -17,7 +17,6 @@
 package com.ztianzeng.agouti.http;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -35,7 +34,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 /**
  * @author zhaotianzeng
@@ -56,7 +54,7 @@ public class HttpTask extends WorkFlowTask {
     };
 
     @Override
-    public void start(WorkFlow workflow, Task task) throws JsonProcessingException {
+    public void start(WorkFlow workflow, Task task) {
         // request info
         Object request = task.getInputData().get(REQUEST_PARAMETER_NAME);
 
@@ -107,18 +105,19 @@ public class HttpTask extends WorkFlowTask {
      * @param input input param
      * @return okhttp Response wrap to inner response
      */
-    private HttpResponseWrapper httpCall(Input input) throws JsonProcessingException {
+    private HttpResponseWrapper httpCall(Input input) {
         OkHttpClient client = new OkHttpClient();
         Request.Builder builder = new Request.Builder();
-        RequestBody requestBody = RequestBody.create(
-                MediaType.parse(input.accept),
-                om.writeValueAsString(input.body)
-        );
+
         input.headers.forEach(builder::header);
-        builder.url(input.uri).method(input.method.name(), requestBody);
         Response response;
 
         try {
+            RequestBody requestBody = RequestBody.create(
+                    MediaType.parse(input.accept),
+                    om.writeValueAsString(input.body)
+            );
+            builder.url(input.uri).method(input.method.name(), requestBody);
             response = client.newCall(builder.build()).execute();
             HttpResponseWrapper responseWrapper = new HttpResponseWrapper();
             responseWrapper.status = response.code();
