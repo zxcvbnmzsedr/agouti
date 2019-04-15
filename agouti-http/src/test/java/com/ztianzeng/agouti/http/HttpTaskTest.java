@@ -78,7 +78,7 @@ public class HttpTaskTest {
 
 
     @Test
-    public void testPost() throws JsonProcessingException {
+    public void testPost() {
         Task task = new Task();
         HttpTask.Input input = new HttpTask.Input();
         input.setUri("http://localhost:7009/post");
