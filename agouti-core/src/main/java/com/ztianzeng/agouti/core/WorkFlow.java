@@ -18,11 +18,13 @@
 package com.ztianzeng.agouti.core;
 
 
-import com.alibaba.fastjson.JSONObject;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import com.ztianzeng.common.tasks.Task;
+import com.ztianzeng.common.workflow.WorkFlowDef;
+import lombok.Data;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 任务编排流程
@@ -31,9 +33,15 @@ import java.util.List;
  * @version V1.0
  * @date 2019-01-28 17:52
  */
-@Getter
-@AllArgsConstructor
+@Data
 public class WorkFlow {
+    public enum WorkFlowStatus {
+        /**
+         * RUNNING
+         */
+        RUNNING;
+
+    }
 
     private String name;
 
@@ -42,8 +50,15 @@ public class WorkFlow {
     /**
      * 定义好最后输出的数据模型
      */
-    private JSONObject outputs;
+    private Map<String, Object> outputs;
 
     private List<Task> tasks;
+
+    private WorkFlowStatus status;
+
+    private WorkFlowDef workflowDefinition;
+
+    private Map<String, Object> inputs = new HashMap<>();
+
 
 }

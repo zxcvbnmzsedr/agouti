@@ -15,14 +15,16 @@
  *
  */
 
-package com.ztianzeng.agouti.core.executor.feign;
+package com.ztianzeng.agouti.core.executor.method;
 
 import com.ztianzeng.agouti.core.AgoutiException;
-import com.ztianzeng.agouti.core.Task;
 import com.ztianzeng.agouti.core.executor.BaseExecutor;
+import com.ztianzeng.common.tasks.Task;
 
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -32,7 +34,7 @@ import java.util.Map;
  * @version V1.0
  * @date 2019-01-29 17:43
  */
-public class FeignExecutor extends BaseExecutor {
+public class MethodExecutor extends BaseExecutor {
 
     @Override
     protected Object invoke(Task task,
@@ -52,8 +54,18 @@ public class FeignExecutor extends BaseExecutor {
                 Method me = o.getClass().getDeclaredMethod(method);
                 return me.invoke(o);
             } else {
-                Method declaredMethod = aClass.getDeclaredMethod(method);
-                return declaredMethod.invoke(aClass.newInstance());
+                List<Class> parameterTypes = new ArrayList<>(20);
+                List<Object> params = new ArrayList<>(20);
+                inputs.forEach((s, o) -> {
+                    parameterTypes.add(o.getClass());
+                    params.add(o);
+                });
+                Class[] classes = new Class[parameterTypes.toArray().length];
+                for (int i = 0; i < parameterTypes.size(); i++) {
+                    classes[i] = parameterTypes.get(i);
+                }
+                Method declaredMethod = aClass.getDeclaredMethod(method, classes);
+                return declaredMethod.invoke(aClass.newInstance(), params.toArray());
 
             }
 

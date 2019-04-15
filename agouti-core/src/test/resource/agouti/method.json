@@ -1,0 +1,27 @@
+{
+  "name": "agouti",
+  "description": "agoutiTest",
+  "tasks": [
+    {
+      "alias": "hehe",
+      "target": "com.ztianzeng.agouti.core.engine.MethodTest",
+      "taskType": "METHOD",
+      "method": "hehe"
+    },
+    {
+      "alias": "haha",
+      "target": "com.ztianzeng.agouti.core.engine.MethodTest",
+      "taskType": "METHOD",
+      "method": "haha",
+      "inputs": {
+        "hehe": "$hehe"
+      },
+      "inputsExtra": {
+        "hehe": "com.ztianzeng.agouti.core.engine.User"
+      }
+    }
+  ],
+  "outputs": {
+    "yesterdayData": "$hehe.name"
+  }
+}

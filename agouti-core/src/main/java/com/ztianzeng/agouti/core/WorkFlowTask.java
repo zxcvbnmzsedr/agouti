@@ -14,17 +14,19 @@
  * limitations under the License.
  *
  */
+package com.ztianzeng.agouti.core;
 
-package com.ztianzeng.agouti.core.executor.feign;
+import com.ztianzeng.common.tasks.Task;
 
 /**
  * @author zhaotianzeng
  * @version V1.0
- * @date 2019-01-29 20:05
+ * @date 2019-04-15 11:47
  */
-public interface TestFeignInterfaceClass {
+public class WorkFlowTask {
 
-    default void print() {
-        System.out.println("hello world");
+
+    public void start(WorkFlow workflow, Task task) {
+
     }
 }

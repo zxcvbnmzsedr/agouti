@@ -10,15 +10,42 @@
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>agouti-core</module>
+        <module>agouti-common</module>
+        <module>agouti-http</module>
+        <module>agouti-http</module>
     </modules>
 
 
     <dependencyManagement>
         <dependencies>
             <dependency>
+                <groupId>com.ztianzeng.agouti</groupId>
+                <artifactId>agouti-common</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ztianzeng.agouti</groupId>
+                <artifactId>agouti-core</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.hibernate.validator</groupId>
+                <artifactId>hibernate-validator</artifactId>
+                <version>6.0.14.Final</version>
+            </dependency>
+            <dependency>
                 <groupId>com.squareup.okhttp3</groupId>
                 <artifactId>okhttp</artifactId>
                 <version>3.10.0</version>
+            </dependency>
+            <dependency>
+                <groupId>com.jayway.jsonpath</groupId>
+                <artifactId>json-path</artifactId>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>2.9.8</version>
             </dependency>
             <dependency>
                 <groupId>com.alibaba</groupId>

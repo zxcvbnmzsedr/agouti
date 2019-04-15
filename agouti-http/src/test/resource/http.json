@@ -1,0 +1,24 @@
+{
+  "name": "firstPost",
+  "description": "the post of http",
+  "version": 1,
+  "tasks": [
+    {
+      "name": "d1",
+      "type": "HTTP",
+      "inputParameters": {
+        "http_request": {
+          "uri": "http://localhost:7009/post",
+          "method": "POST",
+          "body": {
+            "input_key1": "value1",
+            "input_key2": "45.3d"
+          }
+        }
+      }
+    }
+  ],
+  "outputParameters": {
+    "cdn_url": "${d1.response.input_key1}"
+  }
+}

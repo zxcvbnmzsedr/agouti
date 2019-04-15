@@ -64,3 +64,8 @@ Object invoke = agoutiEngine.invoke(parse, null);
 ~~~
 output {yesterdayData=28, sunrise=07:23, cityInfo=天津市} 
 ~~~
+
+
+# LICENSE
+
+apache: http://www.apache.org/licenses/LICENSE-2.0

@@ -19,10 +19,10 @@ package com.ztianzeng.agouti.core.parser;
 
 import com.alibaba.fastjson.JSONArray;
 import com.ztianzeng.agouti.core.HelloWorld;
-import com.ztianzeng.agouti.core.Task;
 import com.ztianzeng.agouti.core.WorkFlow;
 import com.ztianzeng.agouti.core.resource.AbstractResource;
 import com.ztianzeng.agouti.core.resource.ClassPathResource;
+import com.ztianzeng.common.tasks.Task;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -56,8 +56,9 @@ public class ParserTest {
         }
 
     }
+
     @Test
-    public void a(){
+    public void a() {
         JSONArray objects = new JSONArray();
 
     }

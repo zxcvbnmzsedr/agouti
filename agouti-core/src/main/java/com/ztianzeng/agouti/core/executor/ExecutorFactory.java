@@ -19,9 +19,9 @@ package com.ztianzeng.agouti.core.executor;
 
 
 import com.ztianzeng.agouti.core.AgoutiException;
-import com.ztianzeng.agouti.core.Task;
-import com.ztianzeng.agouti.core.executor.feign.FeignExecutor;
 import com.ztianzeng.agouti.core.executor.http.HttpExecutor;
+import com.ztianzeng.agouti.core.executor.method.MethodExecutor;
+import com.ztianzeng.common.tasks.Task;
 
 /**
  * 执行器工厂
@@ -46,8 +46,8 @@ public final class ExecutorFactory {
         if (taskType.equals(Task.TaskType.URL)) {
             return new HttpExecutor();
         }
-        if (taskType.equals(Task.TaskType.FEIGN)) {
-            return new FeignExecutor();
+        if (taskType.equals(Task.TaskType.METHOD)) {
+            return new MethodExecutor();
         }
         throw new AgoutiException("json error ,not support taskType");
     }

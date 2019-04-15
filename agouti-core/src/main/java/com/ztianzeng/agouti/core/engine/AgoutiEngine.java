@@ -19,12 +19,15 @@ package com.ztianzeng.agouti.core.engine;
 
 import com.alibaba.fastjson.JSONObject;
 import com.ztianzeng.agouti.core.AgoutiException;
-import com.ztianzeng.agouti.core.Task;
 import com.ztianzeng.agouti.core.WorkFlow;
-import com.ztianzeng.agouti.core.executor.ExecutorFactory;
 import com.ztianzeng.agouti.core.executor.BaseExecutor;
+import com.ztianzeng.agouti.core.executor.ExecutorFactory;
+import com.ztianzeng.agouti.core.parser.KVObj;
+import com.ztianzeng.common.tasks.Task;
 import lombok.extern.slf4j.Slf4j;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -43,17 +46,13 @@ public class AgoutiEngine {
      * @param workFlow 服务流程
      * @param params   接口参数
      */
-    public Object invoke(WorkFlow workFlow, JSONObject params) {
+    public static Object invoke(WorkFlow workFlow, JSONObject params) {
         if (workFlow == null) {
             throw new AgoutiException("workFlow is null");
         }
         log.info("invoke work flow name {} , desc {} ", workFlow.getName(), workFlow.getDescription());
         Map<String, String> invokeResult = invoke(workFlow.getTasks().iterator());
-
-
         log.debug("all task invoke result {}", invokeResult);
-
-
         return DataProcessor.getCurrentContext().getResult(workFlow);
     }
 
@@ -63,10 +62,37 @@ public class AgoutiEngine {
      *
      * @param tasks 任务列表
      */
-    private Map<String, String> invoke(Iterator<Task> tasks) {
+    private static Map<String, String> invoke(Iterator<Task> tasks) {
         Map<String, String> invokeResult = DataProcessor.getCurrentContext().INVOKE_RESULT;
         while (tasks.hasNext()) {
             Task next = tasks.next();
+            Map<String, Object> inputs = new HashMap<>(20);
+            next.getOriginInputs().forEach((k, v) -> {
+                try {
+                    if (v instanceof KVObj) {
+                        KVObj v1 = (KVObj) v;
+                        Class<?> aClass = Class.forName(v1.getValue());
+                        if (invokeResult.get(v1.getKey()) == null) {
+                            inputs.put(k,
+                                    aClass.getDeclaredConstructor().newInstance()
+                            );
+
+                        } else {
+                            inputs.put(k,
+                                    JSONObject.parseObject(invokeResult.get(v1.getKey()), aClass)
+                            );
+                        }
+
+
+                    }
+                } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
+                    throw new AgoutiException("class not found " + e);
+                } catch (NoSuchMethodException | InvocationTargetException e) {
+                    e.printStackTrace();
+                }
+            });
+            next.setInputs(inputs);
+
             BaseExecutor baseExecutor = ExecutorFactory.build(next.getTaskType());
             baseExecutor.invoke(invokeResult, next);
         }

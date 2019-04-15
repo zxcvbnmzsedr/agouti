@@ -32,16 +32,27 @@ import org.junit.Test;
 public class AgoutiEngineTest {
 
     @Test
-    public void invoke() {
+    public void testHttp() {
         String path = "agouti/http.json";
 
         AbstractResource resource = new ClassPathResource(
                 path, ClassLoader.getSystemClassLoader());
 
-        Parser parser = new Parser();
-        WorkFlow parse = parser.parse(resource);
-        AgoutiEngine agoutiEngine = new AgoutiEngine();
-        Object invoke = agoutiEngine.invoke(parse, null);
+        WorkFlow parse = Parser.parse(resource);
+        Object invoke = AgoutiEngine.invoke(parse, null);
         Assert.assertNotNull(invoke);
+    }
+
+    @Test
+    public void testMethod() {
+        String path = "agouti/method.json";
+
+        AbstractResource resource = new ClassPathResource(
+                path, ClassLoader.getSystemClassLoader());
+
+        WorkFlow parse = Parser.parse(resource);
+        Object invoke = AgoutiEngine.invoke(parse, null);
+        Assert.assertNotNull(invoke);
+        System.out.println(invoke);
     }
 }
