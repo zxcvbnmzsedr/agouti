@@ -18,7 +18,7 @@
 package com.ztianzeng.agouti.core.executor;
 
 import com.alibaba.fastjson.JSONObject;
-import com.ztianzeng.agouti.core.Task;
+import com.ztianzeng.common.tasks.Task;
 import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Field;

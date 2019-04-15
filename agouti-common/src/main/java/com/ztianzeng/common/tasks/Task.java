@@ -12,11 +12,9 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  */
-package com.ztianzeng.agouti.core;
+package com.ztianzeng.common.tasks;
 
-import com.alibaba.fastjson.JSONObject;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -46,8 +44,6 @@ public class Task {
 
     private String method;
 
-    private JSONObject headers;
-
     /**
      * 入参情况，多个入参通过key:value的结构书写
      */
@@ -57,6 +53,17 @@ public class Task {
 
     private Map<String, Object> inputData = new HashMap<>();
 
+    private Status status;
+
+
+    /**
+     * runtime fail reason
+     */
+    private String reasonForFail;
+
+    public enum Status {
+        FAILED;
+    }
 
     public enum TaskType {
         /**

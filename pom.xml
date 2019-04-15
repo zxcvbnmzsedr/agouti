@@ -20,6 +20,11 @@
         <dependencies>
             <dependency>
                 <groupId>com.ztianzeng.agouti</groupId>
+                <artifactId>agouti-common</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ztianzeng.agouti</groupId>
                 <artifactId>agouti-core</artifactId>
                 <version>1.0-SNAPSHOT</version>
             </dependency>

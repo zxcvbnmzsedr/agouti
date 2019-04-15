@@ -40,6 +40,11 @@ public class HttpTask extends WorkFlowTask {
         // request info
         Object request = task.getInputData().get(REQUEST_PARAMETER_NAME);
 
+        if (request == null){
+            task.setReasonForFail("");
+            task.setStatus(Task.Status.FAILED);
+            return;
+        }
         Input input = om.convertValue(request, Input.class);
 
 

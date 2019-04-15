@@ -19,6 +19,7 @@ package com.ztianzeng.agouti.core;
 
 
 import com.alibaba.fastjson.JSONObject;
+import com.ztianzeng.common.tasks.Task;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

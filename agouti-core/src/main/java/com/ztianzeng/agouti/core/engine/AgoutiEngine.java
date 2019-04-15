@@ -19,11 +19,11 @@ package com.ztianzeng.agouti.core.engine;
 
 import com.alibaba.fastjson.JSONObject;
 import com.ztianzeng.agouti.core.AgoutiException;
-import com.ztianzeng.agouti.core.Task;
 import com.ztianzeng.agouti.core.WorkFlow;
 import com.ztianzeng.agouti.core.executor.BaseExecutor;
 import com.ztianzeng.agouti.core.executor.ExecutorFactory;
 import com.ztianzeng.agouti.core.parser.KVObj;
+import com.ztianzeng.common.tasks.Task;
 import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.InvocationTargetException;

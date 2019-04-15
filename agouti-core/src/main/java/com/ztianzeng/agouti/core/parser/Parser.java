@@ -20,13 +20,16 @@ package com.ztianzeng.agouti.core.parser;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.ztianzeng.agouti.core.AgoutiException;
-import com.ztianzeng.agouti.core.Task;
 import com.ztianzeng.agouti.core.WorkFlow;
 import com.ztianzeng.agouti.core.resource.AbstractResource;
+import com.ztianzeng.common.tasks.Task;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author zhaotianzeng
@@ -77,7 +80,6 @@ public class Parser {
         task.setOriginInputs(
                 handleInput(t1.getJSONObject("inputs"), t1.getJSONObject("inputsExtra"))
         );
-        task.setHeaders(t1.getJSONObject("headers"));
         return task;
     }
 

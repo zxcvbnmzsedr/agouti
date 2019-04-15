@@ -19,9 +19,9 @@ package com.ztianzeng.agouti.core.executor;
 
 
 import com.ztianzeng.agouti.core.AgoutiException;
-import com.ztianzeng.agouti.core.Task;
-import com.ztianzeng.agouti.core.executor.method.MethodExecutor;
 import com.ztianzeng.agouti.core.executor.http.HttpExecutor;
+import com.ztianzeng.agouti.core.executor.method.MethodExecutor;
+import com.ztianzeng.common.tasks.Task;
 
 /**
  * 执行器工厂

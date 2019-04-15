@@ -19,8 +19,8 @@ package com.ztianzeng.agouti.core.executor.http;
 
 import com.alibaba.fastjson.JSONObject;
 import com.ztianzeng.agouti.core.AgoutiException;
-import com.ztianzeng.agouti.core.Task;
 import com.ztianzeng.agouti.core.executor.BaseExecutor;
+import com.ztianzeng.common.tasks.Task;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -97,8 +97,6 @@ public class HttpExecutor extends BaseExecutor {
         } else {
             builder.url(requestLineMatcher.group(2));
         }
-
-        task.getHeaders().forEach((k, v) -> builder.addHeader(k, String.valueOf(v)));
 
 
         builder.method(httpMethod.name(), null);

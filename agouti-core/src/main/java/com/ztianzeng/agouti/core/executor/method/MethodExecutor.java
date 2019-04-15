@@ -18,8 +18,8 @@
 package com.ztianzeng.agouti.core.executor.method;
 
 import com.ztianzeng.agouti.core.AgoutiException;
-import com.ztianzeng.agouti.core.Task;
 import com.ztianzeng.agouti.core.executor.BaseExecutor;
+import com.ztianzeng.common.tasks.Task;
 
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.*;

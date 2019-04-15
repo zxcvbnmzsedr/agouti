@@ -17,5 +17,17 @@
             <groupId>com.ztianzeng.agouti</groupId>
             <artifactId>agouti-core</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-server</artifactId>
+            <version>9.4.3.v20170317</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-servlet</artifactId>
+            <version>9.4.3.v20170317</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 </project>

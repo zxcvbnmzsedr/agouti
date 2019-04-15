@@ -16,6 +16,8 @@
  */
 package com.ztianzeng.agouti.core;
 
+import com.ztianzeng.common.tasks.Task;
+
 /**
  * @author zhaotianzeng
  * @version V1.0
