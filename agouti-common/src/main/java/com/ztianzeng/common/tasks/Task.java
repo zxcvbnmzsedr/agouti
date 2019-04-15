@@ -55,6 +55,8 @@ public class Task {
 
     private Status status;
 
+    private Map<String, Object> outputData = new HashMap<>();
+
 
     /**
      * runtime fail reason

@@ -18,8 +18,8 @@ package com.ztianzeng.agouti.http;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ztianzeng.agouti.core.Task;
 import com.ztianzeng.agouti.core.executor.http.HttpMethod;
+import com.ztianzeng.common.tasks.Task;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.AbstractHandler;
@@ -53,7 +53,7 @@ public class HttpTaskTest {
 
     private static String JSON_RESPONSE;
 
-    private HttpTask httpTask;
+    private HttpTask httpTask = new HttpTask();
 
 
     private static Server server;
@@ -161,20 +161,12 @@ public class HttpTaskTest {
                 writer.close();
             } else if (request.getMethod().equals("POST") && request.getRequestURI().equals("/oauth")) {
                 //echo back oauth parameters generated in the Authorization header in the response
-                Map<String, String> params = parseOauthParameters(request);
                 response.addHeader("Content-Type", "application/json");
                 PrintWriter writer = response.getWriter();
-                writer.print(objectMapper.writeValueAsString(params));
                 writer.flush();
                 writer.close();
             }
         }
 
-        private Map<String, String> parseOauthParameters(HttpServletRequest request) {
-            String paramString = request.getHeader("Authorization").replaceAll("^OAuth (.*)", "$1");
-            return Arrays.stream(paramString.split("\\s*,\\s*"))
-                    .map(pair -> pair.split("="))
-                    .collect(Collectors.toMap(o -> o[0], o -> o[1].replaceAll("\"", "")));
-        }
     }
 }

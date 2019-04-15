@@ -17,8 +17,8 @@
 
 package com.ztianzeng.agouti.core.executor.method;
 
-import com.ztianzeng.agouti.core.Task;
 import com.ztianzeng.agouti.core.executor.BaseExecutor;
+import com.ztianzeng.common.tasks.Task;
 import org.junit.Test;
 
 import java.util.HashMap;
