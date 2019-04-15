@@ -15,8 +15,15 @@ public class WorkflowTask {
     private String name;
 
     /**
+     * task type
+     * used for find task such as HttpTask
+     */
+    private String type = TaskType.HTTP.name();
+
+    /**
      * input parameters
      */
     private Map<String, Object> inputParameters = new LinkedHashMap<>();
-    
+
+
 }

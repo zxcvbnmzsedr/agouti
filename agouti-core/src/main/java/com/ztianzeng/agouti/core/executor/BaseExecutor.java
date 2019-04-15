@@ -18,12 +18,16 @@
 package com.ztianzeng.agouti.core.executor;
 
 import com.alibaba.fastjson.JSONObject;
+import com.ztianzeng.agouti.core.WorkFlow;
 import com.ztianzeng.common.tasks.Task;
+import com.ztianzeng.common.workflow.WorkFlowDef;
+import com.ztianzeng.common.workflow.WorkflowTask;
 import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -37,16 +41,44 @@ import java.util.Map;
 public abstract class BaseExecutor {
 
     /**
-     * 执行任务
+     * start work flow
      *
-     * @param all  已执行过的task的结果
-     * @param task
+     * @param workFlowDefinition work flow definition
+     * @param workflowInput      work flow input
      * @return
      */
-    public void invoke(Map<String, String> all, Task task) {
-        Object invokeResult = invoke(task, all, task.getAlias(), task.getMethod(), task.getTarget(), task.getInputs());
-        log.debug("task {} invoke result {} ", invokeResult);
-        handleResult("$" + task.getAlias(), invokeResult, all);
+    public void startWorkFlow(WorkFlowDef workFlowDefinition,
+                              Map<String, Object> workflowInput) {
+        WorkFlow workFlow = convertWorkFlow(workFlowDefinition, workflowInput);
+
+        for (WorkflowTask task : workFlowDefinition.getTasks()) {
+            Task t = new Task();
+        }
+
+    }
+
+
+    /**
+     * start work flow
+     *
+     * @param workFlow
+     * @param tasks
+     */
+    public void startWorkFlow(WorkFlow workFlow, List<Task> tasks) {
+
+
+    }
+
+    /**
+     * workFlowDef to WorkFlow
+     */
+    private WorkFlow convertWorkFlow(WorkFlowDef workFlowDef, Map<String, Object> workflowInput) {
+        WorkFlow workFlow = new WorkFlow();
+        workFlow.setName(workFlowDef.getName());
+        workFlow.setDescription(workFlowDef.getDescription());
+        workFlow.setStatus(WorkFlow.WorkFlowStatus.RUNNING);
+        workFlow.setInputs(workflowInput);
+        return workFlow;
     }
 
     private void handleResult(String prefix, Object invokeResult, Map<String, String> all) {

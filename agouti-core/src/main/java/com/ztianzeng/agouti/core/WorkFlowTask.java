@@ -24,6 +24,8 @@ import com.ztianzeng.common.tasks.Task;
  * @date 2019-04-15 11:47
  */
 public class WorkFlowTask {
+
+
     public void start(WorkFlow workflow, Task task) {
 
     }

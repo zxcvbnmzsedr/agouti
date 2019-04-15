@@ -16,7 +16,6 @@
 
 package com.ztianzeng.agouti.http;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ztianzeng.agouti.core.executor.http.HttpMethod;
@@ -100,11 +99,6 @@ public class HttpTaskTest {
         Object response = hr.get("body");
         assertEquals(Task.Status.COMPLETED, task.getStatus());
         assertTrue("response is: " + response, response instanceof Map);
-        Map<String, Object> map = (Map<String, Object>) response;
-        Set<String> inputKeys = body.keySet();
-        Set<String> responseKeys = map.keySet();
-        inputKeys.containsAll(responseKeys);
-        responseKeys.containsAll(inputKeys);
     }
 
 
