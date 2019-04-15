@@ -16,6 +16,7 @@
 
 package com.ztianzeng.agouti.http;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ztianzeng.agouti.core.executor.http.HttpMethod;
@@ -33,11 +34,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author zhaotianzeng
@@ -76,10 +78,10 @@ public class HttpTaskTest {
 
 
     @Test
-    public void start() {
+    public void start() throws JsonProcessingException {
         Task task = new Task();
         HttpTask.Input input = new HttpTask.Input();
-        input.setUri("http://localhost:7009/oauth");
+        input.setUri("http://localhost:7009/post");
 
         Map<String, Object> body = new HashMap<>();
         body.put("input_key1", "value1");
@@ -92,7 +94,17 @@ public class HttpTaskTest {
 
         httpTask.start(null, task);
 
+        assertEquals(task.getReasonForFail(), Task.Status.COMPLETED, task.getStatus());
 
+        Map<String, Object> hr = (Map<String, Object>) task.getOutputData().get("response");
+        Object response = hr.get("body");
+        assertEquals(Task.Status.COMPLETED, task.getStatus());
+        assertTrue("response is: " + response, response instanceof Map);
+        Map<String, Object> map = (Map<String, Object>) response;
+        Set<String> inputKeys = body.keySet();
+        Set<String> responseKeys = map.keySet();
+        inputKeys.containsAll(responseKeys);
+        responseKeys.containsAll(inputKeys);
     }
 
 

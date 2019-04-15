@@ -16,6 +16,7 @@
  */
 package com.ztianzeng.agouti.core;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ztianzeng.common.tasks.Task;
 
 /**
@@ -24,7 +25,7 @@ import com.ztianzeng.common.tasks.Task;
  * @date 2019-04-15 11:47
  */
 public class WorkFlowTask {
-    public void start(WorkFlow workflow, Task task) {
+    public void start(WorkFlow workflow, Task task) throws JsonProcessingException {
 
     }
 }

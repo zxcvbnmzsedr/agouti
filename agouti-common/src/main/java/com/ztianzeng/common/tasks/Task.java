@@ -64,7 +64,7 @@ public class Task {
     private String reasonForFail;
 
     public enum Status {
-        FAILED;
+        FAILED, COMPLETED;
     }
 
     public enum TaskType {
