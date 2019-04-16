@@ -86,21 +86,40 @@ public class HttpTaskTest {
         workFlowDef.setName("name");
         workFlowDef.setDescription("desc");
 
-        WorkflowTask workflowTask = new WorkflowTask();
-
-        workflowTask.setName("name");
-        workflowTask.setType("HTTP");
+        WorkflowTask d1 = new WorkflowTask();
+        d1.setName("d1");
+        d1.setType("HTTP");
         HttpTask.Input input = new HttpTask.Input();
         input.setUri("http://localhost:7009/post");
-
         Map<String, Object> body = new HashMap<>();
         body.put("input_key1", "value1");
         body.put("input_key2", 45.3d);
         input.setBody(body);
         input.setMethod(HttpMethod.POST);
-        workflowTask.getInputParameters().put(HttpTask.REQUEST_PARAMETER_NAME, input);
-        workFlowDef.setTasks(Collections.singletonList(workflowTask));
+
+        d1.getInputParameters().put(HttpTask.REQUEST_PARAMETER_NAME, input);
+
+
+        WorkflowTask d2 = new WorkflowTask();
+        d2.setName("d2");
+        d2.setType("HTTP");
+        HttpTask.Input d2In = new HttpTask.Input();
+        d2In.setUri("http://localhost:7009/post");
+        Map<String, Object> d2B = new HashMap<>();
+        d2B.put("B", "value1");
+        d2B.put("C", 45.3d);
+        d2In.setBody(d2B);
+        d2In.setMethod(HttpMethod.POST);
+
+        d2.getInputParameters().put(HttpTask.REQUEST_PARAMETER_NAME, d2In);
+
+
+
+        workFlowDef.getTasks().add(d1);
+        workFlowDef.getTasks().add(d2);
+
         baseExecutor.startWorkFlow(workFlowDef, null);
+
     }
 
     @Test

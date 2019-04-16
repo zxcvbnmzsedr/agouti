@@ -54,6 +54,7 @@ public class BaseExecutor {
             workFlowTask.start(workFlow, task);
         }
 
+        log.info(workFlow.getTasks().toString());
     }
 
 
