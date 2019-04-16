@@ -83,6 +83,8 @@ public class HttpTaskTest {
         WorkFlowDef workFlowDef = new WorkFlowDef();
         workFlowDef.setName("name");
         workFlowDef.setDescription("desc");
+        workFlowDef.setAlias("workflow");
+
         workFlowDef.getOutputParameters().put("d1Key", "${d1}");
 
         WorkflowTask d1 = new WorkflowTask();

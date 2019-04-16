@@ -26,7 +26,10 @@ import com.ztianzeng.common.tasks.Task;
 import com.ztianzeng.common.workflow.WorkFlowDef;
 import lombok.Data;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 任务编排流程
@@ -37,6 +40,7 @@ import java.util.*;
  */
 @Data
 public class WorkFlow {
+
     public enum WorkFlowStatus {
         /**
          * RUNNING
@@ -46,6 +50,8 @@ public class WorkFlow {
     }
 
     private String name;
+
+    private String alias;
 
     private String description;
 
