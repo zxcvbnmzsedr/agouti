@@ -30,6 +30,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 任务编排流程
@@ -45,7 +46,11 @@ public class WorkFlow {
         /**
          * RUNNING
          */
-        RUNNING;
+        RUNNING,
+        /**
+         *
+         */
+        COMPLETED;
 
     }
 
@@ -54,18 +59,15 @@ public class WorkFlow {
     private String description;
 
 
-    /**
-     * temporary result
-     */
-    private Map<String, Object> tampTaskResult = new HashMap<>();
-
     private List<Task> tasks;
 
     private WorkFlowStatus status;
 
     private WorkFlowDef workflowDefinition;
 
-    private Map<String, Object> inputs = new HashMap<>();
+    private Map<String, Object> inputs = new ConcurrentHashMap<>();
+
+    private Map<String, Object> runtimeParam = new ConcurrentHashMap<>();
 
 
     /**
@@ -78,7 +80,7 @@ public class WorkFlow {
         Configuration option = Configuration.defaultConfiguration().addOptions(Option.SUPPRESS_EXCEPTIONS);
 
         Map<String, Object> resultMap = new HashMap<>(20);
-        DocumentContext documentContext = JsonPath.parse(tampTaskResult, option);
+        DocumentContext documentContext = JsonPath.parse(inputs, option);
 
         outputParameters.forEach((k, v) -> {
             Object value = v;

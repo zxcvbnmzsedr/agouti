@@ -38,7 +38,7 @@ public class WorkFlowTest {
         Map<String, Object> d1Res = new HashMap<>();
         d1Res.put("key1", "key1111Val");
         d1Res.put("key2", "key2222Val");
-        workFlow.getTampTaskResult().put("d1", d1Res);
+        workFlow.getInputs().put("d1", d1Res);
 
         Map<String, Object> outputParameters = new HashMap<>();
         outputParameters.put("name","${d1.key1}");

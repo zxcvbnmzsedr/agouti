@@ -55,7 +55,8 @@ public class BaseExecutorTest {
 
         workflowInput.put("input_1", "1");
 
-        baseExecutor.startWorkFlow(workFlowDef, workflowInput);
+        WorkFlow workFlow = baseExecutor.startWorkFlow(workFlowDef, workflowInput);
+
 
     }
 

@@ -17,6 +17,8 @@ public class WorkflowTask {
     @NotEmpty(message = "WorkflowTask name cannot be empty or null")
     private String name;
 
+    private String alias;
+
     /**
      * task type
      * used for find task such as HttpTask

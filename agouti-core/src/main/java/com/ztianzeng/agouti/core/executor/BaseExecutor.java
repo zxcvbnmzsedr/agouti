@@ -48,14 +48,16 @@ public class BaseExecutor {
      * @param workflowInput      work flow input
      * @return
      */
-    public void startWorkFlow(WorkFlowDef workFlowDefinition,
-                              Map<String, Object> workflowInput) {
+    public WorkFlow startWorkFlow(WorkFlowDef workFlowDefinition,
+                                  Map<String, Object> workflowInput) {
         WorkFlow workFlow = convertWorkFlow(workFlowDefinition, workflowInput);
         for (Task task : workFlow.getTasks()) {
             WorkFlowTask workFlowTask = WorkFlowTask.get(task.getTaskType().name());
             workFlowTask.start(workFlow, task);
             completeTask(workFlow, task);
         }
+        workFlow.setStatus(WorkFlow.WorkFlowStatus.COMPLETED);
+        return workFlow;
     }
 
     /**
@@ -65,7 +67,7 @@ public class BaseExecutor {
      */
     private void completeTask(WorkFlow workFlow, Task task) {
         if (StringUtils.isNotEmpty(task.getAlias())) {
-            workFlow.getTampTaskResult().put(task.getAlias(), task.getOutputData());
+            workFlow.getRuntimeParam().put(task.getAlias(), task.getOutputData());
         }
     }
 
@@ -78,19 +80,21 @@ public class BaseExecutor {
         workFlow.setName(workFlowDef.getName());
         workFlow.setDescription(workFlowDef.getDescription());
         workFlow.setStatus(WorkFlow.WorkFlowStatus.RUNNING);
-        workFlow.setInputs(workflowInput);
 
+        // handle input
+        Map<String, Object> taskInput = getTaskInput(workFlow);
+        workFlow.getRuntimeParam().putAll(taskInput);
+
+        if (workflowInput != null) {
+            workFlow.getInputs().putAll(workflowInput);
+        }
 
         List<Task> tasks = new LinkedList<>();
         for (WorkflowTask task : workFlowDef.getTasks()) {
             Task t = new Task();
             t.setName(task.getName());
             t.setTaskType(TaskType.valueOf(task.getType()));
-
-            // handle input
-            Map<String, Object> taskInput = getTaskInput(workFlow);
-            task.getInputParameters().putAll(taskInput);
-
+            t.setAlias(task.getAlias());
 
             t.setInputData(task.getInputParameters());
             tasks.add(t);

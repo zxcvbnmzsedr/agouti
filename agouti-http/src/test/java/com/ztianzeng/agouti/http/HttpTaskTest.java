@@ -18,10 +18,12 @@ package com.ztianzeng.agouti.http;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ztianzeng.agouti.core.WorkFlow;
 import com.ztianzeng.agouti.core.executor.BaseExecutor;
 import com.ztianzeng.common.tasks.Task;
 import com.ztianzeng.common.workflow.WorkFlowDef;
 import com.ztianzeng.common.workflow.WorkflowTask;
+import lombok.extern.slf4j.Slf4j;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.AbstractHandler;
@@ -47,6 +49,7 @@ import static org.junit.Assert.assertTrue;
  * @version V1.0
  * @date 2019-04-15 14:26
  */
+@Slf4j
 public class HttpTaskTest {
     private static final String ERROR_RESPONSE = "Something went wrong!";
 
@@ -89,6 +92,8 @@ public class HttpTaskTest {
         WorkflowTask d1 = new WorkflowTask();
         d1.setName("d1");
         d1.setType("HTTP");
+        d1.setAlias("d1");
+
         HttpTask.Input input = new HttpTask.Input();
         input.setUri("http://localhost:7009/post");
         Map<String, Object> body = new HashMap<>();
@@ -103,6 +108,8 @@ public class HttpTaskTest {
         WorkflowTask d2 = new WorkflowTask();
         d2.setName("d2");
         d2.setType("HTTP");
+        d2.setAlias("d1");
+
         HttpTask.Input d2In = new HttpTask.Input();
         d2In.setUri("http://localhost:7009/post");
         Map<String, Object> d2B = new HashMap<>();
@@ -117,8 +124,8 @@ public class HttpTaskTest {
         workFlowDef.getTasks().add(d1);
         workFlowDef.getTasks().add(d2);
 
-        baseExecutor.startWorkFlow(workFlowDef, null);
-
+        WorkFlow workFlow = baseExecutor.startWorkFlow(workFlowDef, null);
+        log.info(workFlow.toString());
     }
 
     @Test
