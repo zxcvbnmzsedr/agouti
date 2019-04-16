@@ -26,6 +26,7 @@ import com.ztianzeng.agouti.core.WorkFlow;
 import com.ztianzeng.agouti.core.WorkFlowTask;
 import com.ztianzeng.agouti.core.executor.http.HttpMethod;
 import com.ztianzeng.common.tasks.Task;
+import com.ztianzeng.common.workflow.TaskType;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
@@ -52,6 +53,13 @@ public class HttpTask extends WorkFlowTask {
 
     private TypeReference<List<Object>> listOfObj = new TypeReference<List<Object>>() {
     };
+
+    /**
+     * http task
+     */
+    public HttpTask() {
+        super(TaskType.HTTP.name());
+    }
 
     @Override
     public void start(WorkFlow workflow, Task task) {

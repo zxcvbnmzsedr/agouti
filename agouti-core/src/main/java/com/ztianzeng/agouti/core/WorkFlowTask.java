@@ -18,15 +18,41 @@ package com.ztianzeng.agouti.core;
 
 import com.ztianzeng.common.tasks.Task;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @author zhaotianzeng
  * @version V1.0
  * @date 2019-04-15 11:47
  */
-public class WorkFlowTask {
+public abstract class WorkFlowTask {
+    private static Map<String, WorkFlowTask> registry = new HashMap<>();
+    /**
+     * task name
+     */
+    private String name;
 
+    /**
+     * base work flow
+     *
+     * @param name
+     */
+    public WorkFlowTask(String name) {
+        this.name = name;
+        registry.put(name, this);
 
-    public void start(WorkFlow workflow, Task task) {
+    }
 
+    /**
+     * start work flow
+     *
+     * @param workflow wf
+     * @param task     task
+     */
+    public abstract void start(WorkFlow workflow, Task task);
+
+    public static WorkFlowTask get(String type) {
+        return registry.get(type);
     }
 }

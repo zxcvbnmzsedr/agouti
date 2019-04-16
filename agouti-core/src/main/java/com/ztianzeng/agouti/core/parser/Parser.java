@@ -23,6 +23,7 @@ import com.ztianzeng.agouti.core.AgoutiException;
 import com.ztianzeng.agouti.core.WorkFlow;
 import com.ztianzeng.agouti.core.resource.AbstractResource;
 import com.ztianzeng.common.tasks.Task;
+import com.ztianzeng.common.workflow.TaskType;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
@@ -59,10 +60,7 @@ public class Parser {
             tasks.add(readTask(t1));
         }
 
-        return new WorkFlow(workFlowJSON.getString("name"),
-                workFlowJSON.getString("description"),
-                workFlowJSON.getJSONObject("outputs"),
-                tasks);
+        return null;
     }
 
     /**
@@ -76,7 +74,7 @@ public class Parser {
         task.setTarget(t1.getString("target"));
         task.setAlias(t1.getString("alias"));
         task.setMethod(t1.getString("method"));
-        task.setTaskType(Task.TaskType.valueOf(t1.getString("taskType")));
+        task.setTaskType(TaskType.valueOf(t1.getString("taskType")));
         task.setOriginInputs(
                 handleInput(t1.getJSONObject("inputs"), t1.getJSONObject("inputsExtra"))
         );

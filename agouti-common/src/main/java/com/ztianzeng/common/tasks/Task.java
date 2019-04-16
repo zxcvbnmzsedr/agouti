@@ -15,6 +15,7 @@
  */
 package com.ztianzeng.common.tasks;
 
+import com.ztianzeng.common.workflow.TaskType;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -43,6 +44,8 @@ public class Task {
     private String alias;
 
     private String method;
+
+    private String name;
 
     /**
      * 入参情况，多个入参通过key:value的结构书写
@@ -77,14 +80,4 @@ public class Task {
         COMPLETED;
     }
 
-    public enum TaskType {
-        /**
-         * FEIGN 调用
-         */
-        METHOD,
-        /**
-         * URL调用
-         */
-        URL;
-    }
 }

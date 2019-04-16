@@ -60,7 +60,7 @@ public class DataProcessor {
     public Object getResult(WorkFlow workFlow) {
         Map<String, Object> result = new HashMap<>(10);
 
-        JSONObject outputs = workFlow.getOutputs();
+        JSONObject outputs = null;
         outputs.forEach((k, v) -> result.put(k, handleValue(INVOKE_RESULT, v)));
         log.debug("output {} ", result);
         return result;
