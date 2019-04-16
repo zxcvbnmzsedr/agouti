@@ -26,8 +26,6 @@ public class WorkFlowDef {
 
     private String description;
 
-    private String alias;
-
 
     @NotEmpty(message = "WorkflowTask list cannot be empty")
     private List<@Valid WorkflowTask> tasks = new LinkedList<>();

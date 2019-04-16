@@ -51,8 +51,6 @@ public class WorkFlow {
 
     private String name;
 
-    private String alias;
-
     private String description;
 
 

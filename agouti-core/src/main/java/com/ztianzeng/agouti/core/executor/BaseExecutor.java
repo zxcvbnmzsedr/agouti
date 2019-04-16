@@ -78,7 +78,6 @@ public class BaseExecutor {
         workFlow.setDescription(workFlowDef.getDescription());
         workFlow.setStatus(WorkFlow.WorkFlowStatus.RUNNING);
         workFlow.setInputs(workflowInput);
-        workFlow.setAlias(workFlowDef.getAlias());
 
         List<Task> tasks = new LinkedList<>();
         for (WorkflowTask task : workFlowDef.getTasks()) {
