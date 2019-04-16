@@ -72,6 +72,8 @@ public class BaseExecutor {
             Task t = new Task();
             t.setName(task.getName());
             t.setTaskType(TaskType.valueOf(task.getType()));
+
+            t.setInputData(task.getInputParameters());
             tasks.add(t);
         }
         workFlow.setTasks(tasks);

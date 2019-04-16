@@ -18,8 +18,11 @@ package com.ztianzeng.agouti.http;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ztianzeng.agouti.core.executor.BaseExecutor;
 import com.ztianzeng.agouti.core.executor.http.HttpMethod;
 import com.ztianzeng.common.tasks.Task;
+import com.ztianzeng.common.workflow.WorkFlowDef;
+import com.ztianzeng.common.workflow.WorkflowTask;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.AbstractHandler;
@@ -33,6 +36,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -75,6 +79,32 @@ public class HttpTaskTest {
         server.start();
     }
 
+    @Test
+    public void startWorkFlow() {
+        BaseExecutor baseExecutor = new BaseExecutor();
+        WorkFlowDef workFlowDef = new WorkFlowDef();
+        workFlowDef.setName("name");
+        workFlowDef.setDescription("desc");
+
+        WorkflowTask workflowTask = new WorkflowTask();
+
+        workflowTask.setName("name");
+        workflowTask.setType("HTTP");
+        HttpTask.Input input = new HttpTask.Input();
+        input.setUri("http://localhost:7009/post");
+
+        Map<String, Object> body = new HashMap<>();
+        body.put("input_key1", "value1");
+        body.put("input_key2", 45.3d);
+        input.setBody(body);
+
+        input.setMethod(HttpMethod.POST);
+        workflowTask.getInputParameters().put(HttpTask.REQUEST_PARAMETER_NAME, input);
+
+        workFlowDef.setTasks(Collections.singletonList(workflowTask));
+
+        baseExecutor.startWorkFlow(workFlowDef, null);
+    }
 
     @Test
     public void testPost() {
