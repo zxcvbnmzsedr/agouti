@@ -94,28 +94,4 @@ public class BaseExecutor {
     }
 
 
-    /**
-     * 执行器
-     *
-     * @param task   当前执行的任务
-     * @param all    已执行过的task的结果
-     * @param alias  别名
-     * @param method 方法
-     * @param target 目标
-     * @param inputs 入参
-     * @return 执行结果
-     */
-    protected Object invoke(Task task,
-                            Map<String, String> all,
-                            String alias,
-                            String method,
-                            String target,
-                            Map<String, Object> inputs) {
-        return null;
-    }
-
-
-    public void invoke(Map<String, String> invokeResult, Task next) {
-
-    }
 }
