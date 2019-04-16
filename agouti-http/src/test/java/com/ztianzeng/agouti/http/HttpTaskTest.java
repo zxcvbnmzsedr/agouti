@@ -97,12 +97,9 @@ public class HttpTaskTest {
         body.put("input_key1", "value1");
         body.put("input_key2", 45.3d);
         input.setBody(body);
-
         input.setMethod(HttpMethod.POST);
         workflowTask.getInputParameters().put(HttpTask.REQUEST_PARAMETER_NAME, input);
-
         workFlowDef.setTasks(Collections.singletonList(workflowTask));
-
         baseExecutor.startWorkFlow(workFlowDef, null);
     }
 

@@ -18,8 +18,7 @@ package com.ztianzeng.agouti.core;
 
 import com.ztianzeng.common.tasks.Task;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author zhaotianzeng
@@ -27,7 +26,7 @@ import java.util.Map;
  * @date 2019-04-15 11:47
  */
 public abstract class WorkFlowTask {
-    private static Map<String, WorkFlowTask> registry = new HashMap<>();
+    private static ConcurrentHashMap<String, WorkFlowTask> registry = new ConcurrentHashMap<>();
     /**
      * task name
      */

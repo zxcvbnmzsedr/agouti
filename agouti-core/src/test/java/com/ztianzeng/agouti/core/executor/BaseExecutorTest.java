@@ -16,13 +16,14 @@
 
 package com.ztianzeng.agouti.core.executor;
 
+import com.ztianzeng.agouti.core.WorkFlow;
+import com.ztianzeng.agouti.core.WorkFlowTask;
+import com.ztianzeng.common.tasks.Task;
 import com.ztianzeng.common.workflow.WorkFlowDef;
 import com.ztianzeng.common.workflow.WorkflowTask;
 import org.junit.Test;
 
 import java.util.Collections;
-
-import static org.junit.Assert.*;
 
 /**
  * @author zhaotianzeng
@@ -38,14 +39,28 @@ public class BaseExecutorTest {
         workFlowDef.setName("name");
         workFlowDef.setDescription("desc");
 
-
         WorkflowTask workflowTask = new WorkflowTask();
 
         workflowTask.setName("name");
-        workflowTask.setType("HTTP");
+        workflowTask.setType("SIMPLE");
+
+        new SimpleTask();
 
         workFlowDef.setTasks(Collections.singletonList(workflowTask));
 
-        baseExecutor.startWorkFlow(workFlowDef,null);
+        baseExecutor.startWorkFlow(workFlowDef, null);
+
+    }
+
+    class SimpleTask extends WorkFlowTask {
+
+        SimpleTask() {
+            super("SIMPLE");
+        }
+
+        @Override
+        public void start(WorkFlow workflow, Task task) {
+            System.out.println("task");
+        }
     }
 }
