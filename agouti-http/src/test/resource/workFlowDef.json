@@ -1,0 +1,24 @@
+{
+  "name": "work flow",
+  "description": "desc",
+  "outputParameters": {
+    "d1Key": "${d1.response.body.input_key1}"
+  },
+  "tasks": [
+    {
+      "name": "d1",
+      "alias": "d1",
+      "type": "HTTP",
+      "inputParameters": {
+        "http_request": {
+          "uri": "http://localhost:7009/post",
+          "body": {
+            "input_key1": "value1",
+            "input_key2": "45.3d"
+          },
+          "method": "POST"
+        }
+      }
+    }
+  ]
+}

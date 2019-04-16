@@ -20,6 +20,9 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ztianzeng.agouti.core.WorkFlow;
 import com.ztianzeng.agouti.core.executor.BaseExecutor;
+import com.ztianzeng.agouti.core.parse.WorkFlowParse;
+import com.ztianzeng.agouti.core.resource.AbstractResource;
+import com.ztianzeng.agouti.core.resource.ClassPathResource;
 import com.ztianzeng.common.tasks.Task;
 import com.ztianzeng.common.workflow.WorkFlowDef;
 import com.ztianzeng.common.workflow.WorkflowTask;
@@ -81,9 +84,29 @@ public class HttpTaskTest {
         server.start();
     }
 
+
+
     @Test
     public void startWorkFlow() {
         BaseExecutor baseExecutor = new BaseExecutor();
+        WorkFlowDef workFlowDef = fromResource();
+
+
+        WorkFlow workFlow = baseExecutor.startWorkFlow(workFlowDef, null);
+        Object d1Key = workFlow.getOutputs().get("d1Key");
+        Assert.assertEquals(d1Key,"input_key1");
+    }
+
+
+    private WorkFlowDef fromResource() {
+        String path = "workFlowDef.json";
+        AbstractResource resource = new ClassPathResource(
+                path, ClassLoader.getSystemClassLoader());
+
+        return WorkFlowParse.parse(resource);
+    }
+
+    private WorkFlowDef fromDef(){
         WorkFlowDef workFlowDef = new WorkFlowDef();
         workFlowDef.setName("name");
         workFlowDef.setDescription("desc");
@@ -123,12 +146,8 @@ public class HttpTaskTest {
 
         workFlowDef.getTasks().add(d1);
         workFlowDef.getTasks().add(d2);
-
-        WorkFlow workFlow = baseExecutor.startWorkFlow(workFlowDef, null);
-        Object d1Key = workFlow.getOutputs().get("d1Key");
-        Assert.assertEquals(d1Key,"input_key1");
+        return workFlowDef;
     }
-
     @Test
     public void testPost() {
         Task task = new Task();
