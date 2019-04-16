@@ -71,13 +71,9 @@ public class Parser {
      */
     private static Task readTask(JSONObject t1) {
         Task task = new Task();
-        task.setTarget(t1.getString("target"));
         task.setAlias(t1.getString("alias"));
-        task.setMethod(t1.getString("method"));
         task.setTaskType(TaskType.valueOf(t1.getString("taskType")));
-        task.setOriginInputs(
-                handleInput(t1.getJSONObject("inputs"), t1.getJSONObject("inputsExtra"))
-        );
+
         return task;
     }
 

@@ -24,6 +24,7 @@ import com.ztianzeng.common.workflow.TaskType;
 import com.ztianzeng.common.workflow.WorkFlowDef;
 import com.ztianzeng.common.workflow.WorkflowTask;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -52,9 +53,19 @@ public class BaseExecutor {
         for (Task task : workFlow.getTasks()) {
             WorkFlowTask workFlowTask = WorkFlowTask.get(task.getTaskType().name());
             workFlowTask.start(workFlow, task);
+            completeTask(workFlow, task);
         }
+    }
 
-        log.info(workFlow.getTasks().toString());
+    /**
+     * handle task output
+     *
+     * @param workFlow
+     */
+    private void completeTask(WorkFlow workFlow, Task task) {
+        if (StringUtils.isNotEmpty(task.getAlias())) {
+            workFlow.getTampTaskResult().put(task.getAlias(), task.getOutputData());
+        }
     }
 
 

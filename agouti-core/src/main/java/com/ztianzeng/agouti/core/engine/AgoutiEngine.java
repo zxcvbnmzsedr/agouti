@@ -67,30 +67,6 @@ public class AgoutiEngine {
         while (tasks.hasNext()) {
             Task next = tasks.next();
             Map<String, Object> inputs = new HashMap<>(20);
-            next.getOriginInputs().forEach((k, v) -> {
-                try {
-                    if (v instanceof KVObj) {
-                        KVObj v1 = (KVObj) v;
-                        Class<?> aClass = Class.forName(v1.getValue());
-                        if (invokeResult.get(v1.getKey()) == null) {
-                            inputs.put(k,
-                                    aClass.getDeclaredConstructor().newInstance()
-                            );
-
-                        } else {
-                            inputs.put(k,
-                                    JSONObject.parseObject(invokeResult.get(v1.getKey()), aClass)
-                            );
-                        }
-
-
-                    }
-                } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
-                    throw new AgoutiException("class not found " + e);
-                } catch (NoSuchMethodException | InvocationTargetException e) {
-                    e.printStackTrace();
-                }
-            });
             next.setInputs(inputs);
 
             BaseExecutor baseExecutor = ExecutorFactory.build(next.getTaskType());

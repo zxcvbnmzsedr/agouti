@@ -18,13 +18,15 @@
 package com.ztianzeng.agouti.core;
 
 
+import com.jayway.jsonpath.Configuration;
+import com.jayway.jsonpath.DocumentContext;
+import com.jayway.jsonpath.JsonPath;
+import com.jayway.jsonpath.Option;
 import com.ztianzeng.common.tasks.Task;
 import com.ztianzeng.common.workflow.WorkFlowDef;
 import lombok.Data;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 任务编排流程
@@ -47,10 +49,11 @@ public class WorkFlow {
 
     private String description;
 
+
     /**
-     * 定义好最后输出的数据模型
+     * temporary result
      */
-    private Map<String, Object> outputs;
+    private Map<String, Object> tampTaskResult = new HashMap<>();
 
     private List<Task> tasks;
 
@@ -59,6 +62,105 @@ public class WorkFlow {
     private WorkFlowDef workflowDefinition;
 
     private Map<String, Object> inputs = new HashMap<>();
+
+
+    /**
+     * out put
+     *
+     * @param outputParameters
+     * @return
+     */
+    public Map<String, Object> getOutputs(Map<String, Object> outputParameters) {
+        Configuration option = Configuration.defaultConfiguration().addOptions(Option.SUPPRESS_EXCEPTIONS);
+
+        Map<String, Object> resultMap = new HashMap<>(20);
+        DocumentContext documentContext = JsonPath.parse(tampTaskResult, option);
+
+        outputParameters.forEach((k, v) -> {
+            Object value = v;
+            if (v instanceof String) {
+                value = replaceVariables(value.toString(), documentContext);
+            } else if (v instanceof Map) {
+                //recursive call
+                replace((Map<String, Object>) value, documentContext);
+            } else if (v instanceof List) {
+                value = replaceList((List<?>) value, documentContext);
+            }
+            resultMap.put(k, value);
+        });
+
+        return resultMap;
+    }
+
+
+    private Map<String, Object> replace(Map<String, Object> input, DocumentContext documentContext) {
+        for (Map.Entry<String, Object> e : input.entrySet()) {
+            Object value = e.getValue();
+            if (value instanceof String) {
+                Object replaced = replaceVariables(value.toString(), documentContext);
+                e.setValue(replaced);
+            } else if (value instanceof Map) {
+                //recursive call
+                Object replaced = replace((Map<String, Object>) value, documentContext);
+                e.setValue(replaced);
+            } else if (value instanceof List) {
+                Object replaced = replaceList((List<?>) value, documentContext);
+                e.setValue(replaced);
+            } else {
+                e.setValue(value);
+            }
+        }
+        return input;
+    }
+
+    private Object replaceVariables(String paramString, DocumentContext documentContext) {
+        String[] values = paramString.split("(?=\\$\\{)|(?<=\\})");
+        Object[] convertedValues = new Object[values.length];
+        for (int i = 0; i < values.length; i++) {
+            convertedValues[i] = values[i];
+            if (values[i].startsWith("${") && values[i].endsWith("}")) {
+                String paramPath = values[i].substring(2, values[i].length() - 1);
+                convertedValues[i] = documentContext.read(paramPath);
+            }
+        }
+
+        Object retObj = convertedValues[0];
+        // If the parameter String was "v1 v2 v3" then make sure to stitch it back
+        if (convertedValues.length > 1) {
+            for (int i = 0; i < convertedValues.length; i++) {
+                Object val = convertedValues[i];
+                if (val == null) {
+                    val = "";
+                }
+                if (i == 0) {
+                    retObj = val;
+                } else {
+                    retObj = retObj + "" + val.toString();
+                }
+            }
+
+        }
+        return retObj;
+    }
+
+    private Object replaceList(List<?> values, DocumentContext io) {
+        List<Object> replacedList = new LinkedList<>();
+        for (Object listVal : values) {
+            if (listVal instanceof String) {
+                Object replaced = replaceVariables(listVal.toString(), io);
+                replacedList.add(replaced);
+            } else if (listVal instanceof Map) {
+                Object replaced = replace((Map<String, Object>) listVal, io);
+                replacedList.add(replaced);
+            } else if (listVal instanceof List) {
+                Object replaced = replaceList((List<?>) listVal, io);
+                replacedList.add(replaced);
+            } else {
+                replacedList.add(listVal);
+            }
+        }
+        return replacedList;
+    }
 
 
 }

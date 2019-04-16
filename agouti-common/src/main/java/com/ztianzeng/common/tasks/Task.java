@@ -36,21 +36,11 @@ public class Task {
      * 调用类型
      */
     private TaskType taskType;
-    /**
-     * 调用的目标
-     */
-    private String target;
 
     private String alias;
 
-    private String method;
-
     private String name;
 
-    /**
-     * 入参情况，多个入参通过key:value的结构书写
-     */
-    private Map<String, Object> originInputs;
 
     private Map<String, Object> inputs;
 
