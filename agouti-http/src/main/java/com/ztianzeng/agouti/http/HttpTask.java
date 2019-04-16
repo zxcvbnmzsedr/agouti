@@ -24,7 +24,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ztianzeng.agouti.core.AgoutiException;
 import com.ztianzeng.agouti.core.WorkFlow;
 import com.ztianzeng.agouti.core.WorkFlowTask;
-import com.ztianzeng.agouti.core.executor.http.HttpMethod;
 import com.ztianzeng.common.tasks.Task;
 import com.ztianzeng.common.workflow.TaskType;
 import lombok.Data;
@@ -125,7 +124,7 @@ public class HttpTask extends WorkFlowTask {
                     MediaType.parse(input.accept),
                     om.writeValueAsString(input.body)
             );
-            builder.url(input.uri).method(input.method.name(), requestBody);
+            builder.url(input.uri).method(input.method, requestBody);
             response = client.newCall(builder.build()).execute();
             HttpResponseWrapper responseWrapper = new HttpResponseWrapper();
             responseWrapper.status = response.code();
@@ -170,7 +169,7 @@ public class HttpTask extends WorkFlowTask {
     @Data
     public static class Input {
 
-        private HttpMethod method;
+        private String method;
 
         private String uri;
 

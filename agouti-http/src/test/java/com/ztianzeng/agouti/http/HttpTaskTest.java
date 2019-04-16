@@ -19,7 +19,6 @@ package com.ztianzeng.agouti.http;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ztianzeng.agouti.core.executor.BaseExecutor;
-import com.ztianzeng.agouti.core.executor.http.HttpMethod;
 import com.ztianzeng.common.tasks.Task;
 import com.ztianzeng.common.workflow.WorkFlowDef;
 import com.ztianzeng.common.workflow.WorkflowTask;
@@ -36,7 +35,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -85,7 +83,7 @@ public class HttpTaskTest {
         WorkFlowDef workFlowDef = new WorkFlowDef();
         workFlowDef.setName("name");
         workFlowDef.setDescription("desc");
-        workFlowDef.getOutputParameters().put("d1Key","${d1}");
+        workFlowDef.getOutputParameters().put("d1Key", "${d1}");
 
         WorkflowTask d1 = new WorkflowTask();
         d1.setName("d1");
@@ -96,7 +94,7 @@ public class HttpTaskTest {
         body.put("input_key1", "value1");
         body.put("input_key2", 45.3d);
         input.setBody(body);
-        input.setMethod(HttpMethod.POST);
+        input.setMethod("POST");
 
         d1.getInputParameters().put(HttpTask.REQUEST_PARAMETER_NAME, input);
 
@@ -110,10 +108,9 @@ public class HttpTaskTest {
         d2B.put("B", "value1");
         d2B.put("C", 45.3d);
         d2In.setBody(d2B);
-        d2In.setMethod(HttpMethod.POST);
+        d2In.setMethod("POST");
 
         d2.getInputParameters().put(HttpTask.REQUEST_PARAMETER_NAME, d2In);
-
 
 
         workFlowDef.getTasks().add(d1);
@@ -134,7 +131,7 @@ public class HttpTaskTest {
         body.put("input_key2", 45.3d);
         input.setBody(body);
 
-        input.setMethod(HttpMethod.POST);
+        input.setMethod("POST");
 
         task.getInputData().put(HttpTask.REQUEST_PARAMETER_NAME, input);
 
