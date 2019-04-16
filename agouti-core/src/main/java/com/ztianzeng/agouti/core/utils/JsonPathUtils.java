@@ -32,6 +32,8 @@ import java.util.Map;
  * @date 2019-04-16 17:51
  */
 public class JsonPathUtils {
+    private JsonPathUtils() {
+    }
 
     /**
      * out put
