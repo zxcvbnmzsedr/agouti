@@ -16,6 +16,7 @@
 
 package com.ztianzeng.agouti.core;
 
+import com.ztianzeng.agouti.core.utils.JsonPathUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -41,9 +42,9 @@ public class WorkFlowTest {
         workFlow.getInputs().put("d1", d1Res);
 
         Map<String, Object> outputParameters = new HashMap<>();
-        outputParameters.put("name","${d1.key1}");
-        outputParameters.put("key1","${d1}");
-        Map<String, Object> outputs = workFlow.getOutputs(outputParameters);
-        Assert.assertEquals(outputs.get("name"),"key1111Val");
+        outputParameters.put("name", "${d1.key1}");
+        outputParameters.put("key1", "${d1}");
+        Map<String, Object> outputs = JsonPathUtils.extractResult(workFlow.getInputs(), outputParameters);
+        Assert.assertEquals(outputs.get("name"), "key1111Val");
     }
 }

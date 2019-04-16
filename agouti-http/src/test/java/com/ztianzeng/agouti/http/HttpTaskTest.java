@@ -29,6 +29,7 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -87,7 +88,7 @@ public class HttpTaskTest {
         workFlowDef.setName("name");
         workFlowDef.setDescription("desc");
 
-        workFlowDef.getOutputParameters().put("d1Key", "${d1}");
+        workFlowDef.getOutputParameters().put("d1Key", "${d1.response.body.input_key1}");
 
         WorkflowTask d1 = new WorkflowTask();
         d1.setName("d1");
@@ -108,7 +109,7 @@ public class HttpTaskTest {
         WorkflowTask d2 = new WorkflowTask();
         d2.setName("d2");
         d2.setType("HTTP");
-        d2.setAlias("d1");
+        d2.setAlias("d2");
 
         HttpTask.Input d2In = new HttpTask.Input();
         d2In.setUri("http://localhost:7009/post");
@@ -120,12 +121,12 @@ public class HttpTaskTest {
 
         d2.getInputParameters().put(HttpTask.REQUEST_PARAMETER_NAME, d2In);
 
-
         workFlowDef.getTasks().add(d1);
         workFlowDef.getTasks().add(d2);
 
         WorkFlow workFlow = baseExecutor.startWorkFlow(workFlowDef, null);
-        log.info(workFlow.toString());
+        Object d1Key = workFlow.getOutputs().get("d1Key");
+        Assert.assertEquals(d1Key,"input_key1");
     }
 
     @Test

@@ -19,6 +19,7 @@ package com.ztianzeng.agouti.core.executor;
 
 import com.ztianzeng.agouti.core.WorkFlow;
 import com.ztianzeng.agouti.core.WorkFlowTask;
+import com.ztianzeng.agouti.core.utils.JsonPathUtils;
 import com.ztianzeng.common.tasks.Task;
 import com.ztianzeng.common.workflow.TaskType;
 import com.ztianzeng.common.workflow.WorkFlowDef;
@@ -56,8 +57,13 @@ public class BaseExecutor {
             workFlowTask.start(workFlow, task);
             completeTask(workFlow, task);
         }
-        workFlow.setStatus(WorkFlow.WorkFlowStatus.COMPLETED);
+        completeWorkFlow(workFlow, workFlowDefinition.getOutputParameters());
         return workFlow;
+    }
+
+    private void completeWorkFlow(WorkFlow workFlow, Map<String, Object> outputParameters) {
+        workFlow.setStatus(WorkFlow.WorkFlowStatus.COMPLETED);
+        workFlow.setOutputs(JsonPathUtils.extractResult(workFlow.getRuntimeParam(), outputParameters));
     }
 
     /**
