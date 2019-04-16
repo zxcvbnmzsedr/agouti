@@ -26,6 +26,7 @@ import com.ztianzeng.common.workflow.WorkflowTask;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -79,11 +80,17 @@ public class BaseExecutor {
         workFlow.setStatus(WorkFlow.WorkFlowStatus.RUNNING);
         workFlow.setInputs(workflowInput);
 
+
         List<Task> tasks = new LinkedList<>();
         for (WorkflowTask task : workFlowDef.getTasks()) {
             Task t = new Task();
             t.setName(task.getName());
             t.setTaskType(TaskType.valueOf(task.getType()));
+
+            // handle input
+            Map<String, Object> taskInput = getTaskInput(workFlow);
+            task.getInputParameters().putAll(taskInput);
+
 
             t.setInputData(task.getInputParameters());
             tasks.add(t);
@@ -93,5 +100,15 @@ public class BaseExecutor {
         return workFlow;
     }
 
+    private Map<String, Object> getTaskInput(WorkFlow workFlow) {
+        Map<String, Object> inputMap = new HashMap<>(5);
+
+        Map<String, Object> workflowParams = new HashMap<>(5);
+        workflowParams.put("input", workFlow.getInputs());
+        workflowParams.put("status", workFlow.getStatus());
+        inputMap.put("workflow", workflowParams);
+
+        return inputMap;
+    }
 
 }

@@ -24,6 +24,8 @@ import com.ztianzeng.common.workflow.WorkflowTask;
 import org.junit.Test;
 
 import java.util.Collections;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author zhaotianzeng
@@ -48,7 +50,12 @@ public class BaseExecutorTest {
 
         workFlowDef.setTasks(Collections.singletonList(workflowTask));
 
-        baseExecutor.startWorkFlow(workFlowDef, null);
+
+        Map<String, Object> workflowInput = new ConcurrentHashMap<>();
+
+        workflowInput.put("input_1", "1");
+
+        baseExecutor.startWorkFlow(workFlowDef, workflowInput);
 
     }
 
