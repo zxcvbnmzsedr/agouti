@@ -13,6 +13,7 @@
         <module>agouti-common</module>
         <module>agouti-http</module>
         <module>agouti-http</module>
+        <module>agouti-test</module>
     </modules>
     <properties>
         <eclipse.jetty>9.4.12.v20180830</eclipse.jetty>
