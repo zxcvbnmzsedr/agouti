@@ -1,0 +1,22 @@
+{
+  "name": "getTest1",
+  "description": "the post of http",
+  "tasks": [
+    {
+      "name": "userOne",
+      "type": "HTTP",
+      "alias": "user",
+      "inputParameters": {
+        "http_request": {
+          "uri": "http://localhost:8080/origin/getUserInfo",
+          "method": "GET"
+        }
+      }
+    }
+  ],
+  "outputParameters": {
+    "username": "${user.response.body.username}",
+    "address": "${user.response.body.address}",
+    "mobile": "${user.response.body.mobile}"
+  }
+}

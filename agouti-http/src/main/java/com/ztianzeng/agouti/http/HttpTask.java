@@ -34,6 +34,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author zhaotianzeng
@@ -114,17 +115,21 @@ public class HttpTask extends WorkFlowTask {
      */
     private HttpResponseWrapper httpCall(Input input) {
         OkHttpClient client = new OkHttpClient();
-        Request.Builder builder = new Request.Builder();
+        Request.Builder builder = new Request.Builder().url(input.uri);
 
         input.headers.forEach(builder::header);
         Response response;
+        ;
 
         try {
             RequestBody requestBody = RequestBody.create(
                     MediaType.parse(input.accept),
                     om.writeValueAsString(input.body)
             );
-            builder.url(input.uri).method(input.method, requestBody);
+            if (!Objects.equals(input.method, "GET")){
+                builder.method(input.method, requestBody);;
+            }
+
             response = client.newCall(builder.build()).execute();
             HttpResponseWrapper responseWrapper = new HttpResponseWrapper();
             responseWrapper.status = response.code();
