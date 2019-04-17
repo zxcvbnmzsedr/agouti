@@ -1,5 +1,7 @@
 package com.ztianzeng.common.workflow;
 
+import lombok.Data;
+
 import javax.validation.constraints.NotEmpty;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -9,10 +11,13 @@ import java.util.Map;
  * @version V1.0
  * @date 2019-04-15 11:24
  */
+@Data
 public class WorkflowTask {
 
     @NotEmpty(message = "WorkflowTask name cannot be empty or null")
     private String name;
+
+    private String alias;
 
     /**
      * task type

@@ -17,16 +17,18 @@
 
 package com.ztianzeng.agouti.core.executor;
 
-import com.alibaba.fastjson.JSONObject;
 import com.ztianzeng.agouti.core.WorkFlow;
+import com.ztianzeng.agouti.core.WorkFlowTask;
+import com.ztianzeng.agouti.core.utils.JsonPathUtils;
 import com.ztianzeng.common.tasks.Task;
+import com.ztianzeng.common.workflow.TaskType;
 import com.ztianzeng.common.workflow.WorkFlowDef;
 import com.ztianzeng.common.workflow.WorkflowTask;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 
-import java.lang.reflect.Field;
-import java.util.Collection;
-import java.util.Iterator;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -38,7 +40,7 @@ import java.util.Map;
  * @date 2019-01-28 20:57
  */
 @Slf4j
-public abstract class BaseExecutor {
+public class BaseExecutor {
 
     /**
      * start work flow
@@ -47,27 +49,34 @@ public abstract class BaseExecutor {
      * @param workflowInput      work flow input
      * @return
      */
-    public void startWorkFlow(WorkFlowDef workFlowDefinition,
-                              Map<String, Object> workflowInput) {
+    public WorkFlow startWorkFlow(WorkFlowDef workFlowDefinition,
+                                  Map<String, Object> workflowInput) {
         WorkFlow workFlow = convertWorkFlow(workFlowDefinition, workflowInput);
-
-        for (WorkflowTask task : workFlowDefinition.getTasks()) {
-            Task t = new Task();
+        for (Task task : workFlow.getTasks()) {
+            WorkFlowTask workFlowTask = WorkFlowTask.get(task.getTaskType().name());
+            workFlowTask.start(workFlow, task);
+            completeTask(workFlow, task);
         }
-
+        completeWorkFlow(workFlow, workFlowDefinition.getOutputParameters());
+        return workFlow;
     }
 
+    private void completeWorkFlow(WorkFlow workFlow, Map<String, Object> outputParameters) {
+        workFlow.setStatus(WorkFlow.WorkFlowStatus.COMPLETED);
+        workFlow.setOutputs(JsonPathUtils.extractResult(workFlow.getRuntimeParam(), outputParameters));
+    }
 
     /**
-     * start work flow
+     * handle task output
      *
      * @param workFlow
-     * @param tasks
      */
-    public void startWorkFlow(WorkFlow workFlow, List<Task> tasks) {
-
-
+    private void completeTask(WorkFlow workFlow, Task task) {
+        if (StringUtils.isNotEmpty(task.getAlias())) {
+            workFlow.getRuntimeParam().put(task.getAlias(), task.getOutputData());
+        }
     }
+
 
     /**
      * workFlowDef to WorkFlow
@@ -77,84 +86,39 @@ public abstract class BaseExecutor {
         workFlow.setName(workFlowDef.getName());
         workFlow.setDescription(workFlowDef.getDescription());
         workFlow.setStatus(WorkFlow.WorkFlowStatus.RUNNING);
-        workFlow.setInputs(workflowInput);
+
+        // handle input
+        Map<String, Object> taskInput = getTaskInput(workFlow);
+        workFlow.getRuntimeParam().putAll(taskInput);
+
+        if (workflowInput != null) {
+            workFlow.getInputs().putAll(workflowInput);
+        }
+
+        List<Task> tasks = new LinkedList<>();
+        for (WorkflowTask task : workFlowDef.getTasks()) {
+            Task t = new Task();
+            t.setName(task.getName());
+            t.setTaskType(TaskType.valueOf(task.getType()));
+            t.setAlias(task.getAlias());
+
+            t.setInputData(task.getInputParameters());
+            tasks.add(t);
+        }
+        workFlow.setTasks(tasks);
+
         return workFlow;
     }
 
-    private void handleResult(String prefix, Object invokeResult, Map<String, String> all) {
-        if (invokeResult == null) {
-            return;
-        }
-        if (invokeResult instanceof Collection) {
-            Collection collection = (Collection) invokeResult;
-            Iterator iterator = collection.iterator();
-            int i = 0;
-            while (iterator.hasNext()) {
-                handleResult(prefix + "[" + (i++) + "]", iterator.next(), all);
-            }
-        } else if (invokeResult instanceof Map) {
-            Map<String, Object> mapResult = (Map) invokeResult;
-            handleMapResult(prefix + ".", mapResult, all);
-        } else if (invokeResult instanceof String) {
-            String k = (String) invokeResult;
-            all.put(prefix, k);
-        } else {
-            all.put(prefix, JSONObject.toJSONString(invokeResult));
-            Field[] fields = invokeResult.getClass().getDeclaredFields();
-            for (Field field : fields) {
-                field.setAccessible(true);
-                try {
-                    all.put(prefix + "." + field.getName(), field.get(invokeResult).toString());
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
+    private Map<String, Object> getTaskInput(WorkFlow workFlow) {
+        Map<String, Object> inputMap = new HashMap<>(5);
 
-            }
-        }
+        Map<String, Object> workflowParams = new HashMap<>(5);
+        workflowParams.put("input", workFlow.getInputs());
+        workflowParams.put("status", workFlow.getStatus());
+        inputMap.put("workflow", workflowParams);
+
+        return inputMap;
     }
-
-    /**
-     * 处理MAP结果集
-     *
-     * @param mapResult
-     * @param all
-     */
-    private void handleMapResult(String prefix, Map<String, Object> mapResult, Map<String, String> all) {
-
-        mapResult.forEach((k, v) -> {
-            if (v instanceof String
-                    || v instanceof Number) {
-                all.put(prefix + k, String.valueOf(v));
-            } else if (v instanceof Collection) {
-                Collection collection = (Collection) v;
-                Iterator iterator = collection.iterator();
-                int i = 0;
-                while (iterator.hasNext()) {
-                    handleResult(prefix + k + "[" + (i++) + "].", iterator.next(), all);
-                }
-            } else if (v instanceof Map) {
-                handleMapResult(prefix + k + ".", (Map<String, Object>) v, all);
-            }
-        });
-    }
-
-    /**
-     * 执行器
-     *
-     * @param task   当前执行的任务
-     * @param all    已执行过的task的结果
-     * @param alias  别名
-     * @param method 方法
-     * @param target 目标
-     * @param inputs 入参
-     * @return 执行结果
-     */
-    protected abstract Object invoke(Task task,
-                                     Map<String, String> all,
-                                     String alias,
-                                     String method,
-                                     String target,
-                                     Map<String, Object> inputs);
-
 
 }

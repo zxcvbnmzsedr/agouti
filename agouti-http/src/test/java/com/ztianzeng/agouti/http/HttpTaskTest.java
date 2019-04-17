@@ -18,13 +18,21 @@ package com.ztianzeng.agouti.http;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ztianzeng.agouti.core.executor.http.HttpMethod;
+import com.ztianzeng.agouti.core.WorkFlow;
+import com.ztianzeng.agouti.core.executor.BaseExecutor;
+import com.ztianzeng.agouti.core.parse.WorkFlowParse;
+import com.ztianzeng.agouti.core.resource.AbstractResource;
+import com.ztianzeng.agouti.core.resource.ClassPathResource;
 import com.ztianzeng.common.tasks.Task;
+import com.ztianzeng.common.workflow.WorkFlowDef;
+import com.ztianzeng.common.workflow.WorkflowTask;
+import lombok.extern.slf4j.Slf4j;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -45,6 +53,7 @@ import static org.junit.Assert.assertTrue;
  * @version V1.0
  * @date 2019-04-15 14:26
  */
+@Slf4j
 public class HttpTaskTest {
     private static final String ERROR_RESPONSE = "Something went wrong!";
 
@@ -76,6 +85,69 @@ public class HttpTaskTest {
     }
 
 
+
+    @Test
+    public void startWorkFlow() {
+        BaseExecutor baseExecutor = new BaseExecutor();
+        WorkFlowDef workFlowDef = fromResource();
+
+
+        WorkFlow workFlow = baseExecutor.startWorkFlow(workFlowDef, null);
+        Object d1Key = workFlow.getOutputs().get("d1Key");
+        Assert.assertEquals(d1Key,"input_key1");
+    }
+
+
+    private WorkFlowDef fromResource() {
+        String path = "workFlowDef.json";
+        AbstractResource resource = new ClassPathResource(
+                path, ClassLoader.getSystemClassLoader());
+
+        return WorkFlowParse.parse(resource);
+    }
+
+    private WorkFlowDef fromDef(){
+        WorkFlowDef workFlowDef = new WorkFlowDef();
+        workFlowDef.setName("name");
+        workFlowDef.setDescription("desc");
+
+        workFlowDef.getOutputParameters().put("d1Key", "${d1.response.body.input_key1}");
+
+        WorkflowTask d1 = new WorkflowTask();
+        d1.setName("d1");
+        d1.setType("HTTP");
+        d1.setAlias("d1");
+
+        HttpTask.Input input = new HttpTask.Input();
+        input.setUri("http://localhost:7009/post");
+        Map<String, Object> body = new HashMap<>();
+        body.put("input_key1", "value1");
+        body.put("input_key2", 45.3d);
+        input.setBody(body);
+        input.setMethod("POST");
+
+        d1.getInputParameters().put(HttpTask.REQUEST_PARAMETER_NAME, input);
+
+
+        WorkflowTask d2 = new WorkflowTask();
+        d2.setName("d2");
+        d2.setType("HTTP");
+        d2.setAlias("d2");
+
+        HttpTask.Input d2In = new HttpTask.Input();
+        d2In.setUri("http://localhost:7009/post");
+        Map<String, Object> d2B = new HashMap<>();
+        d2B.put("B", "value1");
+        d2B.put("C", 45.3d);
+        d2In.setBody(d2B);
+        d2In.setMethod("POST");
+
+        d2.getInputParameters().put(HttpTask.REQUEST_PARAMETER_NAME, d2In);
+
+        workFlowDef.getTasks().add(d1);
+        workFlowDef.getTasks().add(d2);
+        return workFlowDef;
+    }
     @Test
     public void testPost() {
         Task task = new Task();
@@ -87,7 +159,7 @@ public class HttpTaskTest {
         body.put("input_key2", 45.3d);
         input.setBody(body);
 
-        input.setMethod(HttpMethod.POST);
+        input.setMethod("POST");
 
         task.getInputData().put(HttpTask.REQUEST_PARAMETER_NAME, input);
 

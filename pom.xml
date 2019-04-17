@@ -14,10 +14,29 @@
         <module>agouti-http</module>
         <module>agouti-http</module>
     </modules>
-
+    <properties>
+        <eclipse.jetty>9.4.12.v20180830</eclipse.jetty>
+    </properties>
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-server</artifactId>
+                <version>${eclipse.jetty}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-servlet</artifactId>
+                <version>${eclipse.jetty}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>3.8.1</version>
+            </dependency>
             <dependency>
                 <groupId>com.ztianzeng.agouti</groupId>
                 <artifactId>agouti-common</artifactId>

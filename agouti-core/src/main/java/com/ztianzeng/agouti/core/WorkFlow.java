@@ -18,13 +18,19 @@
 package com.ztianzeng.agouti.core;
 
 
+import com.jayway.jsonpath.Configuration;
+import com.jayway.jsonpath.DocumentContext;
+import com.jayway.jsonpath.JsonPath;
+import com.jayway.jsonpath.Option;
 import com.ztianzeng.common.tasks.Task;
 import com.ztianzeng.common.workflow.WorkFlowDef;
 import lombok.Data;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 任务编排流程
@@ -35,11 +41,16 @@ import java.util.Map;
  */
 @Data
 public class WorkFlow {
+
     public enum WorkFlowStatus {
         /**
          * RUNNING
          */
-        RUNNING;
+        RUNNING,
+        /**
+         *
+         */
+        COMPLETED;
 
     }
 
@@ -47,10 +58,6 @@ public class WorkFlow {
 
     private String description;
 
-    /**
-     * 定义好最后输出的数据模型
-     */
-    private Map<String, Object> outputs;
 
     private List<Task> tasks;
 
@@ -58,7 +65,12 @@ public class WorkFlow {
 
     private WorkFlowDef workflowDefinition;
 
-    private Map<String, Object> inputs = new HashMap<>();
+    private Map<String, Object> inputs = new ConcurrentHashMap<>();
+
+    private Map<String, Object> runtimeParam = new ConcurrentHashMap<>();
+
+    private Map<String, Object> outputs = new HashMap<>();
+
 
 
 }

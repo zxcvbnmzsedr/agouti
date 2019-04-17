@@ -12,43 +12,37 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  */
 
-package com.ztianzeng.agouti.core.executor;
+package com.ztianzeng.agouti.core.parse;
 
-
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ztianzeng.agouti.core.AgoutiException;
-import com.ztianzeng.agouti.core.executor.http.HttpExecutor;
-import com.ztianzeng.agouti.core.executor.method.MethodExecutor;
-import com.ztianzeng.common.tasks.Task;
+import com.ztianzeng.agouti.core.resource.AbstractResource;
+import com.ztianzeng.common.workflow.WorkFlowDef;
+
+import java.io.IOException;
 
 /**
- * 执行器工厂
- *
  * @author zhaotianzeng
  * @version V1.0
- * @date 2019-01-28 21:10
+ * @date 2019-04-16 19:45
  */
-public final class ExecutorFactory {
+public class WorkFlowParse {
+    private final static ObjectMapper OM = new ObjectMapper();
 
-    private ExecutorFactory() {
-
-    }
 
     /**
-     * 构造执行器
+     * read json file wrap to WorkFlowDef
      *
-     * @param taskType
-     * @return
+     * @param resource res
+     * @return WorkFlowDef
      */
-    public static BaseExecutor build(Task.TaskType taskType) {
-        if (taskType.equals(Task.TaskType.URL)) {
-            return new HttpExecutor();
+    public static WorkFlowDef parse(AbstractResource resource) {
+        try {
+            return OM.readValue(resource.read(), WorkFlowDef.class);
+        } catch (IOException e) {
+            throw new AgoutiException(e);
         }
-        if (taskType.equals(Task.TaskType.METHOD)) {
-            return new MethodExecutor();
-        }
-        throw new AgoutiException("json error ,not support taskType");
     }
 }

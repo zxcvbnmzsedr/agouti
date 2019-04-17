@@ -18,15 +18,40 @@ package com.ztianzeng.agouti.core;
 
 import com.ztianzeng.common.tasks.Task;
 
+import java.util.concurrent.ConcurrentHashMap;
+
 /**
  * @author zhaotianzeng
  * @version V1.0
  * @date 2019-04-15 11:47
  */
-public class WorkFlowTask {
+public abstract class WorkFlowTask {
+    private static ConcurrentHashMap<String, WorkFlowTask> registry = new ConcurrentHashMap<>();
+    /**
+     * task name
+     */
+    private String name;
 
+    /**
+     * base work flow
+     *
+     * @param name
+     */
+    public WorkFlowTask(String name) {
+        this.name = name;
+        registry.put(name, this);
 
-    public void start(WorkFlow workflow, Task task) {
+    }
 
+    /**
+     * start work flow
+     *
+     * @param workflow wf
+     * @param task     task
+     */
+    public abstract void start(WorkFlow workflow, Task task);
+
+    public static WorkFlowTask get(String type) {
+        return registry.get(type);
     }
 }

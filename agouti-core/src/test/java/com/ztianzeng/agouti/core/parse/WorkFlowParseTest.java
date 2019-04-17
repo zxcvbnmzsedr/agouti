@@ -12,54 +12,34 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  */
 
-package com.ztianzeng.agouti.core.parser;
+package com.ztianzeng.agouti.core.parse;
 
-import com.alibaba.fastjson.JSONArray;
-import com.ztianzeng.agouti.core.HelloWorld;
-import com.ztianzeng.agouti.core.WorkFlow;
 import com.ztianzeng.agouti.core.resource.AbstractResource;
 import com.ztianzeng.agouti.core.resource.ClassPathResource;
-import com.ztianzeng.common.tasks.Task;
-import org.junit.Assert;
+import com.ztianzeng.common.workflow.WorkFlowDef;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 /**
  * @author zhaotianzeng
  * @version V1.0
- * @date 2019-01-28 18:23
+ * @date 2019-04-16 19:53
  */
-public class ParserTest {
+@Slf4j
+public class WorkFlowParseTest {
 
     @Test
     public void parse() {
-        String path = "agouti/parse.json";
-
+        String path = "agouti/workFlowDef.json";
         AbstractResource resource = new ClassPathResource(
                 path, ClassLoader.getSystemClassLoader());
 
-        Parser parser = new Parser();
-        WorkFlow parse = parser.parse(resource);
+        WorkFlowDef workFlowDef = WorkFlowParse.parse(resource);
 
-        Assert.assertEquals(parse.getName(), "agouti");
-        Assert.assertEquals(parse.getDescription(), "agoutiTest");
-
-
-        for (Task task : parse.getTasks()) {
-            Object name = task.getInputs().get("name");
-            Assert.assertTrue(name instanceof String);
-
-            Object helloWorld = task.getInputs().get("helloWorld");
-            Assert.assertTrue(helloWorld instanceof HelloWorld);
-        }
-
-    }
-
-    @Test
-    public void a() {
-        JSONArray objects = new JSONArray();
-
+        log.info(workFlowDef.toString());
     }
 }

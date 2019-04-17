@@ -11,5 +11,9 @@ public enum TaskType {
     /**
      * use http invoke
      */
-    HTTP;
+    HTTP,
+    /**
+     * SIMPLE
+     */
+    SIMPLE;
 }
