@@ -17,6 +17,7 @@
   "outputParameters": {
     "username": "${user.response.body.username}",
     "address": "${user.response.body.address}",
-    "mobile": "${user.response.body.mobile}"
+    "mobile": "${user.response.body.mobile}",
+    "city": "${user.response.body.address.city}"
   }
 }

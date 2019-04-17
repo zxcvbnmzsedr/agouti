@@ -31,6 +31,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class OriginalController {
     @GetMapping("/getUserInfo")
     public UserInfoVO getUserInfo() {
-        return new UserInfoVO();
+        UserInfoVO userInfoVO = new UserInfoVO();
+        userInfoVO.setUsername("tianzeng");
+        userInfoVO.setMobile("12345545654");
+        userInfoVO.setAddress(new UserInfoVO.Address("city"));
+
+        return userInfoVO;
     }
 }

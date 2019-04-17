@@ -16,6 +16,7 @@
 
 package com.ztianzeng.agouti.test.vo;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 /**
@@ -25,14 +26,15 @@ import lombok.Data;
  */
 @Data
 public class UserInfoVO {
-    private String username = "tianzeng";
+    private String username;
 
-    private String mobile = "12345545654";
+    private String mobile;
 
-    private Address address = new Address();
+    private Address address;
 
     @Data
+    @AllArgsConstructor
     public static class Address {
-        private String city = "city";
+        private String city;
     }
 }
