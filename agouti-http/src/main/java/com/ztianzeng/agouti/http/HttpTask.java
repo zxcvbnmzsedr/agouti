@@ -17,14 +17,14 @@
 package com.ztianzeng.agouti.http;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ztianzeng.agouti.common.ServiceInstance;
 import com.ztianzeng.agouti.core.WorkFlow;
 import com.ztianzeng.agouti.core.WorkFlowTask;
+import com.ztianzeng.agouti.http.common.AgoutiServiceInstance;
 import com.ztianzeng.common.tasks.Task;
 import com.ztianzeng.common.workflow.TaskType;
 import lombok.extern.slf4j.Slf4j;
 
-import static com.ztianzeng.agouti.utils.JacksonUtils.defaultMapper;
+import static com.ztianzeng.agouti.http.utils.JacksonUtils.defaultMapper;
 
 /**
  * @author zhaotianzeng
@@ -44,13 +44,13 @@ public class HttpTask extends WorkFlowTask {
 
     private HttpClient httpClient;
 
-    private ServiceInstanceChooser chooser;
+    private AgoutiServiceInstanceChooser chooser;
 
 
     /**
      * http task
      */
-    public HttpTask(HttpClient httpClient, ServiceInstanceChooser chooser) {
+    public HttpTask(HttpClient httpClient, AgoutiServiceInstanceChooser chooser) {
         super(TaskType.HTTP.name());
         this.httpClient = httpClient;
         this.chooser = chooser;
@@ -64,13 +64,6 @@ public class HttpTask extends WorkFlowTask {
         this.httpClient = new DefaultHttpClient();
     }
 
-    /**
-     * http task
-     */
-    public HttpTask(ServiceInstanceChooser chooser) {
-        super(TaskType.HTTP.name());
-        this.chooser = chooser;
-    }
 
     @Override
     public void start(WorkFlow workflow, Task task) {
@@ -94,8 +87,8 @@ public class HttpTask extends WorkFlowTask {
 
         // TODO: 2019-04-18 load
         if (input.getUrl().startsWith(LOAD_STR)) {
-            ServiceInstance choose = chooser.choose("");
-            input.url = choose.getHost();
+            AgoutiServiceInstance choose = chooser.choose("BASIC-RESOURCE-CENTER");
+            choose.getHost();
         }
 
 

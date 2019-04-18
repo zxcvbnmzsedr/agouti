@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ztianzeng.agouti.utils;
+package com.ztianzeng.agouti.http.utils;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -26,7 +26,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * @date 2019-04-18 15:08
  */
 public class JacksonUtils {
-
+    private JacksonUtils() {
+    }
 
     /**
      * default mapper

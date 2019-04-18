@@ -16,26 +16,22 @@
 
 package com.ztianzeng.agouti.test;
 
-import com.ztianzeng.agouti.core.WorkFlowTask;
-import com.ztianzeng.agouti.http.HttpTask;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
+import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 
 /**
  * @author zhaotianzeng
  * @version V1.0
  * @date 2019-04-17 20:19
  */
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "com.ztianzeng.agouti")
+@EnableEurekaClient
 public class Application {
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
 
-    @Bean
-    public WorkFlowTask workFlowTask(){
-        return new HttpTask();
-    }
+
 }

@@ -14,33 +14,22 @@
  * limitations under the License.
  */
 
-package com.ztianzeng.agouti.common;
+package com.ztianzeng.agouti.http;
 
-import java.net.URI;
+import com.ztianzeng.agouti.http.common.AgoutiServiceInstance;
 
 /**
  * @author zhaotianzeng
  * @version V1.0
- * @date 2019-04-18 19:44
+ * @date 2019-04-18 19:43
  */
-public interface ServiceInstance {
-    /**
-     * @return
-     */
-    String getHost();
-
+public interface AgoutiServiceInstanceChooser {
 
     /**
-     * @return
-     */
-    boolean isSecure();
-
-    /**
-     * url
+     * chose server
      *
+     * @param serviceId
      * @return
      */
-    URI getUri();
-
-    int getPort();
+    AgoutiServiceInstance choose(String serviceId);
 }

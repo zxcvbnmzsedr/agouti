@@ -1,0 +1,8 @@
+eureka:
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+    appname: agouti
+  client:
+    service-url:
+      defaultZone: http://abc-eureka-server.dev.cnabc-inc.com/eureka/

@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import static com.ztianzeng.agouti.utils.JacksonUtils.defaultMapper;
+import static com.ztianzeng.agouti.http.utils.JacksonUtils.defaultMapper;
 
 /**
  * @author zhaotianzeng
