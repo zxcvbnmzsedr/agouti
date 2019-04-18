@@ -14,28 +14,32 @@
  * limitations under the License.
  */
 
-package com.ztianzeng.agouti.test;
+package com.ztianzeng.agouti.http;
 
-import com.ztianzeng.agouti.core.WorkFlowTask;
-import com.ztianzeng.agouti.http.HttpTask;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author zhaotianzeng
  * @version V1.0
- * @date 2019-04-17 20:19
+ * @date 2019-04-18 14:57
  */
-@SpringBootApplication
-public class Application {
+public class AgoutiHttpResponse {
 
-    public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
-    }
+    int status;
 
-    @Bean
-    public WorkFlowTask workFlowTask(){
-        return new HttpTask();
+    Map<String, List<String>> headers;
+
+    Object body;
+
+    public Map<String, Object> asMap() {
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("body", body);
+        map.put("headers", headers);
+        map.put("status", status);
+
+        return map;
     }
 }

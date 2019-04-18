@@ -17,7 +17,11 @@
 package com.ztianzeng.agouti.test.vo;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.Objects;
 
 /**
  * @author zhaotianzeng
@@ -25,6 +29,9 @@ import lombok.Data;
  * @date 2019-04-17 20:47
  */
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserInfoVO {
     private String username;
 
@@ -32,9 +39,29 @@ public class UserInfoVO {
 
     private Address address;
 
+    private Integer userId;
+
     @Data
     @AllArgsConstructor
+    @NoArgsConstructor
     public static class Address {
         private String city;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        UserInfoVO that = (UserInfoVO) o;
+        return Objects.equals(userId, that.userId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(userId);
     }
 }

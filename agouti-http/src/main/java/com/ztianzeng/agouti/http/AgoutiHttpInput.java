@@ -14,28 +14,31 @@
  * limitations under the License.
  */
 
-package com.ztianzeng.agouti.test;
+package com.ztianzeng.agouti.http;
 
-import com.ztianzeng.agouti.core.WorkFlowTask;
-import com.ztianzeng.agouti.http.HttpTask;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
+import lombok.Data;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author zhaotianzeng
  * @version V1.0
- * @date 2019-04-17 20:19
+ * @date 2019-04-18 14:57
  */
-@SpringBootApplication
-public class Application {
+@Data
+public class AgoutiHttpInput {
+    String method;
 
-    public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
-    }
+    String url;
 
-    @Bean
-    public WorkFlowTask workFlowTask(){
-        return new HttpTask();
-    }
+    Object body;
+
+    Map<String, Object> param;
+
+    String accept = "application/json";
+
+    String contentType = "application/json";
+
+    Map<String, String> headers = new HashMap<>();
 }

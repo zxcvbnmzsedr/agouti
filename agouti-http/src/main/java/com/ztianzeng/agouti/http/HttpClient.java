@@ -14,28 +14,31 @@
  * limitations under the License.
  */
 
-package com.ztianzeng.agouti.test;
+package com.ztianzeng.agouti.http;
 
-import com.ztianzeng.agouti.core.WorkFlowTask;
-import com.ztianzeng.agouti.http.HttpTask;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
+import com.ztianzeng.agouti.core.WorkFlow;
 
 /**
  * @author zhaotianzeng
  * @version V1.0
- * @date 2019-04-17 20:19
+ * @date 2019-04-18 14:55
  */
-@SpringBootApplication
-public class Application {
+public interface HttpClient {
+    /**
+     * handle input
+     * extract inform from workflow
+     *
+     * @param workFlow
+     * @param input
+     * @return
+     */
+    AgoutiHttpInput handleInput(WorkFlow workFlow, AgoutiHttpInput input);
 
-    public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
-    }
-
-    @Bean
-    public WorkFlowTask workFlowTask(){
-        return new HttpTask();
-    }
+    /**
+     * http invoke
+     *
+     * @param input
+     * @return
+     */
+    AgoutiHttpResponse httpCall(AgoutiHttpInput input);
 }

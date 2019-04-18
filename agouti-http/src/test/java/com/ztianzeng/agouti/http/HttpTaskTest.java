@@ -85,7 +85,6 @@ public class HttpTaskTest {
     }
 
 
-
     @Test
     public void startWorkFlow() {
         BaseExecutor baseExecutor = new BaseExecutor();
@@ -94,7 +93,7 @@ public class HttpTaskTest {
 
         WorkFlow workFlow = baseExecutor.startWorkFlow(workFlowDef, null);
         Object d1Key = workFlow.getOutputs().get("d1Key");
-        Assert.assertEquals(d1Key,"input_key1");
+        Assert.assertEquals(d1Key, "input_key1");
     }
 
 
@@ -106,7 +105,7 @@ public class HttpTaskTest {
         return WorkFlowParse.parse(resource);
     }
 
-    private WorkFlowDef fromDef(){
+    private WorkFlowDef fromDef() {
         WorkFlowDef workFlowDef = new WorkFlowDef();
         workFlowDef.setName("name");
         workFlowDef.setDescription("desc");
@@ -118,8 +117,8 @@ public class HttpTaskTest {
         d1.setType("HTTP");
         d1.setAlias("d1");
 
-        HttpTask.Input input = new HttpTask.Input();
-        input.setUri("http://localhost:7009/post");
+        AgoutiHttpInput input = new AgoutiHttpInput();
+        input.setUrl("http://localhost:7009/post");
         Map<String, Object> body = new HashMap<>();
         body.put("input_key1", "value1");
         body.put("input_key2", 45.3d);
@@ -134,8 +133,8 @@ public class HttpTaskTest {
         d2.setType("HTTP");
         d2.setAlias("d2");
 
-        HttpTask.Input d2In = new HttpTask.Input();
-        d2In.setUri("http://localhost:7009/post");
+        AgoutiHttpInput d2In = new AgoutiHttpInput();
+        d2In.setUrl("http://localhost:7009/post");
         Map<String, Object> d2B = new HashMap<>();
         d2B.put("B", "value1");
         d2B.put("C", 45.3d);
@@ -148,11 +147,12 @@ public class HttpTaskTest {
         workFlowDef.getTasks().add(d2);
         return workFlowDef;
     }
+
     @Test
     public void testPost() {
         Task task = new Task();
-        HttpTask.Input input = new HttpTask.Input();
-        input.setUri("http://localhost:7009/post");
+        AgoutiHttpInput input = new AgoutiHttpInput();
+        input.setUrl("http://localhost:7009/post");
 
         Map<String, Object> body = new HashMap<>();
         body.put("input_key1", "value1");
