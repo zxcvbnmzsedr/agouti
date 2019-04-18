@@ -32,11 +32,11 @@ import static com.ztianzeng.agouti.utils.JacksonUtils.defaultMapper;
  */
 @Slf4j
 public class HttpTask extends WorkFlowTask {
-    public static final String REQUEST_PARAMETER_NAME = "http_request";
+    static final String REQUEST_PARAMETER_NAME = "http_request";
 
-    static final String MISSING_REQUEST = "Missing HTTP request. Task input MUST have a '" + REQUEST_PARAMETER_NAME + "' key with HttpTask.Input as value. See documentation for HttpTask for required input parameters";
+    private static final String MISSING_REQUEST = "Missing HTTP request. Task input MUST have a '" + REQUEST_PARAMETER_NAME + "' key with HttpTask.Input as value. See documentation for HttpTask for required input parameters";
 
-    protected ObjectMapper om = defaultMapper();
+    private ObjectMapper om = defaultMapper();
 
 
     private HttpClient httpClient;
