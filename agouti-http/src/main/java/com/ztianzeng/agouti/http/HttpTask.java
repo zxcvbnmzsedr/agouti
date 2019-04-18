@@ -24,6 +24,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ztianzeng.agouti.core.AgoutiException;
 import com.ztianzeng.agouti.core.WorkFlow;
 import com.ztianzeng.agouti.core.WorkFlowTask;
+import com.ztianzeng.agouti.core.utils.JsonPathUtils;
 import com.ztianzeng.common.tasks.Task;
 import com.ztianzeng.common.workflow.TaskType;
 import lombok.Data;
@@ -53,6 +54,7 @@ public class HttpTask extends WorkFlowTask {
 
     private TypeReference<List<Object>> listOfObj = new TypeReference<List<Object>>() {
     };
+
 
     /**
      * http task
@@ -87,6 +89,9 @@ public class HttpTask extends WorkFlowTask {
             return;
         }
 
+
+        handleInput(workflow, input);
+
         HttpResponseWrapper response = httpCall(input);
 
         if (response.status > 199 && response.status < 300) {
@@ -106,6 +111,28 @@ public class HttpTask extends WorkFlowTask {
 
     }
 
+    private void handleInput(WorkFlow workFlow, Input input) {
+        StringBuilder urlSb = new StringBuilder(input.uri);
+
+        input.param = JsonPathUtils.extractResult(workFlow.getRuntimeParam(), input.param);
+        if (input.param != null) {
+            urlSb.append("?");
+            input.param.forEach((k, v) -> {
+                if (v != null) {
+                    urlSb.append(k);
+                    urlSb.append("=");
+                    urlSb.append(v.toString());
+                    urlSb.append("&");
+                }
+            });
+        }
+
+        input.uri = urlSb.toString();
+
+        input.body = JsonPathUtils.replace(workFlow.getRuntimeParam(), input.body);
+
+    }
+
 
     /**
      * request implementation
@@ -115,19 +142,19 @@ public class HttpTask extends WorkFlowTask {
      */
     private HttpResponseWrapper httpCall(Input input) {
         OkHttpClient client = new OkHttpClient();
-        Request.Builder builder = new Request.Builder().url(input.uri);
 
+
+        Request.Builder builder = new Request.Builder().url(input.uri);
         input.headers.forEach(builder::header);
         Response response;
-        ;
 
         try {
             RequestBody requestBody = RequestBody.create(
                     MediaType.parse(input.accept),
                     om.writeValueAsString(input.body)
             );
-            if (!Objects.equals(input.method, "GET")){
-                builder.method(input.method, requestBody);;
+            if (!Objects.equals(input.method, "GET")) {
+                builder.method(input.method, requestBody);
             }
 
             response = client.newCall(builder.build()).execute();
@@ -179,6 +206,8 @@ public class HttpTask extends WorkFlowTask {
         private String uri;
 
         private Object body;
+
+        private Map<String, Object> param;
 
         private String accept = "application/json";
 

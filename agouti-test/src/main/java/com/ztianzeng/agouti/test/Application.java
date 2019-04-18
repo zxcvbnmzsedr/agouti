@@ -16,8 +16,11 @@
 
 package com.ztianzeng.agouti.test;
 
+import com.ztianzeng.agouti.core.WorkFlowTask;
+import com.ztianzeng.agouti.http.HttpTask;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 
 /**
  * @author zhaotianzeng
@@ -29,5 +32,10 @@ public class Application {
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
+    }
+
+    @Bean
+    public WorkFlowTask workFlowTask(){
+        return new HttpTask();
     }
 }

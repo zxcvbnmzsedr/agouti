@@ -17,9 +17,13 @@
 package com.ztianzeng.agouti.test.controller;
 
 import com.ztianzeng.agouti.test.vo.UserInfoVO;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author zhaotianzeng
@@ -29,13 +33,33 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/origin")
 public class OriginalController {
-    @GetMapping("/getUserInfo")
-    public UserInfoVO getUserInfo() {
-        UserInfoVO userInfoVO = new UserInfoVO();
-        userInfoVO.setUsername("tianzeng");
-        userInfoVO.setMobile("12345545654");
-        userInfoVO.setAddress(new UserInfoVO.Address("city"));
 
-        return userInfoVO;
+    private static Map<Integer, UserInfoVO> userList = new HashMap<>();
+
+    static {
+        userList.put(1, UserInfoVO.builder()
+                .userId(1)
+                .username("tianzeng")
+                .mobile("12345545654")
+                .address(new UserInfoVO.Address("city"))
+                .build());
+    }
+
+    @GetMapping("/getUserInfo")
+    public UserInfoVO getUserInfo(@RequestParam("userId") Integer userId) {
+        return userList.get(userId);
+    }
+
+    @PostMapping("/upload")
+    public List upload(@RequestBody UserInfoVO userInfoVO) {
+        userList.put(userInfoVO.getUserId(), userInfoVO);
+        return list();
+    }
+
+    @GetMapping("/list")
+    public List list() {
+        ArrayList<Map.Entry<Integer, UserInfoVO>> entries = new ArrayList<>(userList.entrySet());
+
+        return entries.stream().map(Map.Entry::getValue).collect(Collectors.toList());
     }
 }

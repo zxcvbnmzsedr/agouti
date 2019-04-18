@@ -21,10 +21,7 @@ import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.Option;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author zhaotianzeng
@@ -41,7 +38,11 @@ public class JsonPathUtils {
      * @param outputParameters
      * @return
      */
-    public static Map<String, Object> extractResult(Map<String, Object> inputs, Map<String, Object> outputParameters) {
+    public static Map<String, Object> extractResult(Map<String, Object> inputs,
+                                                    Map<String, Object> outputParameters) {
+        if (outputParameters == null) {
+            return Collections.emptyMap();
+        }
         Configuration option = Configuration.defaultConfiguration().addOptions(Option.SUPPRESS_EXCEPTIONS);
 
         Map<String, Object> resultMap = new HashMap<>(20);
@@ -61,6 +62,26 @@ public class JsonPathUtils {
         });
 
         return resultMap;
+    }
+
+    public static Object replace(Map<String, Object> input, Object json) {
+        if (json == null || input == null) {
+            return Collections.emptyMap();
+        }
+        Configuration option = Configuration.defaultConfiguration().addOptions(Option.SUPPRESS_EXCEPTIONS);
+        DocumentContext documentContext = JsonPath.parse(input, option);
+
+        Object value = json;
+        if (json instanceof String) {
+            value = replaceVariables(value.toString(), documentContext);
+        } else if (json instanceof Map) {
+            //recursive call
+            replace((Map<String, Object>) value, documentContext);
+        } else if (json instanceof List) {
+            value = replaceList((List<?>) value, documentContext);
+        }
+
+        return value;
     }
 
 
