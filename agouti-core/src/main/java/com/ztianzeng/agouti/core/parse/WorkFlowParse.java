@@ -19,6 +19,7 @@ package com.ztianzeng.agouti.core.parse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ztianzeng.agouti.core.AgoutiException;
 import com.ztianzeng.agouti.core.resource.AbstractResource;
+import com.ztianzeng.agouti.core.resource.ClassPathResource;
 import com.ztianzeng.common.workflow.WorkFlowDef;
 
 import java.io.IOException;
@@ -31,6 +32,18 @@ import java.io.IOException;
 public class WorkFlowParse {
     private final static ObjectMapper OM = new ObjectMapper();
 
+    /**
+     * load WorkFlowDef from class resource
+     *
+     * @param path resource path
+     * @return
+     */
+    public static WorkFlowDef fromResource(String path) {
+        AbstractResource resource = new ClassPathResource(
+                path, ClassLoader.getSystemClassLoader());
+
+        return WorkFlowParse.parse(resource);
+    }
 
     /**
      * read json file wrap to WorkFlowDef

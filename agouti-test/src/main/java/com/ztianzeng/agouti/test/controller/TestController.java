@@ -19,8 +19,6 @@ package com.ztianzeng.agouti.test.controller;
 import com.ztianzeng.agouti.core.WorkFlow;
 import com.ztianzeng.agouti.core.executor.BaseExecutor;
 import com.ztianzeng.agouti.core.parse.WorkFlowParse;
-import com.ztianzeng.agouti.core.resource.AbstractResource;
-import com.ztianzeng.agouti.core.resource.ClassPathResource;
 import com.ztianzeng.common.workflow.WorkFlowDef;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,17 +36,10 @@ public class TestController {
     @GetMapping("/getTest1")
     public Object getTest1() {
         BaseExecutor baseExecutor = new BaseExecutor();
-        WorkFlowDef workFlowDef = fromResource();
+        WorkFlowDef workFlowDef = WorkFlowParse.fromResource("getTest1.json");
 
         WorkFlow workFlow = baseExecutor.startWorkFlow(workFlowDef, null);
         return workFlow.getOutputs();
     }
 
-    private WorkFlowDef fromResource() {
-        String path = "getTest1.json";
-        AbstractResource resource = new ClassPathResource(
-                path, ClassLoader.getSystemClassLoader());
-
-        return WorkFlowParse.parse(resource);
-    }
 }
