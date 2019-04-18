@@ -42,4 +42,12 @@ public class TestController {
         return workFlow.getOutputs();
     }
 
+    @GetMapping("/ribbonGetTest1")
+    public Object ribbonGetTest1() {
+        BaseExecutor baseExecutor = new BaseExecutor();
+        WorkFlowDef workFlowDef = WorkFlowParse.fromResource("ribbonGetTest1.json");
+
+        WorkFlow workFlow = baseExecutor.startWorkFlow(workFlowDef, null);
+        return workFlow.getOutputs();
+    }
 }

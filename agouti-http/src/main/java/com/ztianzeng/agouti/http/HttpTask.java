@@ -17,6 +17,7 @@
 package com.ztianzeng.agouti.http;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ztianzeng.agouti.common.ServiceInstance;
 import com.ztianzeng.agouti.core.WorkFlow;
 import com.ztianzeng.agouti.core.WorkFlowTask;
 import com.ztianzeng.common.tasks.Task;
@@ -34,6 +35,8 @@ import static com.ztianzeng.agouti.utils.JacksonUtils.defaultMapper;
 public class HttpTask extends WorkFlowTask {
     static final String REQUEST_PARAMETER_NAME = "http_request";
 
+    static final String LOAD_STR = "lb";
+
     private static final String MISSING_REQUEST = "Missing HTTP request. Task input MUST have a '" + REQUEST_PARAMETER_NAME + "' key with HttpTask.Input as value. See documentation for HttpTask for required input parameters";
 
     private ObjectMapper om = defaultMapper();
@@ -41,13 +44,16 @@ public class HttpTask extends WorkFlowTask {
 
     private HttpClient httpClient;
 
+    private ServiceInstanceChooser chooser;
+
 
     /**
      * http task
      */
-    public HttpTask(HttpClient httpClient) {
+    public HttpTask(HttpClient httpClient, ServiceInstanceChooser chooser) {
         super(TaskType.HTTP.name());
         this.httpClient = httpClient;
+        this.chooser = chooser;
     }
 
     /**
@@ -56,6 +62,14 @@ public class HttpTask extends WorkFlowTask {
     public HttpTask() {
         super(TaskType.HTTP.name());
         this.httpClient = new DefaultHttpClient();
+    }
+
+    /**
+     * http task
+     */
+    public HttpTask(ServiceInstanceChooser chooser) {
+        super(TaskType.HTTP.name());
+        this.chooser = chooser;
     }
 
     @Override
@@ -77,6 +91,13 @@ public class HttpTask extends WorkFlowTask {
             task.setStatus(Task.Status.FAILED);
             return;
         }
+
+        // TODO: 2019-04-18 load
+        if (input.getUrl().startsWith(LOAD_STR)) {
+            ServiceInstance choose = chooser.choose("");
+            input.url = choose.getHost();
+        }
+
 
         if (input.getMethod() == null) {
             String reason = "No HTTP method specified";

@@ -30,6 +30,10 @@ import java.io.IOException;
  * @date 2019-04-16 19:45
  */
 public class WorkFlowParse {
+    private WorkFlowParse() {
+
+    }
+
     private final static ObjectMapper OM = new ObjectMapper();
 
     /**
