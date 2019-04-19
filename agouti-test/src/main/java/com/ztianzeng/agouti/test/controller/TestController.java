@@ -43,8 +43,6 @@ public class TestController {
         WorkFlow workFlow = baseExecutor.startWorkFlow(workFlowDef, null);
         return workFlow.getOutputs();
     }
-    @Autowired
-    private SpringClientFactory factory;
 
     @GetMapping("/ribbonGetTest1")
     public Object ribbonGetTest1() {
