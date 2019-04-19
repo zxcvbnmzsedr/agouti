@@ -19,7 +19,7 @@ package com.ztianzeng.agouti.http;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ztianzeng.agouti.core.WorkFlow;
-import com.ztianzeng.agouti.core.executor.BaseExecutor;
+import com.ztianzeng.agouti.core.executor.DefaultExecutor;
 import com.ztianzeng.agouti.core.parse.WorkFlowParse;
 import com.ztianzeng.agouti.core.resource.AbstractResource;
 import com.ztianzeng.agouti.core.resource.ClassPathResource;
@@ -87,11 +87,11 @@ public class HttpTaskTest {
 
     @Test
     public void startWorkFlow() {
-        BaseExecutor baseExecutor = new BaseExecutor();
+        DefaultExecutor defaultExecutor = new DefaultExecutor();
         WorkFlowDef workFlowDef = fromResource();
 
 
-        WorkFlow workFlow = baseExecutor.startWorkFlow(workFlowDef, null);
+        WorkFlow workFlow = defaultExecutor.startWorkFlow(workFlowDef, null);
         Object d1Key = workFlow.getOutputs().get("d1Key");
         Assert.assertEquals(d1Key, "input_key1");
     }

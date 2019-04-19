@@ -49,6 +49,12 @@
                 <artifactId>commons-lang3</artifactId>
                 <version>3.8.1</version>
             </dependency>
+
+            <dependency>
+                <groupId>io.projectreactor</groupId>
+                <artifactId>reactor-core</artifactId>
+                <version>3.2.6.RELEASE</version>
+            </dependency>
             <dependency>
                 <groupId>com.ztianzeng.agouti</groupId>
                 <artifactId>agouti-common</artifactId>

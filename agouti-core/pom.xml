@@ -13,6 +13,10 @@
 
     <dependencies>
         <dependency>
+            <groupId>io.projectreactor</groupId>
+            <artifactId>reactor-core</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.ztianzeng.agouti</groupId>
             <artifactId>agouti-common</artifactId>
         </dependency>

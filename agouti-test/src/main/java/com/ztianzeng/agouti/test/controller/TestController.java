@@ -17,11 +17,9 @@
 package com.ztianzeng.agouti.test.controller;
 
 import com.ztianzeng.agouti.core.WorkFlow;
-import com.ztianzeng.agouti.core.executor.BaseExecutor;
+import com.ztianzeng.agouti.core.executor.DefaultExecutor;
 import com.ztianzeng.agouti.core.parse.WorkFlowParse;
 import com.ztianzeng.common.workflow.WorkFlowDef;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.netflix.ribbon.SpringClientFactory;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -37,19 +35,19 @@ public class TestController {
 
     @GetMapping("/getTest1")
     public Object getTest1() {
-        BaseExecutor baseExecutor = new BaseExecutor();
+        DefaultExecutor defaultExecutor = new DefaultExecutor();
         WorkFlowDef workFlowDef = WorkFlowParse.fromResource("getTest1.json");
 
-        WorkFlow workFlow = baseExecutor.startWorkFlow(workFlowDef, null);
+        WorkFlow workFlow = defaultExecutor.startWorkFlow(workFlowDef, null);
         return workFlow.getOutputs();
     }
 
     @GetMapping("/ribbonGetTest1")
     public Object ribbonGetTest1() {
-        BaseExecutor baseExecutor = new BaseExecutor();
+        DefaultExecutor defaultExecutor = new DefaultExecutor();
         WorkFlowDef workFlowDef = WorkFlowParse.fromResource("ribbonGetTest1.json");
 
-        WorkFlow workFlow = baseExecutor.startWorkFlow(workFlowDef, null);
+        WorkFlow workFlow = defaultExecutor.startWorkFlow(workFlowDef, null);
         return workFlow.getOutputs();
     }
 }

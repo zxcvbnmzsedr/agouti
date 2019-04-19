@@ -32,11 +32,11 @@ import java.util.concurrent.ConcurrentHashMap;
  * @version V1.0
  * @date 2019-04-16 09:46
  */
-public class BaseExecutorTest {
+public class DefaultExecutorTest {
 
     @Test
     public void startWorkFlow() {
-        BaseExecutor baseExecutor = new BaseExecutor();
+        DefaultExecutor defaultExecutor = new DefaultExecutor();
         WorkFlowDef workFlowDef = new WorkFlowDef();
         workFlowDef.setName("name");
         workFlowDef.setDescription("desc");
@@ -55,7 +55,7 @@ public class BaseExecutorTest {
 
         workflowInput.put("input_1", "1");
 
-        WorkFlow workFlow = baseExecutor.startWorkFlow(workFlowDef, workflowInput);
+        WorkFlow workFlow = defaultExecutor.startWorkFlow(workFlowDef, workflowInput);
 
 
     }

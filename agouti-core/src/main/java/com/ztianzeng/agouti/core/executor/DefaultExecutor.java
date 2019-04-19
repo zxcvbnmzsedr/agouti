@@ -40,7 +40,7 @@ import java.util.Map;
  * @date 2019-01-28 20:57
  */
 @Slf4j
-public class BaseExecutor {
+public class DefaultExecutor {
 
     /**
      * start work flow
