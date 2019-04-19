@@ -54,4 +54,5 @@ public abstract class WorkFlowTask {
     public static WorkFlowTask get(String type) {
         return registry.get(type);
     }
+
 }

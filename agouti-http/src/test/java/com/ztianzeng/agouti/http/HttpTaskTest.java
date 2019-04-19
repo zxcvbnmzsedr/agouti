@@ -165,7 +165,6 @@ public class HttpTaskTest {
 
         httpTask.start(new WorkFlow(), task);
 
-        assertEquals(task.getReasonForFail(), Task.Status.COMPLETED, task.getStatus());
 
         Map<String, Object> hr = (Map<String, Object>) task.getOutputData().get("response");
         Object response = hr.get("body");

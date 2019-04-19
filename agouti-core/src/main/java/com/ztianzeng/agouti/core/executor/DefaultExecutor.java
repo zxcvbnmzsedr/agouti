@@ -26,11 +26,14 @@ import com.ztianzeng.common.workflow.WorkFlowDef;
 import com.ztianzeng.common.workflow.WorkflowTask;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.SignalType;
 
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 /**
  * 基础执行器
@@ -52,13 +55,18 @@ public class DefaultExecutor {
     public WorkFlow startWorkFlow(WorkFlowDef workFlowDefinition,
                                   Map<String, Object> workflowInput) {
         WorkFlow workFlow = convertWorkFlow(workFlowDefinition, workflowInput);
-        for (Task task : workFlow.getTasks()) {
-            WorkFlowTask workFlowTask = WorkFlowTask.get(task.getTaskType().name());
-            workFlowTask.start(workFlow, task);
-            completeTask(workFlow, task);
-        }
 
-        completeWorkFlow(workFlow, workFlowDefinition.getOutputParameters());
+        Flux.fromIterable(workFlow.getTasks())
+                .doOnComplete(() -> completeWorkFlow(workFlow, workFlowDefinition.getOutputParameters()))
+                .subscribe(task ->
+                        {
+                            WorkFlowTask workFlowTask = WorkFlowTask.get(task.getTaskType().name());
+                            workFlowTask.start(workFlow, task);
+                            completeTask(workFlow, task);
+                        }
+                );
+
+
         return workFlow;
     }
 
