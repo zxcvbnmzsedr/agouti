@@ -13,7 +13,7 @@
       "inputParameters": {
 
         "http_request": {
-          "uri": "http://localhost:7009/post",
+          "url": "http://localhost:7009/post",
           "body": {
             "input_key1": "value1",
             "input_key2": "45.3d"
@@ -30,7 +30,7 @@
       "inputParameters": {
 
         "http_request": {
-          "uri": "http://localhost:7009/post",
+          "url": "http://localhost:7009/post",
           "body": {
             "input_key1": "value1",
             "input_key2": "45.3d"

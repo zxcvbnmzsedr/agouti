@@ -1,0 +1,26 @@
+server:
+  port: 8080
+spring:
+  profiles: agouti1
+  application:
+    name: agouti1
+eureka:
+  client:
+    service-url:
+      defaultZone: http://192.168.1.147:9000/eureka/
+---
+
+server:
+  port: 8081
+spring:
+  profiles: agouti2
+  application:
+    name: agouti2
+eureka:
+  client:
+    service-url:
+      defaultZone: http://192.168.1.147:9000/eureka/
+
+---
+
+

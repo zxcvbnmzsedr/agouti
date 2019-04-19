@@ -1,0 +1,57 @@
+{
+  "name": "getTest1",
+  "description": "the post of http",
+  "tasks": [
+    {
+      "name": "userList",
+      "type": "HTTP",
+      "alias": "userList",
+      "inputParameters": {
+        "http_request": {
+          "url": "lb://agouti1/origin/list",
+          "method": "GET"
+        }
+      }
+    },
+    {
+      "name": "uploadList",
+      "type": "HTTP",
+      "alias": "uploadList",
+      "inputParameters": {
+        "http_request": {
+          "url": "lb://agouti1/origin/upload",
+          "method": "POST",
+          "body": {
+            "username": "${userList.response.body[0].userId}",
+            "mobile": "name2",
+            "address": {
+              "city": "1"
+            },
+            "userId": "2"
+          }
+        }
+      }
+    },
+    {
+      "name": "userOne",
+      "type": "HTTP",
+      "alias": "user",
+      "inputParameters": {
+        "http_request": {
+          "url": "lb://agouti1/origin/getUserInfo",
+          "method": "GET",
+          "param": {
+            "userId": "${uploadList.response.body[1].userId}"
+          }
+        }
+      }
+    }
+  ],
+  "outputParameters": {
+    "username": "${user.response.body.username}",
+    "address": "${user.response.body.address}",
+    "mobile": "${user.response.body.mobile}",
+    "city": "${user.response.body.address.city}",
+    "userId": "${user.response.body.userId}"
+  }
+}

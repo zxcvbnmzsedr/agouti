@@ -14,6 +14,7 @@
         <module>agouti-http</module>
         <module>agouti-http</module>
         <module>agouti-test</module>
+        <module>agouti-http-spring</module>
     </modules>
     <properties>
         <eclipse.jetty>9.4.12.v20180830</eclipse.jetty>
@@ -21,6 +22,16 @@
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>com.ztianzeng.agouti</groupId>
+                <artifactId>agouti-http</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-netflix-ribbon</artifactId>
+                <version>2.0.2.RELEASE</version>
+            </dependency>
             <dependency>
                 <groupId>org.eclipse.jetty</groupId>
                 <artifactId>jetty-server</artifactId>

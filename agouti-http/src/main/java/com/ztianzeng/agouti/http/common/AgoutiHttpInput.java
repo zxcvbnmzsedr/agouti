@@ -14,22 +14,32 @@
  * limitations under the License.
  */
 
-package com.ztianzeng.agouti.http;
+package com.ztianzeng.agouti.http.common;
 
-import com.ztianzeng.agouti.http.common.AgoutiHttpInput;
+import lombok.Builder;
+import lombok.Getter;
+
+import java.net.URI;
+import java.util.Map;
 
 /**
  * @author zhaotianzeng
  * @version V1.0
- * @date 2019-04-18 14:55
+ * @date 2019-04-19 10:50
  */
-public interface HttpClient {
+@Getter
+@Builder
+public class AgoutiHttpInput {
 
-    /**
-     * http invoke
-     *
-     * @param input
-     * @return
-     */
-    AgoutiHttpResponse httpCall(AgoutiHttpInput input);
+    String method;
+
+    URI uri;
+
+    Object body;
+
+    String accept;
+
+    String contentType;
+
+    Map<String, String> headers;
 }

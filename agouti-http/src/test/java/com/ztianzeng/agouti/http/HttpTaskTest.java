@@ -117,7 +117,7 @@ public class HttpTaskTest {
         d1.setType("HTTP");
         d1.setAlias("d1");
 
-        AgoutiHttpInput input = new AgoutiHttpInput();
+        HttpTask.Input input = new HttpTask.Input();
         input.setUrl("http://localhost:7009/post");
         Map<String, Object> body = new HashMap<>();
         body.put("input_key1", "value1");
@@ -133,7 +133,7 @@ public class HttpTaskTest {
         d2.setType("HTTP");
         d2.setAlias("d2");
 
-        AgoutiHttpInput d2In = new AgoutiHttpInput();
+        HttpTask.Input d2In = new HttpTask.Input();
         d2In.setUrl("http://localhost:7009/post");
         Map<String, Object> d2B = new HashMap<>();
         d2B.put("B", "value1");
@@ -151,7 +151,7 @@ public class HttpTaskTest {
     @Test
     public void testPost() {
         Task task = new Task();
-        AgoutiHttpInput input = new AgoutiHttpInput();
+        HttpTask.Input input = new HttpTask.Input();
         input.setUrl("http://localhost:7009/post");
 
         Map<String, Object> body = new HashMap<>();
@@ -163,7 +163,7 @@ public class HttpTaskTest {
 
         task.getInputData().put(HttpTask.REQUEST_PARAMETER_NAME, input);
 
-        httpTask.start(null, task);
+        httpTask.start(new WorkFlow(), task);
 
         assertEquals(task.getReasonForFail(), Task.Status.COMPLETED, task.getStatus());
 

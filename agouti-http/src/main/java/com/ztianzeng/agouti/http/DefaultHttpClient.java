@@ -20,17 +20,17 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ztianzeng.agouti.core.AgoutiException;
-import com.ztianzeng.agouti.core.WorkFlow;
-import com.ztianzeng.agouti.core.utils.JsonPathUtils;
+import com.ztianzeng.agouti.http.common.AgoutiHttpInput;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import static com.ztianzeng.agouti.utils.JacksonUtils.defaultMapper;
+import static com.ztianzeng.agouti.http.utils.JacksonUtils.defaultMapper;
 
 /**
  * @author zhaotianzeng
@@ -48,30 +48,6 @@ public class DefaultHttpClient implements HttpClient {
     };
 
 
-    @Override
-    public AgoutiHttpInput handleInput(WorkFlow workFlow, AgoutiHttpInput input) {
-        StringBuilder urlSb = new StringBuilder(input.url);
-
-        input.param = JsonPathUtils.extractResult(workFlow.getRuntimeParam(), input.param);
-        if (input.param != null) {
-            urlSb.append("?");
-            input.param.forEach((k, v) -> {
-                if (v != null) {
-                    urlSb.append(k);
-                    urlSb.append("=");
-                    urlSb.append(v.toString());
-                    urlSb.append("&");
-                }
-            });
-        }
-
-        input.url = urlSb.toString();
-
-        input.body = JsonPathUtils.replace(workFlow.getRuntimeParam(), input.body);
-        return input;
-    }
-
-
     /**
      * request implementation
      *
@@ -83,17 +59,22 @@ public class DefaultHttpClient implements HttpClient {
         OkHttpClient client = new OkHttpClient();
 
 
-        Request.Builder builder = new Request.Builder().url(input.url);
-        input.headers.forEach(builder::header);
+        Request.Builder builder = new Request.Builder();
+        try {
+            builder.url(input.getUri().toURL());
+        } catch (MalformedURLException e) {
+            throw new AgoutiException(e);
+        }
+        input.getHeaders().forEach(builder::header);
         Response response;
 
         try {
             RequestBody requestBody = RequestBody.create(
-                    MediaType.parse(input.accept),
-                    om.writeValueAsString(input.body)
+                    MediaType.parse(input.getAccept()),
+                    om.writeValueAsString(input.getBody())
             );
-            if (!Objects.equals(input.method, "GET")) {
-                builder.method(input.method, requestBody);
+            if (!Objects.equals(input.getMethod(), "GET")) {
+                builder.method(input.getMethod(), requestBody);
             }
 
             response = client.newCall(builder.build()).execute();

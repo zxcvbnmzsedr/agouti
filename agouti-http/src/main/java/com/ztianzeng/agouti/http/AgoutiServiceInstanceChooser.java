@@ -16,20 +16,20 @@
 
 package com.ztianzeng.agouti.http;
 
-import com.ztianzeng.agouti.http.common.AgoutiHttpInput;
+import com.ztianzeng.agouti.http.common.AgoutiServiceInstance;
 
 /**
  * @author zhaotianzeng
  * @version V1.0
- * @date 2019-04-18 14:55
+ * @date 2019-04-18 19:43
  */
-public interface HttpClient {
+public interface AgoutiServiceInstanceChooser {
 
     /**
-     * http invoke
+     * chose server
      *
-     * @param input
+     * @param serviceId
      * @return
      */
-    AgoutiHttpResponse httpCall(AgoutiHttpInput input);
+    AgoutiServiceInstance choose(String serviceId);
 }
