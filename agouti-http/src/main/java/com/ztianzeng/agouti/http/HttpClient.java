@@ -16,7 +16,7 @@
 
 package com.ztianzeng.agouti.http;
 
-import com.ztianzeng.agouti.core.WorkFlow;
+import com.ztianzeng.agouti.http.common.AgoutiHttpInput;
 
 /**
  * @author zhaotianzeng
@@ -24,15 +24,6 @@ import com.ztianzeng.agouti.core.WorkFlow;
  * @date 2019-04-18 14:55
  */
 public interface HttpClient {
-    /**
-     * handle input
-     * extract inform from workflow
-     *
-     * @param workFlow
-     * @param input
-     * @return
-     */
-    AgoutiHttpInput handleInput(WorkFlow workFlow, AgoutiHttpInput input);
 
     /**
      * http invoke

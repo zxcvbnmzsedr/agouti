@@ -17,16 +17,19 @@
 package com.ztianzeng.agouti.http;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ztianzeng.agouti.core.AgoutiException;
 import com.ztianzeng.agouti.core.WorkFlow;
 import com.ztianzeng.agouti.core.WorkFlowTask;
+import com.ztianzeng.agouti.core.utils.JsonPathUtils;
+import com.ztianzeng.agouti.http.common.AgoutiHttpInput;
 import com.ztianzeng.agouti.http.common.AgoutiServiceInstance;
 import com.ztianzeng.common.tasks.Task;
 import com.ztianzeng.common.workflow.TaskType;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.URI;
-import java.net.URISyntaxException;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.ztianzeng.agouti.http.utils.JacksonUtils.defaultMapper;
 
@@ -80,36 +83,39 @@ public class HttpTask extends WorkFlowTask {
             return;
         }
 
-        AgoutiHttpInput input = httpClient.handleInput(workflow, om.convertValue(request, AgoutiHttpInput.class));
-
-        if (input.getUrl() == null) {
+        Input input = om.convertValue(request, Input.class);
+        if (input.url == null) {
             String reason = "Missing HTTP URI.  See documentation for HttpTask for required input parameters";
             task.setReasonForFail(reason);
             task.setStatus(Task.Status.FAILED);
             return;
         }
-        URI uri;
-        try {
-            uri = new URI(input.getUrl());
-        } catch (URISyntaxException e) {
-            throw new AgoutiException(e);
-        }
+
+        URI uri = buildUri(workflow, input);
 
         if (uri.getScheme().equals(LOAD_STR)) {
             AgoutiServiceInstance choose = chooser.choose(uri.getHost());
-            input.url = choose.getUri() + uri.getPath() +"?"+ uri.getQuery();
+            uri = URI.create(choose.getUri() + uri.getPath() + "?" + uri.getQuery());
         }
 
 
-        if (input.getMethod() == null) {
+        if (input.method == null) {
             String reason = "No HTTP method specified";
             task.setReasonForFail(reason);
             task.setStatus(Task.Status.FAILED);
             return;
         }
 
+        AgoutiHttpInput build = AgoutiHttpInput.builder()
+                .accept(input.accept)
+                .body(JsonPathUtils.replace(workflow.getRuntimeParam(), input.body))
+                .headers(input.headers)
+                .contentType(input.contentType)
+                .uri(uri)
+                .method(input.method)
+                .build();
 
-        AgoutiHttpResponse response = httpClient.httpCall(input);
+        AgoutiHttpResponse response = httpClient.httpCall(build);
 
         if (response.status > 199 && response.status < 300) {
             task.setStatus(Task.Status.COMPLETED);
@@ -125,7 +131,48 @@ public class HttpTask extends WorkFlowTask {
 
         task.getOutputData().put("response", response.asMap());
 
-
     }
 
+    private URI buildUri(WorkFlow workFlow, Input input) {
+
+        StringBuilder urlSb = new StringBuilder(input.url);
+
+        Map<String, Object> param = JsonPathUtils.extractResult(workFlow.getRuntimeParam(), input.param);
+        if (param != null) {
+            urlSb.append("?");
+            param.forEach((k, v) -> {
+                if (v != null) {
+                    urlSb.append(k);
+                    urlSb.append("=");
+                    urlSb.append(v.toString());
+                    urlSb.append("&");
+                }
+            });
+        }
+
+
+        return URI.create(urlSb.toString());
+    }
+
+    /**
+     * @author zhaotianzeng
+     * @version V1.0
+     * @date 2019-04-18 14:57
+     */
+    @Data
+    public static class Input {
+        String method;
+
+        String url;
+
+        Object body;
+
+        Map<String, Object> param;
+
+        String accept = "application/json";
+
+        String contentType = "application/json";
+
+        Map<String, String> headers = new HashMap<>();
+    }
 }

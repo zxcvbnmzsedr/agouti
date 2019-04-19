@@ -14,31 +14,32 @@
  * limitations under the License.
  */
 
-package com.ztianzeng.agouti.http;
+package com.ztianzeng.agouti.http.common;
 
-import lombok.Data;
+import lombok.Builder;
+import lombok.Getter;
 
-import java.util.HashMap;
+import java.net.URI;
 import java.util.Map;
 
 /**
  * @author zhaotianzeng
  * @version V1.0
- * @date 2019-04-18 14:57
+ * @date 2019-04-19 10:50
  */
-@Data
+@Getter
+@Builder
 public class AgoutiHttpInput {
+
     String method;
 
-    String url;
+    URI uri;
 
     Object body;
 
-    Map<String, Object> param;
+    String accept;
 
-    String accept = "application/json";
+    String contentType;
 
-    String contentType = "application/json";
-
-    Map<String, String> headers = new HashMap<>();
+    Map<String, String> headers;
 }
