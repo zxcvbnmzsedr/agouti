@@ -57,6 +57,7 @@ public class DefaultExecutor {
             workFlowTask.start(workFlow, task);
             completeTask(workFlow, task);
         }
+
         completeWorkFlow(workFlow, workFlowDefinition.getOutputParameters());
         return workFlow;
     }
