@@ -17,12 +17,16 @@
 package com.ztianzeng.agouti.http;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ztianzeng.agouti.core.AgoutiException;
 import com.ztianzeng.agouti.core.WorkFlow;
 import com.ztianzeng.agouti.core.WorkFlowTask;
 import com.ztianzeng.agouti.http.common.AgoutiServiceInstance;
 import com.ztianzeng.common.tasks.Task;
 import com.ztianzeng.common.workflow.TaskType;
 import lombok.extern.slf4j.Slf4j;
+
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import static com.ztianzeng.agouti.http.utils.JacksonUtils.defaultMapper;
 
@@ -84,11 +88,16 @@ public class HttpTask extends WorkFlowTask {
             task.setStatus(Task.Status.FAILED);
             return;
         }
+        URI uri;
+        try {
+            uri = new URI(input.getUrl());
+        } catch (URISyntaxException e) {
+            throw new AgoutiException(e);
+        }
 
-        // TODO: 2019-04-18 load
-        if (input.getUrl().startsWith(LOAD_STR)) {
-            AgoutiServiceInstance choose = chooser.choose("BASIC-RESOURCE-CENTER");
-            choose.getHost();
+        if (uri.getScheme().equals(LOAD_STR)) {
+            AgoutiServiceInstance choose = chooser.choose(uri.getHost());
+            input.url = choose.getUri() + uri.getPath() +"?"+ uri.getQuery();
         }
 
 

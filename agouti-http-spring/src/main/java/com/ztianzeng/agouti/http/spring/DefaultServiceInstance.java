@@ -17,6 +17,7 @@
 package com.ztianzeng.agouti.http.spring;
 
 import com.ztianzeng.agouti.http.common.AgoutiServiceInstance;
+import org.springframework.cloud.client.ServiceInstance;
 
 import java.net.URI;
 
@@ -33,6 +34,7 @@ public class DefaultServiceInstance implements AgoutiServiceInstance {
     private final int port;
 
     private final boolean secure;
+
 
     public DefaultServiceInstance(String host, int port, boolean secure) {
         this.host = host;
@@ -54,7 +56,15 @@ public class DefaultServiceInstance implements AgoutiServiceInstance {
 
     @Override
     public URI getUri() {
-        return URI.create(host);
+        return getUri(this);
+    }
+
+
+    public static URI getUri(AgoutiServiceInstance instance) {
+        String scheme = (instance.isSecure()) ? "https" : "http";
+        String uri = String.format("%s://%s:%s", scheme, instance.getHost(),
+                instance.getPort());
+        return URI.create(uri);
     }
 
     @Override
