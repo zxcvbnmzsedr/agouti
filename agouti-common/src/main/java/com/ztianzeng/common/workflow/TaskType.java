@@ -15,5 +15,9 @@ public enum TaskType {
     /**
      * SIMPLE
      */
-    SIMPLE;
+    SIMPLE,
+    /**
+     * METHOD
+     */
+    METHOD;
 }
