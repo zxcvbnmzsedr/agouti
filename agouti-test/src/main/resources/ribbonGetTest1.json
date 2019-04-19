@@ -8,7 +8,7 @@
       "alias": "userList",
       "inputParameters": {
         "http_request": {
-          "url": "lb://agouti1/origin/list",
+          "url": "lb://agouti2/origin/list",
           "method": "GET"
         }
       }
@@ -19,7 +19,7 @@
       "alias": "uploadList",
       "inputParameters": {
         "http_request": {
-          "url": "lb://agouti1/origin/upload",
+          "url": "lb://agouti2/origin/upload",
           "method": "POST",
           "body": {
             "username": "${userList.response.body[0].userId}",
@@ -38,7 +38,7 @@
       "alias": "user",
       "inputParameters": {
         "http_request": {
-          "url": "lb://agouti1/origin/getUserInfo",
+          "url": "lb://agouti2/origin/getUserInfo",
           "method": "GET",
           "param": {
             "userId": "${uploadList.response.body[1].userId}"
@@ -49,7 +49,10 @@
   ],
   "outputParameters": {
     "username": "${user.response.body.username}",
-    "address": "${user.response.body.address}",
+    "address": {
+      "country": "${user.response.body.address}",
+      "userId": "${user.response.body.userId}"
+    },
     "mobile": "${user.response.body.mobile}",
     "city": "${user.response.body.address.city}",
     "userId": "${user.response.body.userId}"
