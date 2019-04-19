@@ -42,7 +42,7 @@ import static com.ztianzeng.agouti.http.utils.JacksonUtils.defaultMapper;
 public class HttpTask extends WorkFlowTask {
     static final String REQUEST_PARAMETER_NAME = "http_request";
 
-    static final String LOAD_STR = "lb";
+    private static final String LOAD_STR = "lb";
 
     private static final String MISSING_REQUEST = "Missing HTTP request. Task input MUST have a '" + REQUEST_PARAMETER_NAME + "' key with HttpTask.Input as value. See documentation for HttpTask for required input parameters";
 

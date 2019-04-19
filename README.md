@@ -11,35 +11,121 @@
 ## task
 每一次调用都是一次task,task是执行的最小单位
 
+### HTTP TASK 
+使用HTTP进行结果调用，支持使用lb进行负载均衡，默认采用ribbon作为负载均衡实现
+
+可以实现HttpClient进行自定义http请求扩展。
+
+一个简单的HTTP TASK定义
+~~~
+{
+      "name": "uploadList",
+      "type": "HTTP",
+      "alias": "uploadList",
+      "inputParameters": {
+        "http_request": {
+          "url": "http://localhost:8080/origin/upload",
+          "method": "POST",
+          "body": {
+            "username": "${userList.response.body[0].userId}",
+            "mobile": "name2",
+            "address": {
+              "city": "1"
+            },
+            "userId": "2"
+          },
+          "param": {
+               "userId": "${uploadList.response.body[1].userId}"
+          }
+        }
+      }
+    }
+~~~
+name: task的名字
+
+type: task类型
+
+alias: task的引用名，设置了这个可以在下面的task中或者输出中对这个task的结果进行引用
+
+inputParameters:入参类型设置
+
+http_request: HTTP请求方式定义
+    1. body请求体
+    2. param请求参数
+    3. url请求的url，如果url是以lb开头，会通过ribbon自动选择服务器
+
+task执行成功后可以通过jsonpath引用:
+
+${taskName.response.body} 响应体
+
+${taskName.response.header} 响应头
+
+${taskName.response.status} 响应码
+
+
+
+
 ## 演示
-下面json定义了一个请求天气的接口，最终能够解析出最终我们想要的数据出来。
+下面json定义了HTTP。
 
 ~~~
 
 {
-  "name": "agouti", // 流程名字
-  "description": "agoutiTest", // 流程描述
-  "outputs": { // 最终返回的结果
-    "yesterdayData": "$weather.data.yesterday.date",
-    "sunrise": "$weather.data.yesterday.sunrise",
-    "cityInfo": "$weather.cityInfo.city"
-  },
+  "name": "getTest1",
+  "description": "the post of http",
   "tasks": [
-    { // API地址
-      "target": "GET http://cdn.sojson.com/_city.json",
-      // 任务别名
-      "alias": "city",
-      "method": "",
-      // 任务类型
-      "taskType": "URL"
+    {
+      "name": "userList",
+      "type": "HTTP",
+      "alias": "userList",
+      "inputParameters": {
+        "http_request": {
+          "url": "http://localhost:8080/origin/list",
+          "method": "GET"
+        }
+      }
     },
     {
-      "target": "GET http://t.weather.sojson.com/api/weather/city/${city[25].city_code}",
-      "alias": "weather",
-      "method": "",
-      "taskType": "URL"
+      "name": "uploadList",
+      "type": "HTTP",
+      "alias": "uploadList",
+      "inputParameters": {
+        "http_request": {
+          "url": "http://localhost:8080/origin/upload",
+          "method": "POST",
+          "body": {
+            "username": "${userList.response.body[0].userId}",
+            "mobile": "name2",
+            "address": {
+              "city": "1"
+            },
+            "userId": "2"
+          }
+        }
+      }
+    },
+    {
+      "name": "userOne",
+      "type": "HTTP",
+      "alias": "user",
+      "inputParameters": {
+        "http_request": {
+          "url": "http://localhost:8080/origin/getUserInfo",
+          "method": "GET",
+          "param": {
+            "userId": "${uploadList.response.body[1].userId}"
+          }
+        }
+      }
     }
-  ]
+  ],
+  "outputParameters": {
+    "username": "${user.response.body.username}",
+    "address": "${user.response.body.address}",
+    "mobile": "${user.response.body.mobile}",
+    "city": "${user.response.body.address.city}",
+    "userId": "${user.response.body.userId}"
+  }
 }
 
 ~~~
@@ -47,22 +133,26 @@
 执行：
 
 ~~~
-String path = "agouti/invoke.json";
+BaseExecutor baseExecutor = new BaseExecutor();
+WorkFlowDef workFlowDef = WorkFlowParse.fromResource("getTest1.json");
 
-AbstractResource resource = new ClassPathResource(
-        path, ClassLoader.getSystemClassLoader());
-
-Parser parser = new Parser();
-WorkFlow parse = parser.parse(resource);
-AgoutiEngine agoutiEngine = new AgoutiEngine();
-Object invoke = agoutiEngine.invoke(parse, null);
+WorkFlow workFlow = baseExecutor.startWorkFlow(workFlowDef, null);
+workFlow.getOutputs();
 
 ~~~
 
 执行结果:
 
 ~~~
-output {yesterdayData=28, sunrise=07:23, cityInfo=天津市} 
+{
+    "address": {
+        "city": "1"
+    },
+    "city": "1",
+    "mobile": "name2",
+    "userId": 2,
+    "username": "1"
+}
 ~~~
 
 
