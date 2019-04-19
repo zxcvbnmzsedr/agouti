@@ -16,6 +16,7 @@
 
 package com.ztianzeng.agouti.http.spring;
 
+import com.ztianzeng.agouti.core.AgoutiException;
 import com.ztianzeng.agouti.http.AgoutiServiceInstanceChooser;
 import com.ztianzeng.agouti.http.common.AgoutiServiceInstance;
 import org.springframework.cloud.client.ServiceInstance;
@@ -37,7 +38,9 @@ public class DefaultChooser implements AgoutiServiceInstanceChooser {
     @Override
     public AgoutiServiceInstance choose(String serviceId) {
         ServiceInstance choose = lo.choose(serviceId);
-
+        if (choose == null) {
+            throw new AgoutiException("service" + serviceId + "not find ");
+        }
         return new DefaultServiceInstance(choose.getHost(), choose.getPort(), choose.isSecure());
     }
 
