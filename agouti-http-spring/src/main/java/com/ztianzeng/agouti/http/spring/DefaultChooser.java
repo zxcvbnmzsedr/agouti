@@ -39,7 +39,7 @@ public class DefaultChooser implements AgoutiServiceInstanceChooser {
     public AgoutiServiceInstance choose(String serviceId) {
         ServiceInstance choose = lo.choose(serviceId);
         if (choose == null) {
-            throw new AgoutiException("service" + serviceId + "not find ");
+            throw new AgoutiException("service " + serviceId + " not find ");
         }
         return new DefaultServiceInstance(choose.getHost(), choose.getPort(), choose.isSecure());
     }
