@@ -32,7 +32,7 @@ import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.ztianzeng.agouti.http.utils.JacksonUtils.defaultMapper;
+import static com.ztianzeng.agouti.core.utils.JacksonUtils.defaultMapper;
 
 /**
  * @author zhaotianzeng
