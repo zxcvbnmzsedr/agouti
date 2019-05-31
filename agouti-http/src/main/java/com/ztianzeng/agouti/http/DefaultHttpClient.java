@@ -105,7 +105,6 @@ public class DefaultHttpClient implements HttpClient {
             }
 
         } catch (IOException jpe) {
-            log.error(jpe.getMessage(), jpe);
             return json;
         }
     }
