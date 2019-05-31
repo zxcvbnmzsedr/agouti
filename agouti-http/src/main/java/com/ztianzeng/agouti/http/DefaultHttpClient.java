@@ -30,6 +30,8 @@ import java.util.Objects;
 import static com.ztianzeng.agouti.core.utils.JacksonUtils.*;
 
 /**
+ * 默认的http执行器
+ *
  * @author zhaotianzeng
  * @version V1.0
  * @date 2019-04-18 14:55
