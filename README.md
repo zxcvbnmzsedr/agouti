@@ -133,10 +133,10 @@ ${taskName.response.status} 响应码
 执行：
 
 ~~~
-BaseExecutor baseExecutor = new BaseExecutor();
+BaseExecutor defaultExecutor = new BaseExecutor();
 WorkFlowDef workFlowDef = WorkFlowParse.fromResource("getTest1.json");
 
-WorkFlow workFlow = baseExecutor.startWorkFlow(workFlowDef, null);
+WorkFlow workFlow = defaultExecutor.startWorkFlow(workFlowDef, null);
 workFlow.getOutputs();
 
 ~~~

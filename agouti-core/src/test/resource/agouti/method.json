@@ -1,27 +1,24 @@
 {
-  "name": "agouti",
-  "description": "agoutiTest",
+  "name": "method",
+  "description": "the post of http",
   "tasks": [
     {
-      "alias": "hehe",
-      "target": "com.ztianzeng.agouti.core.engine.MethodTest",
-      "taskType": "METHOD",
-      "method": "hehe"
-    },
-    {
-      "alias": "haha",
-      "target": "com.ztianzeng.agouti.core.engine.MethodTest",
-      "taskType": "METHOD",
-      "method": "haha",
-      "inputs": {
-        "hehe": "$hehe"
-      },
-      "inputsExtra": {
-        "hehe": "com.ztianzeng.agouti.core.engine.User"
+      "name": "m1",
+      "type": "METHOD",
+      "alias": "m1",
+      "inputParameters": {
+        "class": "java.lang.String",
+        "method": "xxxx",
+        "param": [
+          "name"
+        ],
+        "paramType": [
+          "java.lang.String"
+        ]
       }
     }
   ],
-  "outputs": {
-    "yesterdayData": "$hehe.name"
+  "outputParameters": {
+
   }
 }

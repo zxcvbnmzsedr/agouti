@@ -20,7 +20,7 @@ import com.ztianzeng.agouti.core.WorkFlow;
 import com.ztianzeng.agouti.core.WorkFlowTask;
 import com.ztianzeng.common.tasks.Task;
 import com.ztianzeng.common.workflow.WorkFlowDef;
-import com.ztianzeng.common.workflow.WorkflowTask;
+import com.ztianzeng.common.workflow.WorkflowTaskDef;
 import org.junit.Test;
 
 import java.util.Collections;
@@ -32,16 +32,16 @@ import java.util.concurrent.ConcurrentHashMap;
  * @version V1.0
  * @date 2019-04-16 09:46
  */
-public class BaseExecutorTest {
+public class DefaultExecutorTest {
 
     @Test
     public void startWorkFlow() {
-        BaseExecutor baseExecutor = new BaseExecutor();
+        DefaultExecutor defaultExecutor = new DefaultExecutor();
         WorkFlowDef workFlowDef = new WorkFlowDef();
         workFlowDef.setName("name");
         workFlowDef.setDescription("desc");
 
-        WorkflowTask workflowTask = new WorkflowTask();
+        WorkflowTaskDef workflowTask = new WorkflowTaskDef();
 
         workflowTask.setName("name");
         workflowTask.setType("SIMPLE");
@@ -55,7 +55,7 @@ public class BaseExecutorTest {
 
         workflowInput.put("input_1", "1");
 
-        WorkFlow workFlow = baseExecutor.startWorkFlow(workFlowDef, workflowInput);
+        WorkFlow workFlow = defaultExecutor.startWorkFlow(workFlowDef, workflowInput);
 
 
     }

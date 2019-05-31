@@ -17,15 +17,17 @@
 
 package com.ztianzeng.agouti.core.executor;
 
+import com.ztianzeng.agouti.core.AgoutiException;
 import com.ztianzeng.agouti.core.WorkFlow;
 import com.ztianzeng.agouti.core.WorkFlowTask;
 import com.ztianzeng.agouti.core.utils.JsonPathUtils;
 import com.ztianzeng.common.tasks.Task;
 import com.ztianzeng.common.workflow.TaskType;
 import com.ztianzeng.common.workflow.WorkFlowDef;
-import com.ztianzeng.common.workflow.WorkflowTask;
+import com.ztianzeng.common.workflow.WorkflowTaskDef;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import reactor.core.publisher.Flux;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -40,7 +42,7 @@ import java.util.Map;
  * @date 2019-01-28 20:57
  */
 @Slf4j
-public class BaseExecutor {
+public class DefaultExecutor {
 
     /**
      * start work flow
@@ -52,12 +54,21 @@ public class BaseExecutor {
     public WorkFlow startWorkFlow(WorkFlowDef workFlowDefinition,
                                   Map<String, Object> workflowInput) {
         WorkFlow workFlow = convertWorkFlow(workFlowDefinition, workflowInput);
-        for (Task task : workFlow.getTasks()) {
-            WorkFlowTask workFlowTask = WorkFlowTask.get(task.getTaskType().name());
-            workFlowTask.start(workFlow, task);
-            completeTask(workFlow, task);
-        }
-        completeWorkFlow(workFlow, workFlowDefinition.getOutputParameters());
+
+        Flux.fromIterable(workFlow.getTasks())
+                .doOnComplete(() -> completeWorkFlow(workFlow, workFlowDefinition.getOutputParameters()))
+                .subscribe(task ->
+                        {
+                            WorkFlowTask workFlowTask = WorkFlowTask.get(task.getTaskType().name());
+                            if (workFlowTask == null) {
+                                throw new AgoutiException("流程定义为空 taskType:" + task.getTaskType().name());
+                            }
+                            workFlowTask.start(workFlow, task);
+                            completeTask(workFlow, task);
+                        }
+                );
+
+
         return workFlow;
     }
 
@@ -96,7 +107,7 @@ public class BaseExecutor {
         }
 
         List<Task> tasks = new LinkedList<>();
-        for (WorkflowTask task : workFlowDef.getTasks()) {
+        for (WorkflowTaskDef task : workFlowDef.getTasks()) {
             Task t = new Task();
             t.setName(task.getName());
             t.setTaskType(TaskType.valueOf(task.getType()));

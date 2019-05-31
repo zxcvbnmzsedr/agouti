@@ -14,40 +14,38 @@
  * limitations under the License.
  */
 
-package com.ztianzeng.agouti.test.controller;
+package com.ztianzeng.agouti.http.spring;
 
 import com.ztianzeng.agouti.core.WorkFlow;
 import com.ztianzeng.agouti.core.executor.DefaultExecutor;
 import com.ztianzeng.agouti.core.parse.WorkFlowParse;
+import com.ztianzeng.agouti.core.resource.AbstractResource;
+import com.ztianzeng.agouti.core.resource.ClassPathResource;
 import com.ztianzeng.common.workflow.WorkFlowDef;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * @author zhaotianzeng
  * @version V1.0
- * @date 2019-04-17 20:35
+ * @date 2019-05-31 10:19
  */
-@RestController
-@RequestMapping("/test")
-public class TestController {
+public class HttpTaskTest {
 
-    @GetMapping("/getTest1")
-    public Object getTest1() {
+    @Test
+    public void startLbWorkFlow() {
         DefaultExecutor defaultExecutor = new DefaultExecutor();
-        WorkFlowDef workFlowDef = WorkFlowParse.fromResource("getTest1.json");
+        String path = "lb.json";
+        AbstractResource resource = new ClassPathResource(
+                path, ClassLoader.getSystemClassLoader());
+
+        WorkFlowDef workFlowDef = WorkFlowParse.parse(resource);
+
+
+
 
         WorkFlow workFlow = defaultExecutor.startWorkFlow(workFlowDef, null);
-        return workFlow.getOutputs();
-    }
-
-    @GetMapping("/ribbonGetTest1")
-    public Object ribbonGetTest1() {
-        DefaultExecutor defaultExecutor = new DefaultExecutor();
-        WorkFlowDef workFlowDef = WorkFlowParse.fromResource("ribbonGetTest1.json");
-
-        WorkFlow workFlow = defaultExecutor.startWorkFlow(workFlowDef, null);
-        return workFlow.getOutputs();
+        Object d1Key = workFlow.getOutputs().get("d1Key");
+        Assert.assertEquals(d1Key, "input_key1");
     }
 }

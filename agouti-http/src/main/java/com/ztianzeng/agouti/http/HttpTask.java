@@ -17,6 +17,7 @@
 package com.ztianzeng.agouti.http;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ztianzeng.agouti.core.AgoutiException;
 import com.ztianzeng.agouti.core.WorkFlow;
 import com.ztianzeng.agouti.core.WorkFlowTask;
 import com.ztianzeng.agouti.core.utils.JsonPathUtils;
@@ -31,7 +32,7 @@ import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.ztianzeng.agouti.http.utils.JacksonUtils.defaultMapper;
+import static com.ztianzeng.agouti.core.utils.JacksonUtils.defaultMapper;
 
 /**
  * @author zhaotianzeng
@@ -78,17 +79,17 @@ public class HttpTask extends WorkFlowTask {
         Object request = task.getInputData().get(REQUEST_PARAMETER_NAME);
 
         if (request == null) {
-            task.setReasonForFail(MISSING_REQUEST);
             task.setStatus(Task.Status.FAILED);
-            return;
+            task.setRuntimeResultData(MISSING_REQUEST);
+            throw new AgoutiException(MISSING_REQUEST);
         }
 
         Input input = om.convertValue(request, Input.class);
         if (input.url == null) {
             String reason = "Missing HTTP URI.  See documentation for HttpTask for required input parameters";
-            task.setReasonForFail(reason);
+            task.setRuntimeResultData(reason);
             task.setStatus(Task.Status.FAILED);
-            return;
+            throw new AgoutiException(reason);
         }
 
         URI uri = buildUri(workflow, input);
@@ -101,9 +102,8 @@ public class HttpTask extends WorkFlowTask {
 
         if (input.method == null) {
             String reason = "No HTTP method specified";
-            task.setReasonForFail(reason);
             task.setStatus(Task.Status.FAILED);
-            return;
+            throw new AgoutiException(reason);
         }
 
         AgoutiHttpInput build = AgoutiHttpInput.builder()
@@ -120,9 +120,9 @@ public class HttpTask extends WorkFlowTask {
         if (response.status > 199 && response.status < 300) {
             task.setStatus(Task.Status.COMPLETED);
             if (response.body != null) {
-                task.setReasonForFail(response.body.toString());
+                task.setRuntimeResultData(response.body.toString());
             } else {
-                task.setReasonForFail("No response from the remote service");
+                task.setRuntimeResultData("No response from the remote service");
             }
         } else {
             task.setStatus(Task.Status.FAILED);
