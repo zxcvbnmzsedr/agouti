@@ -12,7 +12,7 @@ import java.util.Map;
  * @date 2019-04-15 11:24
  */
 @Data
-public class WorkflowTask {
+public class WorkflowTaskDef {
 
     @NotEmpty(message = "WorkflowTask name cannot be empty or null")
     private String name;

@@ -1,0 +1,23 @@
+{
+  "name":"USER_DEPART",
+  "description":"查询用户部门",
+  "tasks":[
+    {
+      "name":"d1",
+      "type":"HTTP",
+      "inputParameters":{
+        "http_request":{
+          "url":"lb://biz-organization-center/inc/department/user/listByComUserId/v1",
+          "method":"POST",
+          "body":{
+            "companyId":"value1",
+            "userId":"45.3d"
+          }
+        }
+      }
+    }
+  ],
+  "outputParameters":{
+    "cdn_url":"${d1.response.input_key1}"
+  }
+}

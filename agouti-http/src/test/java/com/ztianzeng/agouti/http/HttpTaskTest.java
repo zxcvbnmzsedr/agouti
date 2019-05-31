@@ -25,7 +25,7 @@ import com.ztianzeng.agouti.core.resource.AbstractResource;
 import com.ztianzeng.agouti.core.resource.ClassPathResource;
 import com.ztianzeng.common.tasks.Task;
 import com.ztianzeng.common.workflow.WorkFlowDef;
-import com.ztianzeng.common.workflow.WorkflowTask;
+import com.ztianzeng.common.workflow.WorkflowTaskDef;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.Server;
@@ -90,11 +90,11 @@ public class HttpTaskTest {
         DefaultExecutor defaultExecutor = new DefaultExecutor();
         WorkFlowDef workFlowDef = fromResource();
 
-
         WorkFlow workFlow = defaultExecutor.startWorkFlow(workFlowDef, null);
         Object d1Key = workFlow.getOutputs().get("d1Key");
         Assert.assertEquals(d1Key, "input_key1");
     }
+
 
 
     private WorkFlowDef fromResource() {
@@ -112,7 +112,7 @@ public class HttpTaskTest {
 
         workFlowDef.getOutputParameters().put("d1Key", "${d1.response.body.input_key1}");
 
-        WorkflowTask d1 = new WorkflowTask();
+        WorkflowTaskDef d1 = new WorkflowTaskDef();
         d1.setName("d1");
         d1.setType("HTTP");
         d1.setAlias("d1");
@@ -128,7 +128,7 @@ public class HttpTaskTest {
         d1.getInputParameters().put(HttpTask.REQUEST_PARAMETER_NAME, input);
 
 
-        WorkflowTask d2 = new WorkflowTask();
+        WorkflowTaskDef d2 = new WorkflowTaskDef();
         d2.setName("d2");
         d2.setType("HTTP");
         d2.setAlias("d2");

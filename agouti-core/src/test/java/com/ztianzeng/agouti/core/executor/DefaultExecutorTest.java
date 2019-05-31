@@ -20,7 +20,7 @@ import com.ztianzeng.agouti.core.WorkFlow;
 import com.ztianzeng.agouti.core.WorkFlowTask;
 import com.ztianzeng.common.tasks.Task;
 import com.ztianzeng.common.workflow.WorkFlowDef;
-import com.ztianzeng.common.workflow.WorkflowTask;
+import com.ztianzeng.common.workflow.WorkflowTaskDef;
 import org.junit.Test;
 
 import java.util.Collections;
@@ -41,7 +41,7 @@ public class DefaultExecutorTest {
         workFlowDef.setName("name");
         workFlowDef.setDescription("desc");
 
-        WorkflowTask workflowTask = new WorkflowTask();
+        WorkflowTaskDef workflowTask = new WorkflowTaskDef();
 
         workflowTask.setName("name");
         workflowTask.setType("SIMPLE");

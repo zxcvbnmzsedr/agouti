@@ -23,17 +23,15 @@ import com.ztianzeng.agouti.core.utils.JsonPathUtils;
 import com.ztianzeng.common.tasks.Task;
 import com.ztianzeng.common.workflow.TaskType;
 import com.ztianzeng.common.workflow.WorkFlowDef;
-import com.ztianzeng.common.workflow.WorkflowTask;
+import com.ztianzeng.common.workflow.WorkflowTaskDef;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.SignalType;
 
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
 
 /**
  * 基础执行器
@@ -105,7 +103,7 @@ public class DefaultExecutor {
         }
 
         List<Task> tasks = new LinkedList<>();
-        for (WorkflowTask task : workFlowDef.getTasks()) {
+        for (WorkflowTaskDef task : workFlowDef.getTasks()) {
             Task t = new Task();
             t.setName(task.getName());
             t.setTaskType(TaskType.valueOf(task.getType()));
