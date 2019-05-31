@@ -103,7 +103,12 @@ public class DefaultExecutor {
         workFlow.getRuntimeParam().putAll(taskInput);
 
         if (workflowInput != null) {
-            workFlow.getInputs().putAll(workflowInput);
+            workflowInput.forEach((k, v) -> {
+                if (v != null) {
+                    workFlow.getInputs().put(k, v);
+                }
+            });
+
         }
 
         List<Task> tasks = new LinkedList<>();

@@ -18,16 +18,11 @@
 package com.ztianzeng.agouti.core;
 
 
-import com.jayway.jsonpath.Configuration;
-import com.jayway.jsonpath.DocumentContext;
-import com.jayway.jsonpath.JsonPath;
-import com.jayway.jsonpath.Option;
 import com.ztianzeng.common.tasks.Task;
 import com.ztianzeng.common.workflow.WorkFlowDef;
 import lombok.Data;
 
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -71,6 +66,20 @@ public class WorkFlow {
 
     private Map<String, Object> outputs = new HashMap<>();
 
+    /**
+     * 获取task
+     *
+     * @param name taskName
+     * @return task
+     */
+    public Task getTask(String name) {
+        for (Task task : tasks) {
+            if (task.getName().equals(name)) {
+                return task;
+            }
+        }
+        return null;
+    }
 
 
 }

@@ -19,6 +19,7 @@
     }
   ],
   "outputParameters":{
-    "data":"${d1.response.body.data}"
+    "data":"${d1.response.body.data}",
+    "code": "${d1.response.body.code == 1}"
   }
 }
