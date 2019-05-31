@@ -1,0 +1,2 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.ztianzeng.agouti.http.spring.AgoutiAutoConfig

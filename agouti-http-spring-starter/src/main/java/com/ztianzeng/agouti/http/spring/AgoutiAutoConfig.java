@@ -17,9 +17,10 @@
 package com.ztianzeng.agouti.http.spring;
 
 import com.ztianzeng.agouti.core.WorkFlowTask;
+import com.ztianzeng.agouti.core.executor.DefaultExecutor;
 import com.ztianzeng.agouti.http.DefaultHttpClient;
 import com.ztianzeng.agouti.http.HttpTask;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,9 +31,12 @@ import org.springframework.context.annotation.Configuration;
  * @date 2019-04-18 20:02
  */
 @Configuration
-public class Config {
+public class AgoutiAutoConfig {
 
-
+    @Bean
+    public DefaultExecutor defaultExecutor() {
+        return new DefaultExecutor();
+    }
 
     @Bean
     public DefaultChooser loadBalancerClientFilter(LoadBalancerClient client) {
