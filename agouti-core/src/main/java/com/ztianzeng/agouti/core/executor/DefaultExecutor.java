@@ -17,6 +17,7 @@
 
 package com.ztianzeng.agouti.core.executor;
 
+import com.ztianzeng.agouti.core.AgoutiException;
 import com.ztianzeng.agouti.core.WorkFlow;
 import com.ztianzeng.agouti.core.WorkFlowTask;
 import com.ztianzeng.agouti.core.utils.JsonPathUtils;
@@ -59,6 +60,9 @@ public class DefaultExecutor {
                 .subscribe(task ->
                         {
                             WorkFlowTask workFlowTask = WorkFlowTask.get(task.getTaskType().name());
+                            if (workFlowTask == null) {
+                                throw new AgoutiException("流程定义为空 taskType:" + task.getTaskType().name());
+                            }
                             workFlowTask.start(workFlow, task);
                             completeTask(workFlow, task);
                         }
