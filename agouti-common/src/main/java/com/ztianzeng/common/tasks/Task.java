@@ -52,9 +52,9 @@ public class Task {
 
 
     /**
-     * runtime fail reason
+     * runtime result data
      */
-    private String reasonForFail;
+    private String runtimeResultData;
 
     /**
      * task status

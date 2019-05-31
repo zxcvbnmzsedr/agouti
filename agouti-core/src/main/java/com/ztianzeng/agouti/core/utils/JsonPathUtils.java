@@ -16,6 +16,7 @@
 
 package com.ztianzeng.agouti.core.utils;
 
+import com.alibaba.fastjson.JSONObject;
 import com.jayway.jsonpath.Configuration;
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
@@ -44,11 +45,12 @@ public class JsonPathUtils {
             return Collections.emptyMap();
         }
         Configuration option = Configuration.defaultConfiguration().addOptions(Option.SUPPRESS_EXCEPTIONS);
+        Map<String, Object> outMapper = JacksonUtils.convertValue(outputParameters,JacksonUtils.mapOfObj);
 
         Map<String, Object> resultMap = new HashMap<>(20);
-        DocumentContext documentContext = JsonPath.parse(inputs, option);
+        DocumentContext documentContext = JsonPath.parse(JSONObject.toJSONString(inputs), option);
 
-        outputParameters.forEach((k, v) -> {
+        outMapper.forEach((k, v) -> {
             Object value = v;
             if (v instanceof String) {
                 value = replaceVariables(value.toString(), documentContext);

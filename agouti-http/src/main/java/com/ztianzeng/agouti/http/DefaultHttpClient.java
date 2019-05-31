@@ -16,7 +16,6 @@
 
 package com.ztianzeng.agouti.http;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ztianzeng.agouti.core.AgoutiException;
@@ -26,13 +25,13 @@ import okhttp3.*;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
-import static com.ztianzeng.agouti.http.utils.JacksonUtils.defaultMapper;
+import static com.ztianzeng.agouti.core.utils.JacksonUtils.*;
 
 /**
+ * 默认的http执行器
+ *
  * @author zhaotianzeng
  * @version V1.0
  * @date 2019-04-18 14:55
@@ -41,11 +40,6 @@ import static com.ztianzeng.agouti.http.utils.JacksonUtils.defaultMapper;
 public class DefaultHttpClient implements HttpClient {
 
     private ObjectMapper om = defaultMapper();
-    private TypeReference<Map<String, Object>> mapOfObj = new TypeReference<Map<String, Object>>() {
-    };
-
-    private TypeReference<List<Object>> listOfObj = new TypeReference<List<Object>>() {
-    };
 
 
     /**
@@ -113,7 +107,6 @@ public class DefaultHttpClient implements HttpClient {
             }
 
         } catch (IOException jpe) {
-            log.error(jpe.getMessage(), jpe);
             return json;
         }
     }

@@ -63,6 +63,23 @@ ${taskName.response.header} 响应头
 ${taskName.response.status} 响应码
 
 
+## 开始使用
+
+~~~
+<dependency>
+    <groupId>com.ztianzeng.agouti</groupId>
+    <artifactId>agouti-http-spring-starter</artifactId>
+    <version>${agouti-version}</version>
+</dependency>
+~~~
+
+~~~
+@Autowired
+private DefaultExecutor defaultExecutor;
+
+WorkFlowDef workDef = processRepo.getWorkFlow(workFlow);
+WorkFlow workFlowRes = defaultExecutor.startWorkFlow(workDef, data);
+~~~
 
 
 ## 演示
@@ -133,13 +150,14 @@ ${taskName.response.status} 响应码
 执行：
 
 ~~~
-BaseExecutor baseExecutor = new BaseExecutor();
+BaseExecutor defaultExecutor = new BaseExecutor();
 WorkFlowDef workFlowDef = WorkFlowParse.fromResource("getTest1.json");
 
-WorkFlow workFlow = baseExecutor.startWorkFlow(workFlowDef, null);
+WorkFlow workFlow = defaultExecutor.startWorkFlow(workFlowDef, null);
 workFlow.getOutputs();
 
 ~~~
+
 
 执行结果:
 

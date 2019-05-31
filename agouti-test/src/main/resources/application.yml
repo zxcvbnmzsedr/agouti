@@ -1,26 +1,18 @@
 server:
   port: 8080
 spring:
-  profiles: agouti1
   application:
     name: agouti1
 eureka:
+  instance:
+    prefer-ip-address: true
+    non-secure-port: ${server.port}
+    lease-expiration-duration-in-seconds: 1
+    lease-renewal-interval-in-seconds: 1
+    instance-id: ${spring.application.name}:${spring.cloud.client.ip-address}:${server.port}
   client:
     service-url:
-      defaultZone: http://192.168.1.147:9000/eureka/
----
+      defaultZone: http://abc-eureka-server.dev.cnabc-inc.com/eureka/
 
-server:
-  port: 8081
-spring:
-  profiles: agouti2
-  application:
-    name: agouti2
-eureka:
-  client:
-    service-url:
-      defaultZone: http://192.168.1.147:9000/eureka/
-
----
 
 
