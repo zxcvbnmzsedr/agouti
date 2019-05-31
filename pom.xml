@@ -12,8 +12,6 @@
         <module>agouti-core</module>
         <module>agouti-common</module>
         <module>agouti-http</module>
-        <module>agouti-http</module>
-        <module>agouti-test</module>
         <module>agouti-http-spring</module>
     </modules>
     <properties>
@@ -173,5 +171,16 @@
             <artifactId>logback-core</artifactId>
         </dependency>
     </dependencies>
-
+    <distributionManagement>
+        <repository>
+            <id>nexus-releases</id>
+            <name>CNABC Release Maven Repository Group</name>
+            <url>http://nexus.cnabc-inc.com/content/repositories/share_releases</url>
+        </repository>
+        <snapshotRepository>
+            <id>nexus-snapshots</id>
+            <name>CNABC Snapshot Maven Repository Group</name>
+            <url>http://nexus.cnabc-inc.com/content/repositories/share_snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
 </project>
