@@ -24,6 +24,7 @@ import com.ztianzeng.common.workflow.TaskType;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -32,7 +33,6 @@ import java.util.Map;
  * @version V1.0
  * @date 2019-04-19 16:41
  */
-// TODO: 2019-04-19 todo
 public class MethodTask extends WorkFlowTask {
 
     /**
@@ -47,8 +47,8 @@ public class MethodTask extends WorkFlowTask {
         Map<String, Object> inputData = task.getInputData();
         String classS = (String) inputData.get("class");
         String methodS = (String) inputData.get("method");
-        List param = (List) inputData.get("param");
-        List<String> paramType = (List<String>) inputData.get("paramType");
+        List param = inputData.get("param") == null ? new ArrayList() : (List) inputData.get("param");
+        List<String> paramType = inputData.get("paramType") == null ? new ArrayList<>() : (List<String>) inputData.get("paramType");
 
         if (param.size() != paramType.size()) {
             throw new AgoutiException("param size != paramType size");
@@ -67,7 +67,9 @@ public class MethodTask extends WorkFlowTask {
             Object o = aClass.getConstructor().newInstance();
             Object invokeResult = method.invoke(o, param.toArray());
 
-            workflow.getRuntimeParam().put("response", invokeResult);
+            if (invokeResult != null) {
+                workflow.getRuntimeParam().put("response", invokeResult);
+            }
         } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException e) {
             throw new AgoutiException(e);
         }
