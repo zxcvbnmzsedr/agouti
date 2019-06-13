@@ -21,6 +21,7 @@ import com.ztianzeng.common.tasks.Task;
 import com.ztianzeng.common.workflow.TaskType;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -39,12 +40,21 @@ public class MethodTaskTest {
         inputData.put("class", MethodTaskTest.class.getName());
         inputData.put("method", "helloWorld");
 
+        ArrayList<String> param = new ArrayList<>();
+        param.add("hello   World");
+        inputData.put("param", param);
+
+
+        ArrayList<String> paramType = new ArrayList<>();
+        paramType.add(String.class.getName());
+        inputData.put("paramType", paramType);
+
         task.setInputData(inputData);
 
         methodTask.start(new WorkFlow(), task);
     }
 
-    public void helloWorld() {
-        System.out.println("hello word");
+    public void helloWorld(String s) {
+        System.out.println(s);
     }
 }
